@@ -10,11 +10,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme="synthwave">
+    <html lang="en" data-theme="bumblebee">
       <head />
       <body className={`${inter.className} h-screen`}>
         <NavBar />
-        <div className="-mt-[4rem] grid h-full place-items-center bg-gradient-to-br from-primary to-secondary pt-20 text-primary-content">
+        <div className="-mt-[4rem] px-8 grid h-full  bg-gradient-to-br from-primary to-secondary pt-20">
           {children}
         </div>
       </body>
