@@ -1,15 +1,18 @@
+"use client";
+import { signOut, useSession } from "next-auth/react";
 import React from "react";
 import { BiLogInCircle } from "react-icons/bi";
 const Navbar = () => {
+  const { data: session, status } = useSession();
   return (
-    <div className="sticky top-0 z-30 flex h-16 w-full justify-center bg-base-100 bg-opacity-90 text-base-content shadow-sm backdrop-blur transition-all duration-100">
-      <nav className="navbar w-full">
+    <div className="sticky top-0 z-30 flex justify-center w-full h-16 transition-all duration-100 shadow-sm bg-base-100 bg-opacity-90 text-base-content backdrop-blur">
+      <nav className="w-full navbar">
         <div className="navbar-start">
           <div className="dropdown">
             <label tabIndex={0} className="btn-ghost btn lg:hidden">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
+                className="w-5 h-5"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -24,24 +27,24 @@ const Navbar = () => {
             </label>
             <ul
               tabIndex={0}
-              className="dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-100 p-2 shadow"
+              className="p-2 mt-3 shadow dropdown-content menu rounded-box menu-compact w-52 bg-base-100"
             >
               <li>
-                <a className="btn-ghost drawer-button btn normal-case">
+                <a className="normal-case btn-ghost drawer-button btn">
                   Item 1
                 </a>
               </li>
               <li>
-                <a className="btn-ghost drawer-button btn normal-case">
+                <a className="normal-case btn-ghost drawer-button btn">
                   Item 3
                 </a>
               </li>
             </ul>
           </div>
-          <a className="btn-ghost btn text-xl normal-case">Radio::Otherway</a>
+          <a className="text-xl normal-case btn-ghost btn">Radio::Otherway</a>
         </div>
-        <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">
+        <div className="hidden navbar-center lg:flex">
+          <ul className="px-1 menu menu-horizontal">
             <li>
               <a>Coming Up</a>
             </li>
@@ -51,10 +54,17 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="navbar-end">
-          <a className="btn gap-4">
-            <BiLogInCircle className="inline-block h-5 w-5 stroke-current md:h-6 md:w-6" />
-            <span>Login</span>
-          </a>
+          {status === "authenticated" ? (
+            <button className="gap-4 btn" onClick={() => signOut()}>
+              <BiLogInCircle className="inline-block w-5 h-5 stroke-current md:h-6 md:w-6" />
+              <span>Logout</span>
+            </button>
+          ) : (
+            <a className="gap-4 btn">
+              <BiLogInCircle className="inline-block w-5 h-5 stroke-current md:h-6 md:w-6" />
+              <span>Login</span>
+            </a>
+          )}
         </div>
       </nav>
     </div>

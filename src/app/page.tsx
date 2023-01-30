@@ -14,7 +14,7 @@ export default async function Home() {
   ) : (
     <div>
       <h1 className="text-xl font-extrabold font-title text-primary-content md:text-2xl lg:text-4xl">
-        Upcoming Radio Otherway Shows
+        Upcoming Shows
       </h1>
 
       <div className="mt-4 overflow-x-auto">
@@ -29,11 +29,7 @@ export default async function Home() {
           <tbody>
             {results.events.map((r: any) => (
               <tr key={r.id}>
-                <td>
-                  {new Date(r.start.dateTime).toLocaleString(
-                    "en-IE"
-                  )}
-                </td>
+                <td>{new Date(r.start.dateTime).toLocaleString("en-IE")}</td>
                 <td>{r.summary}</td>
                 <td>
                   <button className="btn">Remind me</button>
