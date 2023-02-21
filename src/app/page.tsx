@@ -7,17 +7,21 @@ const getData = async () => {
 
 export default async function Home() {
   const results = await getData();
-  return results.events.length === 0 ? (
-    <h1 className="text-xl font-extrabold font-title text-primary-content md:text-2xl lg:text-2xl">
-      No upcoming events
-    </h1>
+  return results.events.length === 0 && results.message ? (
+    <div className="min-h-screen hero bg-base-200">
+      <div className="text-center hero-content">
+        <div className="max-w-md">
+          <h1 className="text-5xl font-bold">{results.message}</h1>
+        </div>
+      </div>
+    </div>
   ) : (
     <div>
       <h1 className="text-xl font-extrabold font-title text-primary-content md:text-2xl lg:text-4xl">
-        Upcoming Radio Otherway Shows
+        Upcoming Shows
       </h1>
 
-      <div className="mt-4 overflow-x-auto">
+      <div className="px-4 mt-4 overflow-x-auto">
         <table className="table w-full">
           <thead>
             <tr>
@@ -29,11 +33,7 @@ export default async function Home() {
           <tbody>
             {results.events.map((r: any) => (
               <tr key={r.id}>
-                <td>
-                  {new Date(r.start.dateTime).toLocaleString(
-                    "en-IE"
-                  )}
-                </td>
+                <td>{new Date(r.start.dateTime).toLocaleString("en-IE")}</td>
                 <td>{r.summary}</td>
                 <td>
                   <button className="btn">Remind me</button>
