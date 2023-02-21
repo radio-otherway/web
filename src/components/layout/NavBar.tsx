@@ -1,11 +1,14 @@
 "use client";
-import { signOut, useSession } from "next-auth/react";
+import {signOut, useSession} from "next-auth/react";
 import React from "react";
-import { BiLogInCircle } from "react-icons/bi";
+import {BiLogInCircle} from "react-icons/bi";
+import Link from "next/link";
+
 const Navbar = () => {
-  const { data: session, status } = useSession();
+  const {data: session, status} = useSession();
   return (
-    <div className="sticky top-0 z-30 flex justify-center w-full h-16 transition-all duration-100 shadow-sm bg-base-100 bg-opacity-90 text-base-content backdrop-blur">
+    <div
+      className="sticky top-0 z-30 flex justify-center w-full h-16 transition-all duration-100 shadow-sm bg-base-100 bg-opacity-90 text-base-content backdrop-blur">
       <nav className="w-full navbar">
         <div className="navbar-start">
           <div className="dropdown">
@@ -56,14 +59,14 @@ const Navbar = () => {
         <div className="navbar-end">
           {status === "authenticated" ? (
             <button className="gap-4 btn" onClick={() => signOut()}>
-              <BiLogInCircle className="inline-block w-5 h-5 stroke-current md:h-6 md:w-6" />
+              <BiLogInCircle className="inline-block w-5 h-5 stroke-current md:h-6 md:w-6"/>
               <span>Logout</span>
             </button>
           ) : (
-            <a className="gap-4 btn">
-              <BiLogInCircle className="inline-block w-5 h-5 stroke-current md:h-6 md:w-6" />
+            <Link className="gap-4 btn" href="/login">
+              <BiLogInCircle className="inline-block w-5 h-5 stroke-current md:h-6 md:w-6"/>
               <span>Login</span>
-            </a>
+            </Link>
           )}
         </div>
       </nav>

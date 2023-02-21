@@ -38,7 +38,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         if (result.data.items.length) {
           res.send(JSON.stringify({ events: result.data.items }));
         } else {
-          res.send(JSON.stringify({ message: "No upcoming events found." }));
+          res.send(
+            JSON.stringify({
+              events: [],
+              message: "No upcoming events.",
+            })
+          );
         }
       }
     }
