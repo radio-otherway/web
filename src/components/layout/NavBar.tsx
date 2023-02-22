@@ -1,11 +1,13 @@
 "use client";
-import {signOut, useSession} from "next-auth/react";
 import React from "react";
 import {BiLogInCircle} from "react-icons/bi";
 import Link from "next/link";
+import useFirebaseAuth from "@/lib/auth/useFirebaseAuth";
+import {useAuthUserContext} from '@/lib/auth/authUserContext';
 
 const Navbar = () => {
-  const {data: session, status} = useSession();
+  const {authUser, loading, logOut} = useAuthUserContext();
+
   return (
     <div
       className="sticky top-0 z-30 flex justify-center w-full h-16 transition-all duration-100 shadow-sm bg-base-100 bg-opacity-90 text-base-content backdrop-blur">
@@ -44,7 +46,7 @@ const Navbar = () => {
               </li>
             </ul>
           </div>
-          <a className="text-xl normal-case btn-ghost btn">Radio::Otherway</a>
+          <a href="/" className="text-xl normal-case btn-ghost btn">Radio::Otherway</a>
         </div>
         <div className="hidden navbar-center lg:flex">
           <ul className="px-1 menu menu-horizontal">
@@ -57,8 +59,8 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="navbar-end">
-          {status === "authenticated" ? (
-            <button className="gap-4 btn" onClick={() => signOut()}>
+          {authUser ? (
+            <button className="gap-4 btn" onClick={() => logOut()}>
               <BiLogInCircle className="inline-block w-5 h-5 stroke-current md:h-6 md:w-6"/>
               <span>Logout</span>
             </button>
