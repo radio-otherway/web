@@ -33,19 +33,26 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     },
     (error: any, result: any) => {
       if (error) {
-        res.send(JSON.stringify({ error: error }));
+        res.status(200).json({ error: error });
       } else {
         if (result.data.items.length) {
-          res.send(JSON.stringify({ events: result.data.items }));
-        } else {
-          res.send(
-            JSON.stringify({
-              events: [],
-              message: "No upcoming events.",
+          res.status(200).json(
+            result.data.items.map((r) => {
+              return {
+                id: r.id,
+                title: r.summary,
+                date: r.start.dateTime,
+              };
             })
           );
+        } else {
+          res.status(200).json({
+            events: [],
+            message: "No upcoming events.",
+          });
         }
       }
+      res.end();
     }
   );
 }

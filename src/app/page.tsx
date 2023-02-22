@@ -7,7 +7,7 @@ const getData = async () => {
 
 export default async function Home() {
   const results = await getData();
-  return results.events.length === 0 && results.message ? (
+  return results.message ? (
     <div className="min-h-screen hero bg-base-200">
       <div className="text-center hero-content">
         <div className="max-w-md">
@@ -24,22 +24,22 @@ export default async function Home() {
       <div className="px-4 mt-4 overflow-x-auto">
         <table className="table w-full">
           <thead>
-            <tr>
-              <th>When</th>
-              <th>Who</th>
-              <th />
-            </tr>
+          <tr>
+            <th>When</th>
+            <th>Who</th>
+            <th/>
+          </tr>
           </thead>
           <tbody>
-            {results.events.map((r: any) => (
-              <tr key={r.id}>
-                <td>{new Date(r.start.dateTime).toLocaleString("en-IE")}</td>
-                <td>{r.summary}</td>
-                <td>
-                  <button className="btn">Remind me</button>
-                </td>
-              </tr>
-            ))}
+          {results.map((r: any) => (
+            <tr key={r.id}>
+              <td>{new Date(r.date).toLocaleString("en-IE")}</td>
+              <td>{r.title}</td>
+              <td>
+                <button className="btn">Remind me</button>
+              </td>
+            </tr>
+          ))}
           </tbody>
         </table>
       </div>

@@ -1,7 +1,7 @@
 name:
   Cache Jobs
 on:
-  # Triggers the workflow every 5 minutes
+  # Every 5 minutes
   schedule:
     - cron: "*/5 * * * *"
 jobs:
