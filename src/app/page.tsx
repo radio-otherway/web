@@ -6,9 +6,8 @@ const getData = async () => {
 };
 
 export default async function Home() {
-  const isServer = () => typeof window === `undefined`;
 
-  const results = !isServer() && await getData();
+  const results = await getData();
   return results.message ? (
     <div className="min-h-screen hero bg-base-200">
       <div className="text-center hero-content">

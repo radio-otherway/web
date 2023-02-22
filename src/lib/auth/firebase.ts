@@ -3,7 +3,7 @@ import 'firebase/auth';
 import {getFirestore} from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDtQVcCocVj-baMyBNxhV3Fbi7YXeyTXXE",
+  apiKey: "AIzaSyDtk_Ym-AZroXsHvQVcdHXYyc_TvgycAWw",
   authDomain: "radio-otherway.firebaseapp.com",
   projectId: "radio-otherway",
   storageBucket: "radio-otherway.appspot.com",
