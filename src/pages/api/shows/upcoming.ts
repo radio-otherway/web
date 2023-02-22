@@ -1,8 +1,8 @@
 // https://www.googleapis.com/calendar/v3/calendars/calendarId/events
 
-import { NextApiRequest, NextApiResponse } from "next";
+import {NextApiRequest, NextApiResponse} from "next";
 
-const { google } = require("googleapis");
+const {google} = require("googleapis");
 const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_CALENDAR_CREDENTIALS_PRIVATE_KEY;
 const GOOGLE_CLIENT_EMAIL =
   process.env.GOOGLE_CALENDAR_CREDENTIALS_CLIENT_EMAIL;
@@ -33,11 +33,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     },
     (error: any, result: any) => {
       if (error) {
-        res.status(200).json({ error: error });
+        res.status(200).json({error: error});
       } else {
         if (result.data.items.length) {
           res.status(200).json(
-            result.data.items.map((r) => {
+            result.data.items.map((r: any) => {
               return {
                 id: r.id,
                 title: r.summary,

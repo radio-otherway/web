@@ -6,7 +6,9 @@ const getData = async () => {
 };
 
 export default async function Home() {
-  const results = await getData();
+  const isServer = () => typeof window === `undefined`;
+
+  const results = !isServer() && await getData();
   return results.message ? (
     <div className="min-h-screen hero bg-base-200">
       <div className="text-center hero-content">
@@ -20,7 +22,6 @@ export default async function Home() {
       <h1 className="text-xl font-extrabold font-title text-primary-content md:text-2xl lg:text-4xl">
         Upcoming Shows
       </h1>
-
       <div className="px-4 mt-4 overflow-x-auto">
         <table className="table w-full">
           <thead>
@@ -31,7 +32,7 @@ export default async function Home() {
           </tr>
           </thead>
           <tbody>
-          {results.map((r: any) => (
+          {results && results.map((r: any) => (
             <tr key={r.id}>
               <td>{new Date(r.date).toLocaleString("en-IE")}</td>
               <td>{r.title}</td>
