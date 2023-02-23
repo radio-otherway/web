@@ -1,12 +1,12 @@
 name:
-  Cache Events
+  Send Reminders
 on:
   # Every 5 minutes
   schedule:
     - cron: "*/5 * * * *"
 jobs:
-  cache:
+  reminders:
     runs-on: ubuntu-latest
     steps:
       - name: Cache outstanding events
-        run: curl -X GET https://external.fergl.ie/api/cron/cache
+        run: curl -X GET https://external.fergl.ie/api/cron/reminders

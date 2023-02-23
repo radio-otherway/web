@@ -1,6 +1,6 @@
 import React, {createContext, useContext, Context} from 'react'
 import useFirebaseAuth from "@/lib/auth/useFirebaseAuth";
-import {User} from "@/lib/auth/user";
+import {User} from "@/models";
 
 interface IAuthUserContext {
   authUser: User | undefined;

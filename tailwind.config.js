@@ -4,5 +4,10 @@ module.exports = {
   theme: {
     extend: {},
   },
+  // safelist: [
+  //   {
+  //     pattern: /./, // the "." means "everything"
+  //   },
+  // ],
   plugins: [require("daisyui")],
 };

@@ -10,9 +10,9 @@ import {
   signOut,
   TwitterAuthProvider
 } from 'firebase/auth';
-import {app} from './firebase';
-import {User} from "@/lib/auth/user";
+import {app} from '../db/firebaseAuth';
 import {useRouter} from "next/navigation";
+import {User} from "@/models";
 
 const formatAuthUser = (user: User) => ({
   uid: user.uid,

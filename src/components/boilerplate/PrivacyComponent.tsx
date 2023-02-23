@@ -12,8 +12,8 @@ const PrivacyComponent = () => {
                      rel="noreferrer">Free
         Privacy Policy Generator</a>.</p>
     <h1>Interpretation and Definitions</h1>
-    <h2>Interpretation</h2>
-    <p>The words of which the initial letter is capitalized have meanings defined under the following conditions. The
+    <h2>Interpretation</h2>m
+    <p>The words of which the initial letter is capitalized have eanings defined under the following conditions. The
       following definitions shall have the same meaning regardless of whether they appear in singular or in
       plural.</p>
     <h2>Definitions</h2>
