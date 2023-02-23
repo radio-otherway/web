@@ -1,9 +1,9 @@
-import React, {createContext, useContext, Context} from 'react'
+import React, { createContext, useContext, Context } from "react";
 import useFirebaseAuth from "@/lib/auth/useFirebaseAuth";
-import {User} from "@/models";
+import { User } from "@/models";
 
 interface IAuthUserContext {
-  authUser: User | undefined;
+  user: User | undefined;
   loading: boolean;
   signIn: (email: string, password: string) => {},
   signUp: (email: string, password: string) => {},
@@ -15,7 +15,7 @@ interface IAuthUserContext {
 
 const authUserContext
   = createContext<IAuthUserContext>({
-  authUser: undefined,
+  user: undefined,
   loading: true,
   signIn: async (email: string, password: string) => {
   },
@@ -28,10 +28,10 @@ const authUserContext
   signInWithTwitter: async () => {
   },
   signInWithFacebook: async () => {
-  },
+  }
 });
 
-export function AuthUserProvider({children}: { children: React.ReactNode }) {
+export function AuthUserProvider({ children }: { children: React.ReactNode }) {
   const auth
     = useFirebaseAuth();
   return <authUserContext.Provider value={auth}>{children}</authUserContext.Provider>;

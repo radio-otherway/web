@@ -4,10 +4,10 @@ export default class Show {
   date: Date;
   creator: string;
 
-  constructor(id: string, title: string, date: string, creator: string) {
+  constructor(id: string, title: string, date: Date, creator: string) {
     this.id = id;
     this.title = title;
-    this.date = new Date(date);
+    this.date = date;
     this.creator = creator;
   }
 
@@ -15,7 +15,7 @@ export default class Show {
     return new Show(
       r.id,
       r.title,
-      r.date,
+      new Date(r.date),
       r.creator);
   }
 };

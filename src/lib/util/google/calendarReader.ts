@@ -1,4 +1,5 @@
 import { Show } from "@/models";
+
 const { google } = require("googleapis");
 const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_CALENDAR_CREDENTIALS_PRIVATE_KEY;
 const GOOGLE_CLIENT_EMAIL =
@@ -16,7 +17,7 @@ const jwtClient = new google.auth.JWT(
 const calendar = google.calendar({
   version: "v3",
   project: GOOGLE_PROJECT_NUMBER,
-  auth: jwtClient,
+  auth: jwtClient
 });
 const getCalendarEntries = async () => {
   try {
@@ -25,10 +26,18 @@ const getCalendarEntries = async () => {
       timeMin: new Date().toISOString(),
       maxResults: 10,
       singleEvents: true,
-      orderBy: "startTime",
+      orderBy: "startTime"
     });
-    return events.data.items;
-  } catch (err) {}
+    return events.data.items.map((r: any) => {
+      return {
+        id: r.id,
+        title: r.summary,
+        date: r.start.dateTime,
+        creator: r.creator.email
+      };
+    });
+  } catch (err) {
+  }
   return null;
 };
 

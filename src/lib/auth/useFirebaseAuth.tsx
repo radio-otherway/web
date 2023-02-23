@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from "react";
 import {
   createUserWithEmailAndPassword,
   FacebookAuthProvider,
@@ -9,10 +9,10 @@ import {
   signInWithPopup, signInWithRedirect,
   signOut,
   TwitterAuthProvider
-} from 'firebase/auth';
-import {app} from '../db/firebaseAuth';
-import {useRouter} from "next/navigation";
-import {User} from "@/models";
+} from "firebase/auth";
+import { app } from "./firebase";
+import { useRouter } from "next/navigation";
+import { User } from "@/models";
 
 const formatAuthUser = (user: User) => ({
   uid: user.uid,
@@ -20,27 +20,27 @@ const formatAuthUser = (user: User) => ({
 });
 
 export default function useFirebaseAuth() {
-  const auth = getAuth(app)
+  const auth = getAuth(app);
   const router = useRouter();
 
-  const [authUser, setAuthUser] = useState<User | undefined>(undefined);
+  const [user, setUser] = useState<User | undefined>(undefined);
   const [loading, setLoading] = useState(true);
 
   const authStateChanged = async (authState: any) => {
     if (!authState) {
-      setLoading(false)
+      setLoading(false);
       return;
     }
 
-    setLoading(true)
+    setLoading(true);
     var formattedUser = formatAuthUser(authState);
-    setAuthUser(formattedUser);
+    setUser(formattedUser);
     setLoading(false);
 
   };
 
   const clear = () => {
-    setAuthUser(undefined);
+    setUser(undefined);
     setLoading(true);
   };
 
@@ -52,47 +52,47 @@ export default function useFirebaseAuth() {
 
   const logOut = () =>
     signOut(auth).then(clear);
-  const signInWithGoogle = () => {
+  const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({prompt: 'select_account'});
+    provider.setCustomParameters({ prompt: "select_account" });
 
-    return signInWithPopup(auth, provider)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        if (credential) {
-          const token = credential.accessToken;
-          const user = result.user;
-        }
-        router.push('/');
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-      });
-  }
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      if (credential) {
+        const token = credential.accessToken;
+        // const user = result.user;
+      }
+      router.push("/");
+    } catch (error: any) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      const email = error.email;
+      const credential = GoogleAuthProvider.credentialFromError(error);
+
+    }
+  };
   const signInWithTwitter = () => {
-    const provider = new TwitterAuthProvider();
-
-    return signInWithPopup(auth, provider)
-      .then((result) => {
-        const credential = TwitterAuthProvider.credentialFromResult(result);
-        if (credential) {
-          const token = credential.accessToken;
-          const user = result.user;
-        }
-        router.push('/');
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-      });
+    // const provider = new TwitterAuthProvider();
+    //
+    // return auth.signInWithPopup(auth, provider)
+    //   .then((result) => {
+    //     const credential = TwitterAuthProvider.credentialFromResult(result);
+    //     if (credential) {
+    //       const token = credential.accessToken;
+    //       const user = result.user;
+    //     }
+    //     router.push("/");
+    //   })
+    //   .catch((error) => {
+    //     const errorCode = error.code;
+    //     const errorMessage = error.message;
+    //     const email = error.email;
+    //     const credential = GoogleAuthProvider.credentialFromError(error);
+    //   });
   };
   const signInWithFacebook = () => {
-    const provider = new FacebookAuthProvider()
+    const provider = new FacebookAuthProvider();
     return signInWithPopup(auth, provider)
       .then((result) => {
         const credential = TwitterAuthProvider.credentialFromResult(result);
@@ -100,7 +100,7 @@ export default function useFirebaseAuth() {
           const token = credential.accessToken;
           const user = result.user;
         }
-        router.push('/');
+        router.push("/");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -112,11 +112,11 @@ export default function useFirebaseAuth() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, authStateChanged);
-    return unsubscribe
+    return unsubscribe;
   }, []);
 
   return {
-    authUser,
+    user,
     loading,
     signIn,
     signUp,

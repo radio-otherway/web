@@ -1,78 +1,77 @@
 "use client";
 import React from "react";
-import {BiLogInCircle} from "react-icons/bi";
+import { BiLogInCircle } from "react-icons/bi";
 import Link from "next/link";
 import useFirebaseAuth from "@/lib/auth/useFirebaseAuth";
-import {useAuthUserContext} from '@/lib/auth/authUserContext';
+import { useAuthUserContext } from "@/lib/auth/authUserContext";
+import Image from "next/image";
+import { LogIn, LogOut, PlusSquare, Menu, User } from "react-feather";
+import dynamic from "next/dynamic";
+import Signup from "@/app/(auth)/signup/page";
 
+const ThemeToggle = dynamic(
+  () => import("@/components/widgets/ui/theme/ThemeToggle"),
+  {
+    ssr: false,
+  }
+);
 const Navbar = () => {
-  const {authUser, loading, logOut} = useAuthUserContext();
+  const { user, loading, logOut } = useAuthUserContext();
+  const NavMenu = user ? (
+    <React.Fragment>
+      <Link
+        href="/profile"
+        id="profile"
+        className="font-normal normal-case font-body btn-primary btn-sm btn"
+      >
+        <User size={12} className="mr-2" />
+        Profile
+      </Link>
+      <button
+        id="logout-btn"
+        className="btn-ghost btn-sm btn"
+        onClick={() => logOut()}
+      >
+        <LogOut size={12} className="mr-2" />
+        Logout
+      </button>
+    </React.Fragment>
+  ) : (
+    <React.Fragment>
+      <Link
+        href="/signup"
+        id="signup"
+        className="font-normal normal-case font-body btn-primary btn-sm btn"
+      >
+        <PlusSquare size={12} className="mr-2" />
+        Register
+      </Link>
+      <Link href="/login" id="login" className="btn-ghost btn-sm btn">
+        <LogIn size={12} className="mr-2" />
+        Login
+      </Link>
+    </React.Fragment>
+  );
 
   return (
-    <div
-      className="sticky top-0 z-30 flex justify-center w-full h-16 transition-all duration-100 shadow-sm bg-base-100 bg-opacity-90 text-base-content backdrop-blur">
-      <nav className="w-full navbar">
-        <div className="navbar-start">
-          <div className="dropdown">
-            <label tabIndex={0} className="btn-ghost btn lg:hidden">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-5 h-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h8m-8 6h16"
-                />
-              </svg>
-            </label>
-            <ul
-              tabIndex={0}
-              className="p-2 mt-3 shadow dropdown-content menu rounded-box menu-compact w-52 bg-base-100"
-            >
-              <li>
-                <a className="normal-case btn-ghost drawer-button btn">
-                  Item 1
-                </a>
-              </li>
-              <li>
-                <a className="normal-case btn-ghost drawer-button btn">
-                  Item 3
-                </a>
-              </li>
-            </ul>
+    <nav className="w-full mb-2 navbar">
+      <Link href="/">
+        <Image src="/logo.png" alt="Otherway" width={32} height={32} />
+      </Link>
+      <div className="flex-col hidden ml-auto text-sm text-center font-body lg:flex lg:flex-row lg:space-x-10">
+        {NavMenu}
+      </div>
+      <div className="ml-auto lg:hidden">
+        <div className="dropdown-end dropdown" data-cy="dropdown">
+          <div tabIndex={0} className="m-1 cursor-pointer">
+            <Menu />
           </div>
-          <a href="/" className="text-xl normal-case btn-ghost btn">Radio::Otherway</a>
+          <div className="w-24 mt-3 space-y-3 text-center dropdown-content menu">
+            {NavMenu}
+          </div>
         </div>
-        <div className="hidden navbar-center lg:flex">
-          <ul className="px-1 menu menu-horizontal">
-            <li>
-              <a>Coming Up</a>
-            </li>
-            <li>
-              <a>Subscribe</a>
-            </li>
-          </ul>
-        </div>
-        <div className="navbar-end">
-          {authUser ? (
-            <button className="gap-4 btn" onClick={() => logOut()}>
-              <BiLogInCircle className="inline-block w-5 h-5 stroke-current md:h-6 md:w-6"/>
-              <span>Logout</span>
-            </button>
-          ) : (
-            <Link className="gap-4 btn" href="/login">
-              <BiLogInCircle className="inline-block w-5 h-5 stroke-current md:h-6 md:w-6"/>
-              <span>Login</span>
-            </Link>
-          )}
-        </div>
-      </nav>
-    </div>
+      </div>
+    </nav>
   );
 };
 

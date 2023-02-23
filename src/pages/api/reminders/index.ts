@@ -1,22 +1,20 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import db from "@/lib/db";
+import { reminders, shows } from "@/lib/db";
+import { addDoc, doc, setDoc } from "@firebase/firestore";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
     const { userId, showId } = req.body;
     const docKey = `${userId}_${showId}`;
-    const remindersRef = db.collection("reminders");
-    const dbShow = remindersRef.doc(docKey);
-
-    const reminder = await remindersRef.doc(docKey).set({
+    const remindersRef = doc(reminders, docKey);
+    await setDoc(remindersRef, {
       userId,
       showId,
-      created: new Date(),
       notifications: [
         { secondsBefore: 60 * 60, destination: "353868065119" } //just set a single reminder for an hour beforehand
       ]
     }, { merge: true });
-    res.status(201).json(reminder);
+    res.status(201);
   } else {
     res.status(405);
   }

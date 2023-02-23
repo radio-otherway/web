@@ -1,6 +1,13 @@
 import serviceAccount from "serviceAccount.json";
 import { initializeApp } from "firebase/app";
-import { getFirestore, CollectionReference, collection, DocumentData } from "firebase/firestore";
+import {
+  getFirestore,
+  CollectionReference,
+  collection,
+  DocumentData,
+  WithFieldValue,
+  QueryDocumentSnapshot, SnapshotOptions, Timestamp
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDtk_Ym-AZroXsHvQVcdHXYyc_TvgycAWw",
@@ -16,13 +23,32 @@ const firestore = getFirestore();
 const createCollection = <T = DocumentData>(collectionName: string) => {
   return collection(firestore, collectionName) as CollectionReference<T>;
 };
-
+const showConverter = {
+  toFirestore(show: WithFieldValue<Show>): DocumentData {
+    return {
+      ...show,
+      date: Timestamp.fromDate(<Date>show.date)
+    };
+  },
+  fromFirestore(
+    snapshot: QueryDocumentSnapshot,
+    options: SnapshotOptions
+  ): Show {
+    const data = snapshot.data(options)!;
+    return new Show(
+      snapshot.id,
+      data.title,
+      data.date.toDate(),
+      data.creator);
+  }
+};
 
 // Import all your model types
-import { Show, Reminder } from "@/models";
+import { Show, Reminder, RemindersProcessed } from "@/models";
 // export all your collections
 
-export const shows = createCollection<Show>("shows");
+export const shows = createCollection<Show>("shows")
+  .withConverter(showConverter);
 export const reminders = createCollection<Reminder>("reminders");
-
+export const remindersProcessed = createCollection<RemindersProcessed>("reminders");
 export default firestore;

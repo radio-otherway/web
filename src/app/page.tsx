@@ -8,7 +8,8 @@ const getData = async (): Promise<Show[]> => {
     `${process.env.NEXT_PUBLIC_API_URL}/api/shows/upcoming`
   );
   logger.debug("getDate", res);
-  return await res.json();
+  const data = await res.json();
+  return data.map((r: string) => Show.fromJson(r));
 };
 
 const Home = async () => {

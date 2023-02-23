@@ -6,9 +6,9 @@ import { MdAddAlarm } from "react-icons/md";
 import { error, success, warning } from "./toast/toastService";
 
 const RemindMeButton = ({ show }: { show: Show }) => {
-  const { authUser } = useFirebaseAuth();
+  const { user } = useFirebaseAuth();
   const createShowReminder = async () => {
-    if (authUser?.uid) {
+    if (user?.uid) {
       var response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/reminders`,
         {
@@ -17,7 +17,7 @@ const RemindMeButton = ({ show }: { show: Show }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            userId: authUser?.uid,
+            userId: user?.uid,
             showId: show.id,
           }),
         }

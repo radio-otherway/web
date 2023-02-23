@@ -1,21 +1,21 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getCalendarEntries } from "@/lib/util/google/calendarReader";
-import { shows } from "@/lib/db";
-import { Show } from "@/models";
 import logger from "@/lib/util/logging";
 import { doc, setDoc } from "@firebase/firestore";
+import { shows } from "@/lib/db";
+import { Show } from "@/models";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const entries = await getCalendarEntries();
-    const shows = entries.map((r: any) => Show.fromJson(r));
-    for (const show of shows) {
-      logger.debug("Storing show", show);
-      const showRef = doc(shows, show.id);
+    const e = await getCalendarEntries();
+    const entries = e.map((r: any) => Show.fromJson(r));
+    for (const entry of entries) {
+      logger.debug("Storing show", entry);
+      const showRef = doc(shows, entry.id);
       await setDoc(showRef, {
-        title: show.title,
-        date: show.date,
-        creator: show.creator
+        title: entry.title,
+        date: entry.date,
+        creator: entry.creator
       }, { merge: true });
     }
     logger.debug("Stored show", res);
