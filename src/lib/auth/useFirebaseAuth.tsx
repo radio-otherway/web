@@ -3,7 +3,7 @@ import {
   createUserWithEmailAndPassword,
   FacebookAuthProvider,
   getAuth,
-  GoogleAuthProvider,
+  GoogleAuthProvider, linkWithPopup,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup, signInWithRedirect,
@@ -14,6 +14,8 @@ import { app } from "./firebase";
 import { useRouter } from "next/navigation";
 import { Profile } from "@/models";
 import { FirebaseAuth } from "@firebase/auth-types";
+import firebase from "firebase/app";
+import LoginFunctions from "@/lib/auth/loginFunctions";
 
 
 export default function useFirebaseAuth() {
@@ -63,8 +65,20 @@ export default function useFirebaseAuth() {
 
   const _processSignIn = async (provider: any) => {
     try {
-      const result = await signInWithPopup(auth, provider);
-
+      try {
+        const result = await signInWithPopup(auth, provider);
+      } catch (error: any) {
+        if (error.code === "auth/account-exists-with-different-credential") {
+          linkWithPopup(result.currentUser, provider).then((result) => {
+            // Accounts successfully linked.
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+          }).catch((error) => {
+            console.log("useFirebaseAuth", "_processSignIn", "Failure in _processSignIn", err);
+            // Handle Errors here.
+            // ...
+          });
+        }
+      }
       if (result.user) {
         const profile = getUserProfile();
         setProfile(profile);
@@ -78,15 +92,16 @@ export default function useFirebaseAuth() {
     }
   };
   const signInWithGoogle = async () => {
-    debugger
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: "select_account" });
     provider.addScope("https://www.googleapis.com/auth/userinfo.profile");
-    await _processSignIn(provider);
+    const credential = await signInWithPopup(auth, provider);
+    return LoginFunctions.signInOrLink(GoogleAuthProvider.PROVIDER_ID, credential, credential.user.email);
+    // await _processSignIn(provider);
   };
   const signInWithTwitter = async () => {
-    const provider = new TwitterAuthProvider();
-    await _processSignIn(provider);
+    const credential = new TwitterAuthProvider();
+    return LoginFunctions.signInOrLink(GoogleAuthProvider.PROVIDER_ID, credential, credential.user.email);
   };
   const signInWithFacebook = async () => {
     const provider = new FacebookAuthProvider();
