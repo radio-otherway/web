@@ -12,12 +12,12 @@ import Signup from "@/app/(auth)/signup/page";
 const ThemeToggle = dynamic(
   () => import("@/components/widgets/ui/theme/ThemeToggle"),
   {
-    ssr: false,
+    ssr: false
   }
 );
 const Navbar = () => {
-  const { user, loading, logOut } = useAuthUserContext();
-  const NavMenu = user ? (
+  const { profile, loading, logOut } = useAuthUserContext();
+  const NavMenu = profile ? (
     <React.Fragment>
       <Link
         href="/profile"
@@ -41,7 +41,7 @@ const Navbar = () => {
       <Link
         href="/signup"
         id="signup"
-        className="font-normal normal-case font-body btn-primary btn-sm btn"
+        className="font-normal normal-case font-body btn-primary btn-sm btn text-primary-content"
       >
         <PlusSquare size={12} className="mr-2" />
         Register
@@ -56,11 +56,13 @@ const Navbar = () => {
   return (
     <nav className="w-full mb-2 navbar">
       <Link href="/">
-        <Image src="/logo.png" alt="Otherway" width={32} height={32} />
+        <Image src="/logo.png" alt="Otherway" width={48} height={48} />
       </Link>
-      <div className="flex-col hidden ml-auto text-sm text-center font-body lg:flex lg:flex-row lg:space-x-10">
+      <div className="flex-col hidden ml-auto text-sm text-center font-body md:flex md:flex-row md:space-x-10">
         {NavMenu}
       </div>
+      <ThemeToggle />
+
       <div className="ml-auto lg:hidden">
         <div className="dropdown-end dropdown" data-cy="dropdown">
           <div tabIndex={0} className="m-1 cursor-pointer">

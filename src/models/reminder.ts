@@ -5,7 +5,7 @@ export default class Reminder {
   userId: string;
   showId: string;
   notifications: Notification[];
-  created: Date;
+  created: Date
 
   constructor(id: string,
               userId: string,

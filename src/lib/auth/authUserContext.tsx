@@ -1,40 +1,24 @@
 import React, { createContext, useContext, Context } from "react";
 import useFirebaseAuth from "@/lib/auth/useFirebaseAuth";
-import { User } from "@/models";
+import { Profile } from "@/models";
 
 interface IAuthUserContext {
-  user: User | undefined;
   loading: boolean;
-  signIn: (email: string, password: string) => {},
-  signUp: (email: string, password: string) => {},
-  logOut: () => {},
-  signInWithGoogle: () => {},
-  signInWithTwitter: () => {},
-  signInWithFacebook: () => {}
+  profile: Profile | undefined,
+  logOut: () => Promise<boolean>;
 }
 
-const authUserContext
-  = createContext<IAuthUserContext>({
-  user: undefined,
+const authUserContext = createContext<IAuthUserContext>({
   loading: true,
-  signIn: async (email: string, password: string) => {
-  },
-  signUp: async (email: string, password: string) => {
-  },
-  logOut: async () => {
-  },
-  signInWithGoogle: async () => {
-  },
-  signInWithTwitter: async () => {
-  },
-  signInWithFacebook: async () => {
-  }
+  profile: undefined,
+  logOut: () => Promise.resolve(false)
 });
 
 export function AuthUserProvider({ children }: { children: React.ReactNode }) {
-  const auth
-    = useFirebaseAuth();
-  return <authUserContext.Provider value={auth}>{children}</authUserContext.Provider>;
+  const { loading, profile, logOut } = useFirebaseAuth();
+  return (
+    <authUserContext.Provider value={{ loading, profile, logOut }}>{children}</authUserContext.Provider>
+  );
 }
 
 export const useAuthUserContext = () => useContext(authUserContext);

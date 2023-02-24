@@ -12,35 +12,43 @@ import {
 } from "firebase/auth";
 import { app } from "./firebase";
 import { useRouter } from "next/navigation";
-import { User } from "@/models";
+import { Profile } from "@/models";
+import { FirebaseAuth } from "@firebase/auth-types";
 
-const formatAuthUser = (user: User) => ({
-  uid: user.uid,
-  email: user.email
-});
 
 export default function useFirebaseAuth() {
+  const [profile, setProfile] = useState<Profile | undefined>();
   const auth = getAuth(app);
   const router = useRouter();
 
-  const [user, setUser] = useState<User | undefined>(undefined);
   const [loading, setLoading] = useState(true);
 
-  const authStateChanged = async (authState: any) => {
-    if (!authState) {
+  const getUserProfile = (): Profile | undefined => {
+    if (auth.currentUser !== null) {
+      // The user object has basic properties such as display name, email, etc.
+      // Going forward we may look this up from the user table in firestore
+      const profile = new Profile(
+        auth.currentUser.uid,
+        auth.currentUser.email,
+        auth.currentUser.displayName,
+        auth.currentUser.photoURL,
+        auth.currentUser.emailVerified
+      );
+      setProfile(profile);
+      return profile;
+    }
+  };
+  const authStateChanged = async (user: any) => {
+    if (user) {
       setLoading(false);
+      const profile = getUserProfile();
+      setProfile(profile);
       return;
     }
-
-    setLoading(true);
-    var formattedUser = formatAuthUser(authState);
-    setUser(formattedUser);
-    setLoading(false);
-
   };
 
   const clear = () => {
-    setUser(undefined);
+    setProfile(undefined);
     setLoading(true);
   };
 
@@ -52,62 +60,37 @@ export default function useFirebaseAuth() {
 
   const logOut = () =>
     signOut(auth).then(clear);
-  const signInWithGoogle = async () => {
-    const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: "select_account" });
 
+  const _processSignIn = async (provider: any) => {
     try {
       const result = await signInWithPopup(auth, provider);
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      if (credential) {
-        const token = credential.accessToken;
-        // const user = result.user;
+
+      if (result.user) {
+        const profile = getUserProfile();
+        setProfile(profile);
+        router.push("/");
       }
-      router.push("/");
     } catch (error: any) {
       const errorCode = error.code;
       const errorMessage = error.message;
       const email = error.email;
       const credential = GoogleAuthProvider.credentialFromError(error);
-
     }
   };
-  const signInWithTwitter = () => {
-    // const provider = new TwitterAuthProvider();
-    //
-    // return auth.signInWithPopup(auth, provider)
-    //   .then((result) => {
-    //     const credential = TwitterAuthProvider.credentialFromResult(result);
-    //     if (credential) {
-    //       const token = credential.accessToken;
-    //       const user = result.user;
-    //     }
-    //     router.push("/");
-    //   })
-    //   .catch((error) => {
-    //     const errorCode = error.code;
-    //     const errorMessage = error.message;
-    //     const email = error.email;
-    //     const credential = GoogleAuthProvider.credentialFromError(error);
-    //   });
+  const signInWithGoogle = async () => {
+    debugger
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: "select_account" });
+    provider.addScope("https://www.googleapis.com/auth/userinfo.profile");
+    await _processSignIn(provider);
   };
-  const signInWithFacebook = () => {
+  const signInWithTwitter = async () => {
+    const provider = new TwitterAuthProvider();
+    await _processSignIn(provider);
+  };
+  const signInWithFacebook = async () => {
     const provider = new FacebookAuthProvider();
-    return signInWithPopup(auth, provider)
-      .then((result) => {
-        const credential = TwitterAuthProvider.credentialFromResult(result);
-        if (credential) {
-          const token = credential.accessToken;
-          const user = result.user;
-        }
-        router.push("/");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-      });
+    await _processSignIn(provider);
   };
 
   useEffect(() => {
@@ -116,13 +99,14 @@ export default function useFirebaseAuth() {
   }, []);
 
   return {
-    user,
+    profile,
     loading,
     signIn,
     signUp,
     logOut,
     signInWithGoogle,
     signInWithTwitter,
-    signInWithFacebook
+    signInWithFacebook,
+    getUserProfile
   };
 }

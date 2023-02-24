@@ -5,7 +5,7 @@ import useFirebaseAuth from "@/lib/auth/useFirebaseAuth";
 import { IoLogoFacebook, IoLogoGoogle, IoLogoTwitter } from "react-icons/io";
 
 const LoginPage = () => {
-  const { signInWithGoogle, signInWithFacebook, signInWithTwitter, user, signIn } =
+  const { signInWithGoogle, signInWithFacebook, signInWithTwitter, profile, signIn } =
     useFirebaseAuth();
   const router = useRouter();
   const [email, setEmail] = React.useState("");

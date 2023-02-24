@@ -1,8 +1,8 @@
-const getMonthName = (date: Date) => {
-  return date.toLocaleString("default", { month: "short" });
+const getMonthName = (date: string) => {
+  return new Date(date).toLocaleString("default", { month: "short" });
 };
-const getTime = (date: Date) =>
-  date.toLocaleTimeString("en-IE", { timeStyle: "short" });
+const getTime = (date: string) =>
+  new Date(date).toLocaleTimeString("en-IE", { timeStyle: "short" });
 
 const getStartOfToday = (admin: any) => {
   const now = new Date();

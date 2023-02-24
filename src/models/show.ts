@@ -1,13 +1,13 @@
 export default class Show {
   id: string;
   title: string;
-  date: Date;
+  date: string;
   creator: string;
 
   constructor(id: string, title: string, date: Date, creator: string) {
     this.id = id;
     this.title = title;
-    this.date = date;
+    this.date = date.toString();
     this.creator = creator;
   }
 

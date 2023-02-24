@@ -54,7 +54,7 @@ const Home = async () => {
                     <div className="leading-5 text-gray-900">{show.title}</div>
                   </td>
                   <td className="px-2 py-4">
-                    <RemindMeButton show={show} />
+                    <RemindMeButton showId={show.id} />
                   </td>
                 </tr>
               ))}
