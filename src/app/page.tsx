@@ -1,5 +1,5 @@
 import React from "react";
-import HomePageComponent from "@/components/pages/home/HomePageComponent";
+import HomePageComponent from "@/components/pages/home";
 
 const getData = async () => {
   // const res = await fetch(

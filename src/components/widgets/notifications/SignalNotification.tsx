@@ -13,7 +13,7 @@ const SignalNotification = ({
     <InputText
       showLabel={false}
       type="tel"
-      defaultValue="phoneNumber"
+      value="phoneNumber"
       labelTitle="Phone number"
       updateFormValue={(value) => setPhoneNumber(value)}
       id="phone"
