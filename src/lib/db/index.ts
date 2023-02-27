@@ -1,4 +1,3 @@
-import serviceAccount from "serviceAccount.json";
 import { initializeApp } from "firebase/app";
 import {
   getFirestore,
@@ -6,7 +5,9 @@ import {
   collection,
   DocumentData,
   WithFieldValue,
-  QueryDocumentSnapshot, SnapshotOptions, Timestamp
+  QueryDocumentSnapshot,
+  SnapshotOptions,
+  Timestamp,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -16,7 +17,7 @@ const firebaseConfig = {
   storageBucket: "radio-otherway.appspot.com",
   messagingSenderId: "47147490249",
   appId: "1:47147490249:web:a84515b3ce1c481826e618",
-  measurementId: "G-12YB78EZM4"
+  measurementId: "G-12YB78EZM4",
 };
 export const firebaseApp = initializeApp(firebaseConfig);
 const firestore = getFirestore();
@@ -27,7 +28,9 @@ const showConverter = {
   toFirestore(show: WithFieldValue<Show>): DocumentData {
     return {
       ...show,
-      date: Timestamp.fromDate(<Date>show.date)
+      date: show.date
+        ? Timestamp.fromDate(new Date(show.date as string))
+        : new Date(),
     };
   },
   fromFirestore(
@@ -35,20 +38,18 @@ const showConverter = {
     options: SnapshotOptions
   ): Show {
     const data = snapshot.data(options)!;
-    return new Show(
-      snapshot.id,
-      data.title,
-      data.date.toDate(),
-      data.creator);
-  }
+    return new Show(snapshot.id, data.title, data.date.toDate(), data.creator);
+  },
 };
 
 // Import all your model types
-import { Show, Reminder, RemindersProcessed } from "@/models";
+import { Show, Reminder, RemindersProcessed, Profile } from "@/models";
 // export all your collections
 
-export const shows = createCollection<Show>("shows")
-  .withConverter(showConverter);
+export const users = createCollection<Profile>("users");
+export const shows =
+  createCollection<Show>("shows").withConverter(showConverter);
 export const reminders = createCollection<Reminder>("reminders");
-export const remindersProcessed = createCollection<RemindersProcessed>("reminders");
+export const remindersProcessed =
+  createCollection<RemindersProcessed>("reminders");
 export default firestore;

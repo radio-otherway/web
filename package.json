@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "turbo": "NODE_OPTIONS='-r next-logger' next dev --turbo",
     "dev": "NODE_OPTIONS='-r next-logger' node ./server.js",
     "debug": "node ./server.js",
     "dev-nossl": "next dev",
@@ -28,7 +29,7 @@
     "firebase": "^9.17.1",
     "firebase-functions": "^4.2.1",
     "fireschema": "^4.0.4",
-    "next": "13.2.0",
+    "next": "^13.2.1",
     "next-logger": "^3.0.1",
     "next-seo": "^5.15.0",
     "pino": "^8.11.0",

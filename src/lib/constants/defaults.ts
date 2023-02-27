@@ -1,4 +1,4 @@
 export const defaults = {
-  defaultTheme: "fantasy",
+  defaultTheme: "synthwave",
   defaultDarkTheme: "luxury",
 };

@@ -1,18 +1,47 @@
 "use client";
+import { InputText } from "@/components/widgets/inputs";
+import { HeadingSubComponent } from "@/components/widgets/text";
+import { useAuthUserContext } from "@/lib/auth/authUserContext";
+import db, { users } from "@/lib/db";
+import { debug } from "console";
+import { doc, setDoc } from "firebase/firestore";
 import React from "react";
-import { InputText } from "../widgets/inputs";
-import { HeadingSubComponent } from "../widgets/text";
 const ProfilePageComponentProfile = () => {
+  const { loading, profile } = useAuthUserContext();
   const [sendReminders, setSendReminders] = React.useState(false);
-  const [userName, setUserName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [about, setAbout] = React.useState("");
   const [displayName, setDisplayName] = React.useState("");
   const [url, setUrl] = React.useState("");
   const [image, setImage] = React.useState("");
+  React.useEffect(() => {
+    console.log("ProfilePageComponentProfile", "useEffect", profile);
+    if (profile) {
+      setEmail(profile.email as string);
+      setDisplayName(profile.displayName as string);
+      setAbout(profile.about as string);
+    }
+  }, [profile]);
+  const _submitProfileForm = async ($event: React.SyntheticEvent) => {
+    $event.preventDefault();
+    const result = await setDoc(
+      doc(users, profile?.id),
+      Object.assign(
+        {},
+        {
+          email,
+          displayName,
+          about: about || "",
+          lastSeen: new Date(),
+        }
+      ),
+      { merge: true }
+    );
+    console.log("ProfilePageComponentProfile", "_submitProfileForm", result);
+  };
   return (
-    <form className="space-y-8 divide-y ">
+    <form className="space-y-8 divide-y" onSubmit={_submitProfileForm}>
       <div className="space-y-8 divide-y sm:space-y-5">
         <div>
           <div>
@@ -22,20 +51,22 @@ const ProfilePageComponentProfile = () => {
               share.
             </p>
           </div>
-
           <div className="mt-6 space-y-6 sm:mt-5 sm:space-y-5">
             <div className="space-x-3 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:pt-5">
               <HeadingSubComponent
-                title="Username"
-                subHeading="The username that you would like to use to login to the site. This could be your email address"
+                title="Display Name"
+                subHeading="The name you would like others to see you as."
               />
               <div className="mt-1 sm:col-span-2 sm:mt-0">
                 <div className="flex max-w-lg rounded-md shadow-sm">
                   <InputText
-                    id="username"
-                    labelTitle="Username"
-                    defaultValue={userName}
-                    updateFormValue={(v) => setUserName(v)}
+                    id="displayname"
+                    type="text"
+                    labelTitle="Display name"
+                    value={displayName}
+                    updateFormValue={(v) => {
+                      setDisplayName(v);
+                    }}
                     showLabel={false}
                   />
                 </div>
@@ -52,7 +83,7 @@ const ProfilePageComponentProfile = () => {
                     id="email"
                     type="email"
                     labelTitle="Email address"
-                    defaultValue={email}
+                    value={email}
                     updateFormValue={(v) => setEmail(v)}
                     showLabel={false}
                   />
@@ -71,7 +102,7 @@ const ProfilePageComponentProfile = () => {
                   id="about"
                   type="textarea"
                   labelTitle="About"
-                  defaultValue={about}
+                  value={about}
                   updateFormValue={(v) => setAbout(v)}
                   showLabel={false}
                 />

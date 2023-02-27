@@ -4,11 +4,9 @@ import { useRouter } from "next/navigation";
 import { User, Bell } from "react-feather";
 import classNames from "classnames";
 import { useAuthUserContext } from "@/lib/auth/authUserContext";
-import useFirebaseAuth from "@/lib/auth/useFirebaseAuth";
-import { ImageUpload, InputText } from "../widgets/inputs";
-import { HeadingSubComponent } from "../widgets/text";
 import ProfilePageComponentProfile from "./ProfilePageComponentProfile";
 import ProfilePageComponentNotifications from "./ProfilePageComponentNotifications";
+
 const ProfilePageComponent = () => {
   const { profile, loading } = useAuthUserContext();
   const router = useRouter();
@@ -42,8 +40,11 @@ const ProfilePageComponent = () => {
       return <div>Rerouting</div>;
     } else if (!loading && profile) {
       return (
-        <div className="overflow-hidden rounded-lg shadow bg-base-100 text-base-content">
-          <h1>{selectedItem}</h1>
+        <div className="pt-4 overflow-hidden">
+          <div className="justify-center flex-1 px-2 mx-2 md:flex md:justify-start">
+            <span className="text-2xl font-bold">Your Profile</span>
+          </div>
+          <div className="mt-1 divider" />
           <div className="divide-y lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
             <aside className="py-6 lg:col-span-3">
               <nav className="space-y-1">

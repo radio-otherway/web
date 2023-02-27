@@ -2,12 +2,16 @@
 import React from "react";
 import { themeChange } from "theme-change";
 import "./globals.css";
-import { Inter } from "@next/font/google";
+import { Raleway } from "@next/font/google";
 import { NavBar } from "@/components/layout";
 import { AuthUserProvider } from "@/lib/auth/authUserContext";
 import { Toaster } from "react-hot-toast";
 
-const inter = Inter({ subsets: ["latin"] });
+const font = Raleway({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  variable: "--font-raleway",
+});
 
 export default function RootLayout({
   children,
@@ -20,13 +24,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head />
-      <body>
+      <body className={`${font.className}`}>
+        <Toaster />
         <AuthUserProvider>
-          <div className="w-full min-h-screen m-auto bg-base-100 text-base-content">
-            <div className="flex flex-col min-h-screen p-5 mx-auto max-w-7xl">
-              <Toaster />
+          <div className="flex flex-col min-h-screen bg-base-100">
+            <div className="sticky top-0 z-30 flex justify-center flex-none w-full h-16 transition-all duration-100 bg-opacity-90 text-primary-content backdrop-blur">
               <NavBar />
-              <main className="flex-1">{children}</main>
+            </div>
+            <div className="-mt-[4rem] grow place-items-center items-end bg-gradient-to-br from-primary to-secondary pt-20 text-primary-content ">
+              <main className="text-base-content">{children}</main>
             </div>
           </div>
         </AuthUserProvider>

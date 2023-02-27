@@ -1,8 +1,6 @@
 import React from "react";
 import { HeadingSubComponent } from "@/components/widgets/text";
-import { InputText } from "@/components/widgets/inputs";
-import { PhoneNumberContextImpl } from "twilio/lib/rest/lookups/v2/phoneNumber";
-import { PhoneNumber } from "../widgets/notifications";
+import { PhoneNumber } from "@/components/widgets/notifications";
 
 const ProfilePageComponentNotifications = () => {
   return (

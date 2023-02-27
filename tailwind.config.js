@@ -11,7 +11,7 @@ module.exports = {
   // ],
   plugins: [require("daisyui")],
   daisyui: {
-    themes: ["fantasy", "luxury"],
+    // themes: ["fantasy", "luxury", "synthwave"],
     darkTheme: "luxury",
   },
 };

@@ -1,21 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   createUserWithEmailAndPassword,
   FacebookAuthProvider,
   getAuth,
-  GoogleAuthProvider, linkWithPopup, OAuthProvider,
+  GoogleAuthProvider,
+  linkWithPopup,
+  OAuthProvider,
   onAuthStateChanged,
   signInWithEmailAndPassword,
-  signInWithPopup, signInWithRedirect,
+  signInWithPopup,
   signOut,
-  TwitterAuthProvider, UserCredential
+  TwitterAuthProvider,
+  UserCredential,
 } from "firebase/auth";
 import { app } from "./firebase";
 import { useRouter } from "next/navigation";
 import { Profile } from "@/models";
-import { FirebaseAuth } from "@firebase/auth-types";
-import firebase from "firebase/app";
-
+import { users } from "../db";
+import { doc, setDoc } from "firebase/firestore";
 
 export default function useFirebaseAuth() {
   const [profile, setProfile] = useState<Profile | undefined>();
@@ -24,7 +26,7 @@ export default function useFirebaseAuth() {
 
   const [loading, setLoading] = useState(true);
 
-  const getUserProfile = (): Profile | undefined => {
+  const getUserProfile = useCallback(() => {
     if (auth.currentUser !== null) {
       // The user object has basic properties such as display name, email, etc.
       // Going forward we may look this up from the user table in firestore
@@ -33,36 +35,43 @@ export default function useFirebaseAuth() {
         auth.currentUser.email,
         auth.currentUser.displayName,
         auth.currentUser.photoURL,
-        auth.currentUser.emailVerified
+        auth.currentUser.emailVerified,
+        new Date()
       );
       setProfile(profile);
+      setDoc(doc(users, auth.currentUser.uid), Object.assign({}, profile), {
+        merge: true,
+      });
       return profile;
     }
-  };
-  const authStateChanged = async (user: any) => {
-    if (user) {
+  }, [auth.currentUser]);
+  const authStateChanged = useCallback(
+    (user: any) => {
+      if (user) {
+        setLoading(true);
+        const profile = getUserProfile();
+        setProfile(profile);
+      }
       setLoading(false);
-      const profile = getUserProfile();
-      setProfile(profile);
-      return;
-    }
-  };
-
+    },
+    [getUserProfile]
+  );
   const clear = () => {
     setProfile(undefined);
     setLoading(true);
   };
 
-  const signIn = (email: string, password: string): Promise<> =>
+  const signIn = (email: string, password: string) =>
     signInWithEmailAndPassword(auth, email, password);
 
   const signUp = (email: string, password: string) =>
     createUserWithEmailAndPassword(auth, email, password);
 
-  const logOut = () =>
-    signOut(auth).then(clear);
+  const logOut = () => signOut(auth).then(clear);
 
-  const _processSignIn = async (provider: any): Promise<UserCredential | undefined> => {
+  const _processSignIn = async (
+    provider: any
+  ): Promise<UserCredential | undefined> => {
     try {
       const result = await signInWithPopup(auth, provider);
       return result;
@@ -73,12 +82,20 @@ export default function useFirebaseAuth() {
         console.log("useFirebaseAuth", "_processSignIn_duplicateAccount", err);
         const auth = getAuth();
         if (auth?.currentUser) {
-          linkWithPopup(auth.currentUser, provider).then((result) => {
-            const credential = GoogleAuthProvider.credentialFromResult(result);
-            return credential;
-          }).catch((error) => {
-            console.log("useFirebaseAuth", "_processSignIn", "Failure in _processSignIn", err);
-          });
+          linkWithPopup(auth.currentUser, provider)
+            .then((result) => {
+              const credential =
+                GoogleAuthProvider.credentialFromResult(result);
+              return credential;
+            })
+            .catch((error) => {
+              console.log(
+                "useFirebaseAuth",
+                "_processSignIn",
+                "Failure in _processSignIn",
+                err
+              );
+            });
         }
       }
     }
@@ -114,7 +131,7 @@ export default function useFirebaseAuth() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, authStateChanged);
     return unsubscribe;
-  }, []);
+  }, [auth, getUserProfile]);
 
   return {
     profile,
@@ -125,6 +142,6 @@ export default function useFirebaseAuth() {
     signInWithGoogle,
     signInWithTwitter,
     signInWithFacebook,
-    getUserProfile
+    getUserProfile,
   };
 }

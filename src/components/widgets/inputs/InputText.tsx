@@ -6,7 +6,7 @@ interface IInputTextProps {
   labelStyle?: string;
   type?: string;
   containerStyle?: string;
-  defaultValue: string;
+  value: string;
   placeholder?: string;
   showLabel?: boolean;
   updateFormValue: (value: string) => void;
@@ -17,15 +17,13 @@ const InputText = ({
   labelStyle,
   type,
   containerStyle,
-  defaultValue,
+  value,
   placeholder,
   updateFormValue,
   showLabel = true,
 }: IInputTextProps) => {
-  const [value, setValue] = React.useState(defaultValue);
 
   const updateInputValue = (val: string) => {
-    setValue(val);
     updateFormValue(val);
   };
   const _getId = () => (type === "text" ? `inp_${id}` : `ta_${id}`);
@@ -36,16 +34,18 @@ const InputText = ({
         name={_getId()}
         rows={3}
         className="w-full h-24 textarea-bordered textarea"
-        defaultValue={defaultValue}
+        placeholder={placeholder || ""}
+        defaultValue={value}
+        onChange={(e) => updateInputValue(e.target.value)}
       />
     ) : (
       <input
         id={_getId()}
-        type={type || "text"}
-        value={value}
-        placeholder={placeholder || ""}
-        onChange={(e) => updateInputValue(e.target.value)}
         className="w-full input-bordered input"
+        type={type || "text"}
+        placeholder={placeholder || ""}
+        value={value}
+        onChange={(e) => updateInputValue(e.target.value)}
       />
     );
   return (

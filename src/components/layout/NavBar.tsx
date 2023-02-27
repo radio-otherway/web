@@ -1,18 +1,15 @@
 "use client";
 import React from "react";
-import { BiLogInCircle } from "react-icons/bi";
 import Link from "next/link";
-import useFirebaseAuth from "@/lib/auth/useFirebaseAuth";
 import { useAuthUserContext } from "@/lib/auth/authUserContext";
 import Image from "next/image";
 import { LogIn, LogOut, PlusSquare, Menu, User } from "react-feather";
 import dynamic from "next/dynamic";
-import Signup from "@/app/(auth)/signup/page";
 
 const ThemeToggle = dynamic(
   () => import("@/components/widgets/ui/theme/ThemeToggle"),
   {
-    ssr: false
+    ssr: false,
   }
 );
 const Navbar = () => {
@@ -22,18 +19,24 @@ const Navbar = () => {
       <Link
         href="/profile"
         id="profile"
-        className="font-normal normal-case font-body btn-primary btn-sm btn"
+        className="gap-1 normal-case btn-ghost btn"
       >
-        <User size={12} className="mr-2" />
+        <User
+          size={20}
+          className="inline-block w-5 h-5 stroke-current md:h-6 md:w-6"
+        />
         Profile
       </Link>
       <button
-        id="logout-btn"
-        className="btn-ghost btn-sm btn"
+        tabIndex={0}
+        className="gap-1 normal-case btn-ghost btn"
         onClick={() => logOut()}
       >
-        <LogOut size={12} className="mr-2" />
-        Logout
+        <LogOut
+          size={20}
+          className="inline-block w-5 h-5 stroke-current md:h-6 md:w-6"
+        />
+        <span className="hidden md:inline">Logout</span>
       </button>
     </React.Fragment>
   ) : (
@@ -46,8 +49,15 @@ const Navbar = () => {
         <PlusSquare size={12} className="mr-2" />
         Register
       </Link>
-      <Link href="/login" id="login" className="btn-ghost btn-sm btn">
-        <LogIn size={12} className="mr-2" />
+      <Link
+        href="/login"
+        id="login"
+        className="gap-1 normal-case btn-ghost btn"
+      >
+        <LogIn
+          size={20}
+          className="inline-block w-5 h-5 stroke-current md:h-6 md:w-6"
+        />
         Login
       </Link>
     </React.Fragment>
@@ -59,7 +69,7 @@ const Navbar = () => {
         <Image src="/logo.png" alt="Otherway" width={48} height={48} />
       </Link>
       <div className="flex-col hidden ml-auto text-sm text-center font-body md:flex md:flex-row md:space-x-10">
-        {NavMenu}
+        {!loading && NavMenu}
       </div>
       <ThemeToggle />
 

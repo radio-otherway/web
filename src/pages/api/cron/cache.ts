@@ -19,7 +19,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }, { merge: true });
     }
     logger.debug("Stored show", res);
-    res.status(200).json({ status: "OK" });
+    res.status(200).json({ status: "OK", entries });
   } catch (err) {
     logger.error(err);
     res.status(500).json({status: "Error"});

@@ -9,6 +9,7 @@ const LoginPage = () => {
     useFirebaseAuth();
   const router = useRouter();
   const [error, setError] = React.useState("");
+  const [forgot, setForgot] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 

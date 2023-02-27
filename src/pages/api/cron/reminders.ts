@@ -32,7 +32,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const reminder = r.data() as Reminder;
       for (let notification of reminder.notifications) {
         const targetDate = addSeconds(new Date(), notification.secondsBefore);
-        const differenceInSeconds = dateDifferenceInSeconds(targetDate, show.date);
+        const differenceInSeconds = dateDifferenceInSeconds(targetDate, new Date(show.date));
         if (differenceInSeconds >= 0) {
           //time to fire off a notification
           await sendSMS("353868065119", "New show starting in 1 hour");
