@@ -5,13 +5,14 @@ import { Profile } from "@/models";
 interface IAuthUserContext {
   loading: boolean;
   profile: Profile | undefined,
-  logOut: () => Promise<boolean>;
+  logOut: () => void
 }
 
 const authUserContext = createContext<IAuthUserContext>({
   loading: true,
   profile: undefined,
-  logOut: () => Promise.resolve(false)
+  logOut: () => {
+  }
 });
 
 export function AuthUserProvider({ children }: { children: React.ReactNode }) {

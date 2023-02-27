@@ -3,19 +3,18 @@ import {
   createUserWithEmailAndPassword,
   FacebookAuthProvider,
   getAuth,
-  GoogleAuthProvider, linkWithPopup,
+  GoogleAuthProvider, linkWithPopup, OAuthProvider,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup, signInWithRedirect,
   signOut,
-  TwitterAuthProvider
+  TwitterAuthProvider, UserCredential
 } from "firebase/auth";
 import { app } from "./firebase";
 import { useRouter } from "next/navigation";
 import { Profile } from "@/models";
 import { FirebaseAuth } from "@firebase/auth-types";
 import firebase from "firebase/app";
-import LoginFunctions from "@/lib/auth/loginFunctions";
 
 
 export default function useFirebaseAuth() {
@@ -54,7 +53,7 @@ export default function useFirebaseAuth() {
     setLoading(true);
   };
 
-  const signIn = (email: string, password: string) =>
+  const signIn = (email: string, password: string): Promise<> =>
     signInWithEmailAndPassword(auth, email, password);
 
   const signUp = (email: string, password: string) =>
@@ -63,45 +62,49 @@ export default function useFirebaseAuth() {
   const logOut = () =>
     signOut(auth).then(clear);
 
-  const _processSignIn = async (provider: any) => {
+  const _processSignIn = async (provider: any): Promise<UserCredential | undefined> => {
     try {
-      try {
-        const result = await signInWithPopup(auth, provider);
-      } catch (error: any) {
-        if (error.code === "auth/account-exists-with-different-credential") {
-          linkWithPopup(result.currentUser, provider).then((result) => {
-            // Accounts successfully linked.
+      const result = await signInWithPopup(auth, provider);
+      return result;
+    } catch (err: any) {
+      console.log("useFirebaseAuth", "_processSignIn", err);
+      if (err.code === "auth/account-exists-with-different-credential") {
+        const credential = OAuthProvider.credentialFromError(err);
+        console.log("useFirebaseAuth", "_processSignIn_duplicateAccount", err);
+        const auth = getAuth();
+        if (auth?.currentUser) {
+          linkWithPopup(auth.currentUser, provider).then((result) => {
             const credential = GoogleAuthProvider.credentialFromResult(result);
+            return credential;
           }).catch((error) => {
             console.log("useFirebaseAuth", "_processSignIn", "Failure in _processSignIn", err);
-            // Handle Errors here.
-            // ...
           });
         }
       }
-      if (result.user) {
-        const profile = getUserProfile();
-        setProfile(profile);
-        router.push("/");
-      }
-    } catch (error: any) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      const email = error.email;
-      const credential = GoogleAuthProvider.credentialFromError(error);
     }
   };
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: "select_account" });
     provider.addScope("https://www.googleapis.com/auth/userinfo.profile");
-    const credential = await signInWithPopup(auth, provider);
-    return LoginFunctions.signInOrLink(GoogleAuthProvider.PROVIDER_ID, credential, credential.user.email);
-    // await _processSignIn(provider);
+
+    const result = await _processSignIn(provider);
+    if (result) {
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const profile = getUserProfile();
+      setProfile(profile);
+      router.push("/");
+    }
   };
   const signInWithTwitter = async () => {
-    const credential = new TwitterAuthProvider();
-    return LoginFunctions.signInOrLink(GoogleAuthProvider.PROVIDER_ID, credential, credential.user.email);
+    const provider = new TwitterAuthProvider();
+    const result = await _processSignIn(provider);
+    if (result) {
+      const credential = TwitterAuthProvider.credentialFromResult(result);
+      const profile = getUserProfile();
+      setProfile(profile);
+      router.push("/");
+    }
   };
   const signInWithFacebook = async () => {
     const provider = new FacebookAuthProvider();
