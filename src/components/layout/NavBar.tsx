@@ -38,9 +38,9 @@ const Navbar = () => {
       <Link
         href="/signup"
         id="signup"
-        className="font-normal normal-case font-body btn-primary btn-sm btn"
+        className="gap-1 normal-case btn-ghost btn"
       >
-        <PlusSquare size={12} className="mr-2" />
+        <PlusSquare size={20} className="inline-block w-5 h-5 stroke-current md:h-6 md:w-6" />
         Register
       </Link>
       <Link
@@ -62,10 +62,10 @@ const Navbar = () => {
       <Link href="/">
         <Image src="/logo.png" alt="Otherway" width={42} height={42} />
       </Link>
-      <div className="flex-col hidden ml-auto text-sm text-center font-body md:flex md:flex-row md:space-x-10">
+      <div className="flex-col hidden ml-auto text-sm text-center font-body md:flex md:flex-row">
         {!loading && NavMenu}
+        <ThemeSelector />
       </div>
-      <ThemeSelector />
 
       <div className="ml-auto lg:hidden">
         <div className="dropdown-end dropdown" data-cy="dropdown">

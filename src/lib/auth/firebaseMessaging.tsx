@@ -3,16 +3,16 @@ import localforage from "localforage";
 import { getMessaging, getToken } from "firebase/messaging";
 import { app } from "./firebase";
 
+
 const firebaseCloudMessaging = {
-  init: async () => {
+  init: async (): Promise<string | null> => {
     try {
       const messaging = getMessaging(app);
-
       const tokenInLocalForage = await localforage.getItem("fcm_token");
 
       // Return the token if it is alredy in our local storage
       if (tokenInLocalForage !== null) {
-        return tokenInLocalForage;
+        return tokenInLocalForage as string;
       }
 
       // Request the push notification permission from browser
@@ -23,14 +23,14 @@ const firebaseCloudMessaging = {
 
         // Set token in our local storage
         if (token) {
-          localforage.setItem("fcm_token", token);
+          await localforage.setItem("fcm_token", token);
           return token;
         }
       }
     } catch (error) {
       console.error(error);
-      return null;
     }
-  },
+    return null;
+  }
 };
 export { firebaseCloudMessaging };

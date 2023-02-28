@@ -19,8 +19,7 @@ const ProfilePageComponentProfile = () => {
   const [url, setUrl] = React.useState("");
   const [image, setImage] = React.useState("");
   React.useEffect(() => {
-    console.log("ProfilePageComponentProfile", "useEffect", profile);
-    if (profile) {
+      if (profile) {
       setEmail(profile.email as string);
       setDisplayName(profile.displayName as string);
       setAbout(profile.about as string);

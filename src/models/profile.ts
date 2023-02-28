@@ -1,3 +1,5 @@
+import DeviceRegistration from "@/models/deviceregistration";
+
 export default class Profile {
   id: string;
   email: string | null;
@@ -6,6 +8,7 @@ export default class Profile {
   emailVerified: boolean = false;
   about?: String;
   lastSeen: Date;
+  deviceRegistrations?: DeviceRegistration[] = [];
 
   constructor(
     id: string,
@@ -13,7 +16,8 @@ export default class Profile {
     displayName: string | null,
     photoURL: string | null,
     about?: string,
-    lastSeen?: Date
+    lastSeen?: Date,
+    deviceRegistrations?: DeviceRegistration[]
   ) {
     this.id = id;
     this.email = email;
@@ -22,5 +26,6 @@ export default class Profile {
     this.about = about || "";
 
     this.lastSeen = lastSeen || new Date();
+    this.deviceRegistrations = deviceRegistrations || this.deviceRegistrations;
   }
 }
