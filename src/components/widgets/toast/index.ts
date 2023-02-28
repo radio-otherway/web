@@ -1,3 +1,3 @@
-import { error, success, warning } from "./toastService";
+import ToastService from "./toastService";
 
-export { success, warning, error };
+export default ToastService;

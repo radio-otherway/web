@@ -11,13 +11,14 @@ import {
   signInWithPopup,
   signOut,
   TwitterAuthProvider,
-  UserCredential,
+  UserCredential
 } from "firebase/auth";
 import { app } from "./firebase";
 import { useRouter } from "next/navigation";
 import { Profile } from "@/models";
 import { users } from "../db";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { servicesVersion } from "@ts-morph/common/lib/typescript";
 
 export default function useFirebaseAuth() {
   const [profile, setProfile] = useState<Profile | undefined>();
@@ -26,30 +27,30 @@ export default function useFirebaseAuth() {
 
   const [loading, setLoading] = useState(true);
 
-  const getUserProfile = useCallback(() => {
+  const getUserProfile = useCallback(async () => {
     if (auth.currentUser !== null) {
       // The user object has basic properties such as display name, email, etc.
       // Going forward we may look this up from the user table in firestore
-      const profile = new Profile(
+      const savedProfileRef = await getDoc(doc(users, auth.currentUser.uid));
+      const savedProfile = savedProfileRef.data();
+      const profile: Profile = new Profile(
         auth.currentUser.uid,
-        auth.currentUser.email,
-        auth.currentUser.displayName,
-        auth.currentUser.photoURL,
-        auth.currentUser.emailVerified,
-        new Date()
+        (savedProfile?.email || auth.currentUser.email) as string,
+        (savedProfile?.displayName || auth.currentUser.email) as string,
+        (savedProfile?.photoURL || auth.currentUser.email) as string,
+        savedProfile?.about as string
       );
       setProfile(profile);
-      setDoc(doc(users, auth.currentUser.uid), Object.assign({}, profile), {
-        merge: true,
+      await setDoc(doc(users, auth.currentUser.uid), Object.assign({}, profile), {
+        merge: true
       });
       return profile;
     }
   }, [auth.currentUser]);
-  const authStateChanged = useCallback(
-    (user: any) => {
+  const authStateChanged = useCallback(async (user: any) => {
       if (user) {
         setLoading(true);
-        const profile = getUserProfile();
+        const profile = await getUserProfile();
         setProfile(profile);
       }
       setLoading(false);
@@ -108,7 +109,7 @@ export default function useFirebaseAuth() {
     const result = await _processSignIn(provider);
     if (result) {
       const credential = GoogleAuthProvider.credentialFromResult(result);
-      const profile = getUserProfile();
+      const profile = await getUserProfile();
       setProfile(profile);
       router.push("/");
     }
@@ -118,7 +119,7 @@ export default function useFirebaseAuth() {
     const result = await _processSignIn(provider);
     if (result) {
       const credential = TwitterAuthProvider.credentialFromResult(result);
-      const profile = getUserProfile();
+      const profile = await getUserProfile();
       setProfile(profile);
       router.push("/");
     }
@@ -142,6 +143,6 @@ export default function useFirebaseAuth() {
     signInWithGoogle,
     signInWithTwitter,
     signInWithFacebook,
-    getUserProfile,
+    getUserProfile
   };
 }

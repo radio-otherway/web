@@ -4,12 +4,12 @@ import ToastComponent, { ToastType } from "./ToastComponent";
 import {
   RiAlarmWarningLine,
   RiErrorWarningLine,
-  RiShieldCheckLine
+  RiShieldCheckLine,
 } from "react-icons/ri";
 
-const success = (message: string, title?: string) => {
-  toast.custom(
-    (t) => (
+const ToastService = {
+  success: (message: string, title?: string) => {
+    toast.custom((t) => (
       <ToastComponent
         title={title ?? "Success"}
         body={message}
@@ -19,12 +19,10 @@ const success = (message: string, title?: string) => {
           toast.dismiss(t.id);
         }}
       />
-    )
-  );
-};
-const warning = (message: string, title?: string) => {
-  toast.custom(
-    (t) => (
+    ));
+  },
+  warning: (message: string, title?: string) => {
+    toast.custom((t) => (
       <ToastComponent
         title={title ?? "Warning"}
         body={message}
@@ -34,12 +32,10 @@ const warning = (message: string, title?: string) => {
           toast.dismiss(t.id);
         }}
       />
-    )
-  );
-};
-const error = (message: string, title?: string) => {
-  toast.custom(
-    (t) => (
+    ));
+  },
+  error: (message: string, title?: string) => {
+    toast.custom((t) => (
       <ToastComponent
         title={title ?? "Error"}
         body={message}
@@ -49,7 +45,7 @@ const error = (message: string, title?: string) => {
           toast.dismiss(t.id);
         }}
       />
-    )
-  );
+    ));
+  },
 };
-export { success, warning, error };
+export default ToastService;

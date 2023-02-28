@@ -9,4 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cache outstanding events
-        run: curl -X GET https://otherway.fergl.ie/api/cron/reminders
+        uses: wei/curl@master
+        with:
+          args: https://otherway.fergl.ie/api/cron/reminders

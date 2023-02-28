@@ -4,14 +4,8 @@ import Link from "next/link";
 import { useAuthUserContext } from "@/lib/auth/authUserContext";
 import Image from "next/image";
 import { LogIn, LogOut, PlusSquare, Menu, User } from "react-feather";
-import dynamic from "next/dynamic";
+import { ThemeSelector } from "../widgets/ui/themes";
 
-const ThemeToggle = dynamic(
-  () => import("@/components/widgets/ui/theme/ThemeToggle"),
-  {
-    ssr: false,
-  }
-);
 const Navbar = () => {
   const { profile, loading, logOut } = useAuthUserContext();
   const NavMenu = profile ? (
@@ -64,14 +58,14 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="w-full mb-2 navbar">
+    <nav className="w-full navbar bg-secondary-content text-accent-focus">
       <Link href="/">
-        <Image src="/logo.png" alt="Otherway" width={48} height={48} />
+        <Image src="/logo.png" alt="Otherway" width={42} height={42} />
       </Link>
       <div className="flex-col hidden ml-auto text-sm text-center font-body md:flex md:flex-row md:space-x-10">
         {!loading && NavMenu}
       </div>
-      <ThemeToggle />
+      <ThemeSelector />
 
       <div className="ml-auto lg:hidden">
         <div className="dropdown-end dropdown" data-cy="dropdown">

@@ -3,22 +3,23 @@ export default class Profile {
   email: string | null;
   displayName: string | null;
   photoURL: string | null;
-  emailVerified: boolean;
+  emailVerified: boolean = false;
   about?: String;
   lastSeen: Date;
+
   constructor(
     id: string,
     email: string | null,
     displayName: string | null,
     photoURL: string | null,
-    emailVerified: boolean,
+    about?: string,
     lastSeen?: Date
   ) {
     this.id = id;
     this.email = email;
     this.displayName = displayName;
     this.photoURL = photoURL;
-    this.emailVerified = emailVerified;
+    this.about = about || "";
 
     this.lastSeen = lastSeen || new Date();
   }

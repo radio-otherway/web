@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
-import { themeChange } from "theme-change";
 import "./globals.css";
 import { Raleway } from "@next/font/google";
 import { NavBar } from "@/components/layout";
 import { AuthUserProvider } from "@/lib/auth/authUserContext";
 import { Toaster } from "react-hot-toast";
+import { defaults } from "@/lib/constants";
 
 const font = Raleway({
   weight: ["400", "700"],
@@ -19,7 +19,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   React.useEffect(() => {
-    themeChange(false);
+    const theme = localStorage.getItem("theme") || defaults.defaultTheme;
+    if (theme && !document.body.dataset.theme) {
+      document.body.dataset.theme = theme;
+    }
   }, []);
   return (
     <html lang="en">
@@ -28,11 +31,9 @@ export default function RootLayout({
         <Toaster />
         <AuthUserProvider>
           <div className="flex flex-col min-h-screen bg-base-100">
-            <div className="sticky top-0 z-30 flex justify-center flex-none w-full h-16 transition-all duration-100 bg-opacity-90 text-primary-content backdrop-blur">
-              <NavBar />
-            </div>
-            <div className="-mt-[4rem] grow place-items-center items-end bg-gradient-to-br from-primary to-secondary pt-20 text-primary-content ">
-              <main className="text-base-content">{children}</main>
+            <NavBar />
+            <div className="items-end grow place-items-center bg-base-200 text-primary-content">
+              <main className=" text-base-content">{children}</main>
             </div>
           </div>
         </AuthUserProvider>

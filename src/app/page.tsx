@@ -2,12 +2,11 @@ import React from "react";
 import HomePageComponent from "@/components/pages/home";
 
 const getData = async () => {
-  // const res = await fetch(
-  //   `${process.env.NEXT_PUBLIC_API_URL}/api/shows/upcoming`
-  // );
   const res = await fetch(
-    "https://otherway.dev.fergl.ie:3000/api/shows/upcoming"
+    `${process.env.NEXT_PUBLIC_API_URL}/api/shows/upcoming`,
+    { cache: "no-store" }
   );
+
   return await res.json();
 };
 

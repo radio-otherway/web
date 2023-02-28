@@ -6,6 +6,9 @@ import db, { users } from "@/lib/db";
 import { debug } from "console";
 import { doc, setDoc } from "firebase/firestore";
 import React from "react";
+import ToastService from "@/components/widgets/toast";
+import logger from "@/lib/util/logging";
+
 const ProfilePageComponentProfile = () => {
   const { loading, profile } = useAuthUserContext();
   const [sendReminders, setSendReminders] = React.useState(false);
@@ -25,20 +28,26 @@ const ProfilePageComponentProfile = () => {
   }, [profile]);
   const _submitProfileForm = async ($event: React.SyntheticEvent) => {
     $event.preventDefault();
-    const result = await setDoc(
-      doc(users, profile?.id),
-      Object.assign(
-        {},
-        {
-          email,
-          displayName,
-          about: about || "",
-          lastSeen: new Date(),
-        }
-      ),
-      { merge: true }
-    );
-    console.log("ProfilePageComponentProfile", "_submitProfileForm", result);
+    try {
+      const result = await setDoc(
+        doc(users, profile?.id),
+        Object.assign(
+          {},
+          {
+            email,
+            displayName,
+            about: about || "",
+            lastSeen: new Date()
+          }
+        ),
+        { merge: true }
+      );
+      console.log("ProfilePageComponentProfile", "_submitProfileForm", result);
+      ToastService.success("Successfully updated your profile", "Success");
+    } catch (err) {
+      logger.error("ProfilePageComponentProfile", "_submitProfileForm", err);
+      ToastService.error("Failed to update your profile.");
+    }
   };
   return (
     <form className="space-y-8 divide-y" onSubmit={_submitProfileForm}>
@@ -106,10 +115,6 @@ const ProfilePageComponentProfile = () => {
                   updateFormValue={(v) => setAbout(v)}
                   showLabel={false}
                 />
-
-                <p className="mt-2 text-sm ">
-                  Write a few sentences about yourself.
-                </p>
               </div>
             </div>
 
@@ -126,7 +131,8 @@ const ProfilePageComponentProfile = () => {
                       fill="currentColor"
                       viewBox="0 0 24 24"
                     >
-                      <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                      <path
+                        d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
                   </span>
                   <button
