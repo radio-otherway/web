@@ -5,21 +5,11 @@ import { useState, useEffect } from "react";
 import { IoColorPaletteOutline } from "react-icons/io5";
 import { BiDownArrow } from "react-icons/bi";
 import { defaults } from "@/lib/constants";
+import { useTheme } from "react-daisyui";
+import { themeChange } from "theme-change";
 
 const ThemeSelector = () => {
-    const [activeTheme, setActiveTheme] = useState(
-      typeof window !== "undefined" && localStorage.getItem("theme") ||
-      defaults.defaultTheme);
-    //
-    useEffect(() => {
-      if (document) {
-        document.body.dataset.theme = activeTheme;
-        window.localStorage.setItem("theme", activeTheme);
-      }
-    }, [activeTheme]);
-
-    const _switchTheme = useCallback((theme: string) => {
-      setActiveTheme(theme);
+    const _switchTheme = useCallback(() => {
       const elem = document.activeElement as HTMLElement;
       elem?.blur();
     }, []);
@@ -39,7 +29,8 @@ const ThemeSelector = () => {
               <button
                 key={theme.id}
                 className="overflow-hidden text-left rounded-lg outline-base-content"
-                onClick={() => _switchTheme(theme.id)}
+                data-set-theme={theme.id}
+                onClick={() => _switchTheme()}
               >
                 <div
                   data-theme={theme.id}

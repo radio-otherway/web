@@ -19,6 +19,7 @@ import { Profile } from "@/models";
 import { users } from "../db";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { servicesVersion } from "@ts-morph/common/lib/typescript";
+import logger from "../util/logging";
 
 export default function useFirebaseAuth() {
   const [profile, setProfile] = useState<Profile | undefined>();
@@ -38,7 +39,9 @@ export default function useFirebaseAuth() {
         (savedProfile?.email || auth.currentUser.email) as string,
         (savedProfile?.displayName || auth.currentUser.email) as string,
         (savedProfile?.photoURL || auth.currentUser.email) as string,
-        savedProfile?.about as string
+        savedProfile?.about as string,
+        new Date(),
+        savedProfile?.deviceRegistrations
       );
       setProfile(profile);
       await setDoc(doc(users, auth.currentUser.uid), Object.assign({}, profile), {
@@ -65,8 +68,16 @@ export default function useFirebaseAuth() {
   const signIn = (email: string, password: string) =>
     signInWithEmailAndPassword(auth, email, password);
 
-  const signUp = (email: string, password: string) =>
-    createUserWithEmailAndPassword(auth, email, password);
+  const signUp = async (email: string, password: string): Promise<string> => {
+    try {
+      const response = await createUserWithEmailAndPassword(auth, email, password);
+      logger.debug("useFireBaseAuth", "signUp_success", response);
+      return "";
+    } catch (err: { code: string } | any) {
+      logger.error("useFireBaseAuth", "signUp", err);
+      return err.code;
+    }
+  };
 
   const logOut = () => signOut(auth).then(clear);
 
