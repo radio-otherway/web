@@ -38,7 +38,7 @@ const Navbar = () => {
       <Link
         href="/signup"
         id="signup"
-        className="font-normal normal-case font-body btn-primary btn-sm btn text-primary-content"
+        className="font-normal normal-case font-body btn-primary btn-sm btn"
       >
         <PlusSquare size={12} className="mr-2" />
         Register
@@ -58,7 +58,7 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="w-full navbar bg-secondary-content text-accent-focus">
+    <nav className="w-full navbar bg-primary text-base-200 shadow-lg">
       <Link href="/">
         <Image src="/logo.png" alt="Otherway" width={42} height={42} />
       </Link>

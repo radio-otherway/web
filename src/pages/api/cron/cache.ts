@@ -8,14 +8,18 @@ import Settings from "@/lib/db/settings";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    logger.debug("API:cache", "Starting cache of events");
     const syncToken = await Settings.read("CalendarSyncToken");
+    logger.debug("API:cache", "Sync token", syncToken);
     const e = await getCalendarEntries(syncToken);
+    logger.debug("API:cache", "Got events", e?.events);
     if (!e?.events) {
       res.status(204).json({ result: "No calendar entries found" });
     } else {
       const entries = e?.events.map((r: any) => Show.fromJson(r));
+      logger.debug("API:cache", "Mapping events", entries);
       for (const entry of entries) {
-        logger.debug("Storing show", entry);
+        logger.debug("API:cache", "Mapping event", entry);
         const showRef = doc(shows, entry.id);
         await setDoc(showRef, {
           title: entry.title,
@@ -33,6 +37,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     logger.error(err);
     res.status(500).json({ status: "Error" });
   }
+
   res.end();
 };
 export default handler;
