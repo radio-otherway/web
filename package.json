@@ -29,6 +29,7 @@
     "firebase": "^9.17.1",
     "firebase-functions": "^4.2.1",
     "fireschema": "^4.0.4",
+    "localforage": "^1.10.0",
     "next": "^13.2.1",
     "next-logger": "^3.0.1",
     "next-seo": "^5.15.0",

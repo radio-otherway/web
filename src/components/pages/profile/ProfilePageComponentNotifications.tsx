@@ -1,6 +1,9 @@
 import React from "react";
 import { HeadingSubComponent } from "@/components/widgets/text";
-import { PhoneNumber } from "@/components/widgets/notifications";
+import {
+  PhoneNumber,
+  RequestPushNotifications,
+} from "@/components/widgets/notifications";
 
 const ProfilePageComponentNotifications = () => {
   return (
@@ -21,7 +24,7 @@ const ProfilePageComponentNotifications = () => {
               />
               <div className="mt-1 sm:col-span-2 sm:mt-0">
                 <div className="flex max-w-lg rounded-md shadow-sm">
-                  
+                  <RequestPushNotifications />
                 </div>
               </div>
             </div>

@@ -1,3 +1,4 @@
 import NavBar from "./NavBar";
+import PushNotificationWrapper from "./PushNotificationWrapper";
 
-export { NavBar };
+export { NavBar, PushNotificationWrapper };

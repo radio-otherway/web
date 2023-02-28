@@ -2,7 +2,7 @@
 import React from "react";
 import "./globals.css";
 import { Raleway } from "@next/font/google";
-import { NavBar } from "@/components/layout";
+import { NavBar, PushNotificationWrapper } from "@/components/layout";
 import { AuthUserProvider } from "@/lib/auth/authUserContext";
 import { Toaster } from "react-hot-toast";
 import { defaults } from "@/lib/constants";
@@ -28,15 +28,16 @@ export default function RootLayout({
     <html lang="en">
       <head />
       <body className={`${font.className}`}>
-        <Toaster />
-        <AuthUserProvider>
-          <div className="flex flex-col min-h-screen bg-base-100">
-            <NavBar />
-            <div className="items-end grow place-items-center bg-base-200 text-primary-content">
-              <main className=" text-base-content">{children}</main>
+        <PushNotificationWrapper>
+          <AuthUserProvider>
+            <div className="flex flex-col min-h-screen bg-base-100">
+              <NavBar />
+              <div className="items-end grow place-items-center bg-base-200 text-primary-content">
+                <main className=" text-base-content">{children}</main>
+              </div>
             </div>
-          </div>
-        </AuthUserProvider>
+          </AuthUserProvider>
+        </PushNotificationWrapper>
       </body>
     </html>
   );

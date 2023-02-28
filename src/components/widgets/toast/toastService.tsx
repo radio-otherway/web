@@ -1,4 +1,9 @@
-import toast from "react-hot-toast";
+import toast, {
+  Renderable,
+  Toast,
+  ToastOptions,
+  ValueOrFunction,
+} from "react-hot-toast";
 
 import ToastComponent, { ToastType } from "./ToastComponent";
 import {
@@ -8,6 +13,12 @@ import {
 } from "react-icons/ri";
 
 const ToastService = {
+  custom: (
+    message: ValueOrFunction<Renderable, Toast>,
+    opts?: ToastOptions
+  ) => {
+    toast.custom(message, opts);
+  },
   success: (message: string, title?: string) => {
     toast.custom((t) => (
       <ToastComponent

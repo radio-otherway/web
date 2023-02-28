@@ -1,0 +1,36 @@
+import "firebase/messaging";
+import localforage from "localforage";
+import { getMessaging, getToken } from "firebase/messaging";
+import { app } from "./firebase";
+
+const firebaseCloudMessaging = {
+  init: async () => {
+    try {
+      const messaging = getMessaging(app);
+
+      const tokenInLocalForage = await localforage.getItem("fcm_token");
+
+      // Return the token if it is alredy in our local storage
+      if (tokenInLocalForage !== null) {
+        return tokenInLocalForage;
+      }
+
+      // Request the push notification permission from browser
+      const status = await Notification.requestPermission();
+      if (status && status === "granted") {
+        // Get new token from Firebase
+        const token = await getToken(messaging, { vapidKey: process.env.WEBPUSH_VAPID_KEY });
+
+        // Set token in our local storage
+        if (token) {
+          localforage.setItem("fcm_token", token);
+          return token;
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
+};
+export { firebaseCloudMessaging };
