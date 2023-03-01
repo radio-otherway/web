@@ -1,11 +1,26 @@
 "use client";
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { User, Bell } from "react-feather";
 import classNames from "classnames";
 import { useAuthUserContext } from "@/lib/auth/authUserContext";
 import ProfilePageComponentProfile from "./ProfilePageComponentProfile";
 import ProfilePageComponentNotifications from "./ProfilePageComponentNotifications";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { users } from "@/lib/db";
+import { doc, setDoc } from "firebase/firestore";
+import ToastService from "@/components/widgets/toast";
+import logger from "@/lib/util/logging";
+import { removeUndefinedProperties } from "@/lib/util/objectUtils";
+
+export type ProfileForm = {
+  displayName: string;
+  email: string;
+  about: string;
+  photoURL: string;
+  headerPhotoURL: string;
+  mobileNumber: string;
+};
 
 const ProfilePageComponent = () => {
   const { profile, loading } = useAuthUserContext();
@@ -15,7 +30,6 @@ const ProfilePageComponent = () => {
       router.push("/");
     }
   }, [profile, loading, router]);
-  const [sendReminders, setSendReminders] = React.useState(false);
   const subNavigation = [
     { name: "profile", title: "Profile", icon: User },
     {
@@ -25,12 +39,59 @@ const ProfilePageComponent = () => {
     },
   ];
   const [selectedItem, setSelectedItem] = React.useState("profile");
-  const [userName, setUserName] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [about, setAbout] = React.useState("");
-  const [displayName, setDisplayName] = React.useState("");
-  const [url, setUrl] = React.useState("");
-  const [image, setImage] = React.useState("");
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    watch,
+    control,
+    formState: { errors },
+  } = useForm<ProfileForm>({
+    defaultValues: useMemo(() => {
+      return profile;
+    }, [profile]),
+  });
+
+  useEffect(() => {
+    if (profile) {
+      reset(profile);
+    }
+    // setValue([
+    //   { displayName: profile?.displayName },
+    //   { email: profile?.email },
+    //   { about: profile?.about },
+    //   { photoURL: profile?.photoURL },
+    //   { headerPhotoURL: profile?.headerPhotoURL },
+    //   { mobileNumber: profile?.mobileNumber },
+    // ]);
+  }, [profile, reset]);
+  const onSubmit: SubmitHandler<ProfileForm> = async (data) => {
+    console.log(data);
+    try {
+      const newProfile = removeUndefinedProperties({
+        displayName: data.displayName,
+        email: data.email,
+        about: data.about,
+        photoURL: data.photoURL,
+        headerPhotoURL: data.headerPhotoURL,
+        mobileNumber: data.mobileNumber,
+        lastSeen: new Date(),
+      });
+      const result = await setDoc(
+        doc(users, profile?.id),
+        Object.assign({}, newProfile),
+        {
+          merge: true,
+        }
+      );
+      console.log("ProfilePageComponentProfile", "_submitProfileForm", result);
+      ToastService.success("Successfully updated your profile", "Success");
+    } catch (err) {
+      logger.error("ProfilePageComponentProfile", "_submitProfileForm", err);
+      ToastService.error("Failed to update your profile.");
+    }
+  };
 
   React.useEffect(() => {}, [selectedItem]);
   const _getView = () => {
@@ -76,11 +137,30 @@ const ProfilePageComponent = () => {
             </aside>
 
             <div className="p-4 divide-y lg:col-span-9">
-              {selectedItem === "profile" ? (
-                <ProfilePageComponentProfile />
-              ) : (
-                <ProfilePageComponentNotifications />
-              )}
+              <form onSubmit={handleSubmit(onSubmit)}>
+                {selectedItem === "profile" ? (
+                  <ProfilePageComponentProfile
+                    register={register}
+                    profile={profile}
+                  />
+                ) : (
+                  <ProfilePageComponentNotifications
+                    register={register}
+                    control={control}
+                    profile={profile}
+                  />
+                )}
+                <div className="pt-5">
+                  <div className="flex justify-end space-x-2">
+                    <button type="button" className="btn-warning btn">
+                      Cancel
+                    </button>
+                    <button type="submit" className="btn-success btn">
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>

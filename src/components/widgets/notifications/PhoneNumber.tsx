@@ -1,22 +1,25 @@
 import React from "react";
-import { InputText } from "../inputs";
+import "react-phone-number-input/style.css";
+import { Control, UseFormRegister } from "react-hook-form";
+import { ProfileForm } from "@/components/pages/profile/ProfilePageComponent";
+import { DefaultFormValues } from "react-phone-number-input/react-hook-form";
+import PhoneInputWithCountry from "react-phone-number-input/react-hook-form";
 
-interface PhoneNumberNotificationControlProps {
-  phoneNumber: string;
-  setPhoneNumber: (number: string) => void;
+interface IPhoneNumberNotificationControlProps {
+  name: string;
+  control: any;
 }
 const PhoneNumberNotificationControl = ({
-  phoneNumber,
-  setPhoneNumber,
-}: PhoneNumberNotificationControlProps) => {
+  name,
+  control,
+}: IPhoneNumberNotificationControlProps) => {
   return (
-    <InputText
-      showLabel={false}
-      type="tel"
-      value="phoneNumber"
-      labelTitle="Phone number"
-      updateFormValue={(value) => setPhoneNumber(value)}
-      id="phone"
+    <PhoneInputWithCountry
+      name={name}
+      className="w-full input-bordered input"
+      defaultCountry="IE"
+      placeholder="Enter phone number"
+      control={control}
     />
   );
 };

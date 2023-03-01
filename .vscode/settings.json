@@ -6,9 +6,11 @@
     "**/CVS": true,
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
-    ".vscode":true,
+    ".vscode": true,
     ".next": true,
-    ".vercel": true
+    ".vercel": true,
+    ".working": true,
+    ".yarn": true
   },
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true

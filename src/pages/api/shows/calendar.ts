@@ -28,6 +28,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       creator: entry.creator
     }, { merge: true });
   }
-  res.status(200).json({ result: "We got pinged" });
+  res.status(StatusCodes.OK).json({ result: "We got pinged" });
   res.end();
 };

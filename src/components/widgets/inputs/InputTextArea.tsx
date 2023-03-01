@@ -1,9 +1,9 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, Ref } from "react";
 import ITextInputProps from "./props";
 
-const InputText = forwardRef<HTMLInputElement, ITextInputProps>(
-  ({ id, type, placeholder, label, showLabel = true, onChange, onBlur }, ref) => {
 
+const InputTextArea = forwardRef<HTMLTextAreaElement, ITextInputProps>(
+  ({ id, placeholder, showLabel = true, label, onChange, onBlur }, ref) => {
     return (
       <React.Fragment>
         {showLabel && (
@@ -11,10 +11,11 @@ const InputText = forwardRef<HTMLInputElement, ITextInputProps>(
             <span className="label-text">{label}</span>
           </label>
         )}
-        <input
+        <textarea
           id={id}
-          className="w-full input-bordered input"
-          type={type || "text"}
+          name={id}
+          rows={3}
+          className="w-full h-24 textarea-bordered textarea"
           placeholder={placeholder || ""}
           onChange={onChange}
           onBlur={onBlur}
@@ -24,7 +25,7 @@ const InputText = forwardRef<HTMLInputElement, ITextInputProps>(
     );
   }
 );
-InputText.displayName = "InputTextAreaComponent";
-export default InputText;
+InputTextArea.displayName = "InputTextComponent";
+export default InputTextArea;
 
 

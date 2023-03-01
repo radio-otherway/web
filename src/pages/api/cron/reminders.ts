@@ -47,7 +47,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
     }
   }
-  res.status(200).json({status: "OK"});
+  res.status(StatusCodes.OK).json({status: "OK"});
   res.end();
 };
 export default handler;

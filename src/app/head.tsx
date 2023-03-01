@@ -1,7 +1,7 @@
 import React from "react";
+import Script from "next/script";
 
 export default function Head() {
-
   return (
     <>
       <title>Radio::Otherway</title>
@@ -31,7 +31,6 @@ export default function Head() {
       <link rel="manifest" href="/site.webmanifest" />
       <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
       {/*need to include this here to avoid the FLUC on initial load*/}
-      <script src="https://unpkg.com/theme-change@2.2.0/index.js" />
       <meta name="msapplication-TileColor" content="#da532c" />
       <meta name="theme-color" content="#ffffff" />
     </>

@@ -1,23 +1,26 @@
 import React from "react";
-import { InputText } from "../inputs";
+import InputText from "../inputs/InputText";
+import { UseFormRegister } from "react-hook-form";
+import { ProfileForm } from "@/components/pages/profile/ProfilePageComponent";
+import { Profile } from "@/models";
 
 interface ISignalNotificationProps {
-  phoneNumber: string;
-  setPhoneNumber: (number: string) => void;
+  register: UseFormRegister<ProfileForm>;
+  profile: Profile;
 }
 const SignalNotification = ({
-  phoneNumber,
-  setPhoneNumber,
+  register,
+  profile,
 }: ISignalNotificationProps) => {
   return (
-    <InputText
-      showLabel={false}
-      type="tel"
-      value="phoneNumber"
-      labelTitle="Phone number"
-      updateFormValue={(value) => setPhoneNumber(value)}
-      id="phone"
-    />
+    <div>
+      {/* <InputText
+        id="signalNotification"
+        showLabel={false}
+        type="tel"
+        {...register('signalNotification')}
+      /> */}
+    </div>
   );
 };
 export default SignalNotification;

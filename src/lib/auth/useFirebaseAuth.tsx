@@ -1,17 +1,20 @@
 import { useEffect, useState, useCallback } from "react";
 import {
   createUserWithEmailAndPassword,
+  EmailAuthCredential,
+  EmailAuthProvider,
   FacebookAuthProvider,
   getAuth,
   GoogleAuthProvider,
   linkWithPopup,
+  OAuthCredential,
   OAuthProvider,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   TwitterAuthProvider,
-  UserCredential
+  UserCredential,
 } from "firebase/auth";
 import { app } from "./firebase";
 import { useRouter } from "next/navigation";
@@ -20,8 +23,12 @@ import { users } from "../db";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { servicesVersion } from "@ts-morph/common/lib/typescript";
 import logger from "../util/logging";
+import { debug } from "console";
+import React from "react";
 
 export default function useFirebaseAuth() {
+  const [errorCredential, setErrorCredential] =
+    useState<OAuthCredential | null>();
   const [profile, setProfile] = useState<Profile | undefined>();
   const auth = getAuth(app);
   const router = useRouter();
@@ -40,17 +47,23 @@ export default function useFirebaseAuth() {
         (savedProfile?.displayName || auth.currentUser.email) as string,
         (savedProfile?.photoURL || auth.currentUser.email) as string,
         savedProfile?.about as string,
+        savedProfile?.mobileNumber as string,
         new Date(),
         savedProfile?.deviceRegistrations
       );
       setProfile(profile);
-      await setDoc(doc(users, auth.currentUser.uid), Object.assign({}, profile), {
-        merge: true
-      });
+      await setDoc(
+        doc(users, auth.currentUser.uid),
+        Object.assign({}, profile),
+        {
+          merge: true,
+        }
+      );
       return profile;
     }
   }, [auth.currentUser]);
-  const authStateChanged = useCallback(async (user: any) => {
+  const authStateChanged = useCallback(
+    async (user: any) => {
       if (user) {
         setLoading(true);
         const profile = await getUserProfile();
@@ -70,10 +83,18 @@ export default function useFirebaseAuth() {
 
   const signUp = async (email: string, password: string): Promise<string> => {
     try {
-      const response = await createUserWithEmailAndPassword(auth, email, password);
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       logger.debug("useFireBaseAuth", "signUp_success", response);
       return "";
     } catch (err: { code: string } | any) {
+      const credential = GoogleAuthProvider.credentialFromError(err);
+      if (credential) {
+        setErrorCredential(credential as OAuthCredential);
+      }
       logger.error("useFireBaseAuth", "signUp", err);
       return err.code;
     }
@@ -140,10 +161,30 @@ export default function useFirebaseAuth() {
     await _processSignIn(provider);
   };
 
+  const linkAccounts = async (user: string, password: string) => {
+    debugger;
+    const credential = EmailAuthProvider.credential(user, password);
+    const provider = new GoogleAuthProvider();
+    const auth = getAuth();
+    if (!auth.currentUser) {
+      return;
+    }
+
+    linkWithPopup(auth.currentUser, provider)
+      .then((result) => {
+        // Accounts successfully linked.
+        debugger;
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const user = result.user;
+      })
+      .catch((error) => {
+        logger.error("useFirebaseAuth", "linkWithPopup", error);
+      });
+  };
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, authStateChanged);
     return unsubscribe;
-  }, [auth, getUserProfile]);
+  }, [auth, authStateChanged]);
 
   return {
     profile,
@@ -154,6 +195,7 @@ export default function useFirebaseAuth() {
     signInWithGoogle,
     signInWithTwitter,
     signInWithFacebook,
-    getUserProfile
+    linkAccounts,
+    getUserProfile,
   };
 }

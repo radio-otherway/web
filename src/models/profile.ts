@@ -2,20 +2,23 @@ import DeviceRegistration from "@/models/deviceregistration";
 
 export default class Profile {
   id: string;
-  email: string | null;
-  displayName: string | null;
-  photoURL: string | null;
+  email?: string;
+  displayName?: string;
+  photoURL?: string;
+  headerPhotoURL?: string;
   emailVerified: boolean = false;
-  about?: String;
+  about?: string;
+  mobileNumber?: string;
   lastSeen: Date;
   deviceRegistrations?: DeviceRegistration[] = [];
 
   constructor(
     id: string,
-    email: string | null,
-    displayName: string | null,
-    photoURL: string | null,
+    email?: string,
+    displayName?: string,
+    photoURL?: string,
     about?: string,
+    mobileNumber?: string,
     lastSeen?: Date,
     deviceRegistrations?: DeviceRegistration[]
   ) {
@@ -24,6 +27,7 @@ export default class Profile {
     this.displayName = displayName;
     this.photoURL = photoURL;
     this.about = about || "";
+    this.mobileNumber = mobileNumber || "";
 
     this.lastSeen = lastSeen || new Date();
     this.deviceRegistrations = deviceRegistrations || this.deviceRegistrations;
