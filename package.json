@@ -1,6 +1,6 @@
 {
   "name": "radio-otherway",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "turbo": "NODE_OPTIONS='-r next-logger' next dev --turbo",
