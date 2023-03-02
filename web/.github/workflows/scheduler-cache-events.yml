@@ -1,0 +1,14 @@
+name:
+  Cache Events
+on:
+  # Every 5 minutes
+  schedule:
+    - cron: "*/5 * * * *"
+jobs:
+  cache:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache outstanding events
+        uses: wei/curl@master
+        with:
+          args: https://otherway.fergl.ie/api/cron/cache

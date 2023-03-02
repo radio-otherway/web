@@ -1,0 +1,14 @@
+name:
+  Send Reminders
+on:
+  # Every 5 minutes
+  schedule:
+    - cron: "*/5 * * * *"
+jobs:
+  reminders:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache outstanding events
+        uses: wei/curl@master
+        with:
+          args: https://otherway.fergl.ie/api/cron/reminders
