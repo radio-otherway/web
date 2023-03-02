@@ -1,3 +1,4 @@
+import { firebaseLogging } from "./logRocket";
 const logger = (() => {
   const checkIfLogsEnabled = () => {
     if (process.browser) {

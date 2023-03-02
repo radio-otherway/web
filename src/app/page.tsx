@@ -1,7 +1,5 @@
 import React from "react";
 import HomePageComponent from "@/components/pages/home";
-import LogRocket from "logrocket";
-import setupLogRocketReact from "logrocket-react";
 
 export const metadata = {
   title: "Radio Otherway",

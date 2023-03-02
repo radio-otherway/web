@@ -104,7 +104,15 @@ const ProfilePageComponentProfile = ({
               subHeading="Upload a wide photo for the top of your profile page"
             />
             <div className="mt-1 sm:col-span-2 sm:mt-0">
-
+              <FirebaseImageUpload
+                forType="user"
+                imageType="profile"
+                itemId={profile.id}
+                imageUrl={profile.headerPhotoURL}
+                controlName="headerPhotoURL"
+                setValue={setValue}
+                {...register("headerPhotoURL")}
+              />
             </div>
           </div>
         </div>

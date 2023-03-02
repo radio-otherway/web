@@ -7,14 +7,12 @@ import { NavBar, PushNotificationWrapper } from "@/components/layout";
 import { AuthUserProvider } from "@/lib/auth/authUserContext";
 import { themeChange } from "theme-change";
 import Script from "next/script";
-import logger from "@/lib/util/logging";
 import { Toaster } from "react-hot-toast";
-import { LoggingProvider, ThemeProvider } from "@/components/providers";
-const LogRocket = require("logrocket");
-const setupLogRocketReact = require("logrocket-react");
+import useLogRocket from "@/lib/util/logging/logRocket";
+import logger from "@/lib/util/logging";
+import FirestoreProvider from "@/components/providers/FirebaseProvider";
 
 // only initialize when in the browser
-
 const font = Raleway({
   weight: ["400", "700"],
   subsets: ["latin"],
@@ -25,30 +23,28 @@ const RootLayout = ({ children }: React.PropsWithChildren) => {
   React.useEffect(() => {
     logger.info("Bootstrapping application");
     themeChange(false);
-  }, []);
+  }, [logger]);
 
   return (
     <html lang="en">
       <head>
         <Script src="/theme.js" />
       </head>
-      <LoggingProvider>
-        <body className={`${font.className}`}>
-          <ThemeProvider>
-            <Toaster />
-            <AuthUserProvider>
-              <PushNotificationWrapper>
-                <div className="flex flex-col min-h-screen bg-base-100">
-                  <NavBar />
-                  <div className="items-end grow place-items-center bg-base-200 text-base-content">
-                    <main className=" text-base-content">{children}</main>
-                  </div>
+      <body className={`${font.className}`}>
+        <Toaster />
+        <FirestoreProvider>
+          <AuthUserProvider>
+            <PushNotificationWrapper>
+              <div className="flex flex-col min-h-screen bg-base-100">
+                <NavBar />
+                <div className="items-end grow place-items-center bg-base-200 text-base-content">
+                  <main className=" text-base-content">{children}</main>
                 </div>
-              </PushNotificationWrapper>
-            </AuthUserProvider>
-          </ThemeProvider>
-        </body>
-      </LoggingProvider>
+              </div>
+            </PushNotificationWrapper>
+          </AuthUserProvider>
+        </FirestoreProvider>
+      </body>
     </html>
   );
 };

@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
 const LogRocket = require("logrocket");
-const setupLogRocketReact = require("logrocket-react");
 import packageJson from "../../package.json";
 
 const Loading = () => {
@@ -26,7 +25,6 @@ const Loading = () => {
         },
       },
     });
-    setupLogRocketReact(LogRocket);
   }
 
   return (
