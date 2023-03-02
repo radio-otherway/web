@@ -1,24 +1,25 @@
 import React, { createContext, useContext, Context } from "react";
-import useFirebaseAuth from "@/lib/auth/useFirebaseAuth";
 import { Profile } from "@/models";
+import useFirebaseAuth from "./useFirebaseAuth";
 
 interface IAuthUserContext {
   loading: boolean;
-  profile: Profile | undefined,
-  logOut: () => void
+  profile: Profile | undefined;
+  logOut: () => void;
 }
 
 const authUserContext = createContext<IAuthUserContext>({
   loading: true,
   profile: undefined,
-  logOut: () => {
-  }
+  logOut: () => {},
 });
 
 export function AuthUserProvider({ children }: { children: React.ReactNode }) {
   const { loading, profile, logOut } = useFirebaseAuth();
   return (
-    <authUserContext.Provider value={{ loading, profile, logOut }}>{children}</authUserContext.Provider>
+    <authUserContext.Provider value={{ loading, profile, logOut }}>
+      {children}
+    </authUserContext.Provider>
   );
 }
 

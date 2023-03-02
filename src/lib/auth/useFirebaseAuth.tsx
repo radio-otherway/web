@@ -44,8 +44,8 @@ export default function useFirebaseAuth() {
       const profile: Profile = new Profile(
         auth.currentUser.uid,
         (savedProfile?.email || auth.currentUser.email) as string,
-        (savedProfile?.displayName || auth.currentUser.email) as string,
-        (savedProfile?.photoURL || auth.currentUser.email) as string,
+        (savedProfile?.displayName || auth.currentUser.displayName) as string,
+        (savedProfile?.photoURL || auth.currentUser.photoURL) as string,
         savedProfile?.about as string,
         savedProfile?.mobileNumber as string,
         new Date(),

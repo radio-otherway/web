@@ -8,6 +8,7 @@ import {
   QueryDocumentSnapshot,
   SnapshotOptions,
   Timestamp,
+  initializeFirestore,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -20,42 +21,10 @@ const firebaseConfig = {
   measurementId: "G-12YB78EZM4",
 };
 export const firebaseApp = initializeApp(firebaseConfig);
-const firestore = getFirestore();
+
 const createCollection = <T = DocumentData>(collectionName: string) => {
   return collection(firestore, collectionName) as CollectionReference<T>;
 };
-const showConverter = {
-  toFirestore(show: WithFieldValue<Show>): DocumentData {
-    return {
-      ...show,
-      date: show.date
-        ? Timestamp.fromDate(new Date(show.date as string))
-        : new Date(),
-    };
-  },
-  fromFirestore(
-    snapshot: QueryDocumentSnapshot,
-    options: SnapshotOptions
-  ): Show {
-    const data = snapshot.data(options)!;
-    return new Show(snapshot.id, data.title, data.date.toDate(), data.creator);
-  },
-};
-const noticeConverter = {
-  toFirestore(notice: WithFieldValue<NotificationSchedule>): DocumentData {
-    return notice;
-  },
-  fromFirestore(
-    snapshot: QueryDocumentSnapshot,
-    options: SnapshotOptions
-  ): NotificationSchedule {
-    const data = snapshot.data(options)!;
-    return new NotificationSchedule(
-      data.scheduleTimes.map((r: any) => r.toDate())
-    );
-  },
-};
-
 // Import all your model types
 import {
   Show,
@@ -64,11 +33,15 @@ import {
   Profile,
   NotificationSchedule,
 } from "@/models";
+import { storage } from "../firebase";
+import { noticeConverter, showConverter } from "./converters";
+import { firestore } from "../auth/firebase";
 // export all your collections
 
 export const users = createCollection<Profile>("users");
 export const shows =
   createCollection<Show>("shows").withConverter(showConverter);
+
 export const notificationSchedules =
   createCollection<NotificationSchedule>("noticeSchedules").withConverter(
     noticeConverter
@@ -77,6 +50,5 @@ export const notificationSchedules =
 export const reminders = createCollection<Reminder>("reminders");
 export const remindersProcessed =
   createCollection<RemindersProcessed>("reminders");
-
 export default firestore;
-export { createCollection };
+export { createCollection, firebaseConfig, storage };

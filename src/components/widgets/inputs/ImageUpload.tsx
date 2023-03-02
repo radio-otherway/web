@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import Dropzone, { DropzoneRef, useDropzone } from "react-dropzone";
 
@@ -25,6 +26,7 @@ const ImageUpload = () => {
                 <div id="preview">
                   {acceptedFiles[0] && (
                     <img
+                      alt="Uploaded image"
                       className="object-cover"
                       src={URL.createObjectURL(acceptedFiles[0])}
                     />

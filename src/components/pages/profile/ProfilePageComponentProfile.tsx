@@ -1,20 +1,23 @@
 "use client";
 import { HeadingSubComponent } from "@/components/widgets/text";
-import React from "react";
-import { UseFormRegister } from "react-hook-form";
+import React, { useState } from "react";
+import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { ProfileForm } from "@/components/pages/profile/ProfilePageComponent";
 import { Profile } from "@/models";
-import InputText from "@/components/widgets/inputs/InputText";
+import { FirebaseImageUpload, InputText } from "@/components/widgets/inputs";
 import { InputTextArea } from "@/components/widgets/inputs";
 
 interface IProfilePageComponentProfileProps {
-  register: UseFormRegister<ProfileForm>;
   profile: Profile;
+  register: UseFormRegister<ProfileForm>;
+  setValue: UseFormSetValue<ProfileForm>;
 }
 const ProfilePageComponentProfile = ({
-  register,
   profile,
+  register,
+  setValue,
 }: IProfilePageComponentProfileProps) => {
+  const [photoURLFile, setPhotoURLFile] = useState("");
   return (
     <div className="space-y-8 divide-y sm:space-y-5">
       <div>
@@ -83,23 +86,15 @@ const ProfilePageComponentProfile = ({
               subHeading="Upload a picture to distinguish you from the rest"
             />
             <div className="mt-1 sm:col-span-2 sm:mt-0">
-              <div className="flex items-center">
-                <span className="w-12 h-12 overflow-hidden rounded-full">
-                  <svg
-                    className="w-full h-full "
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                </span>
-                <button
-                  type="button"
-                  className="px-3 py-2 ml-5 text-sm font-medium leading-4 border rounded-md shadow-sm hover: focus:outline-none focus:ring-2 focus:ring-offset-2"
-                >
-                  Change
-                </button>
-              </div>
+              <FirebaseImageUpload
+                forType="user"
+                imageType="avatar"
+                itemId={profile.id}
+                imageUrl={profile.photoURL}
+                controlName="photoURL"
+                setValue={setValue}
+                {...register("photoURL")}
+              />
             </div>
           </div>
 
@@ -109,40 +104,15 @@ const ProfilePageComponentProfile = ({
               subHeading="Upload a wide photo for the top of your profile page"
             />
             <div className="mt-1 sm:col-span-2 sm:mt-0">
-              <div className="flex justify-center max-w-lg px-6 pt-5 pb-6 border-2 border-dashed rounded-md">
-                <div className="space-y-1 text-center">
-                  <svg
-                    className="w-12 h-12 mx-auto "
-                    stroke="currentColor"
-                    fill="none"
-                    viewBox="0 0 48 48"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                      strokeWidth={2}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  <div className="flex text-sm ">
-                    <label
-                      htmlFor="file-upload"
-                      className="relative font-medium rounded-md cursor-pointer te focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2"
-                    >
-                      <span>Upload a file</span>
-                      <input
-                        id="file-upload"
-                        name="file-upload"
-                        type="file"
-                        className="sr-only"
-                      />
-                    </label>
-                    <p className="pl-1">or drag and drop</p>
-                  </div>
-                  <p className="text-xs ">PNG, JPG, GIF up to 10MB</p>
-                </div>
-              </div>
+              <FirebaseImageUpload
+                forType="user"
+                imageType="profile"
+                itemId={profile.id}
+                imageUrl={profile.headerPhotoURL}
+                controlName="headerPhotoURL"
+                setValue={setValue}
+                {...register("headerPhotoURL")}
+              />
             </div>
           </div>
         </div>

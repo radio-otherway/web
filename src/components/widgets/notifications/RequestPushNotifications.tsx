@@ -1,6 +1,6 @@
 import React from "react";
-import { firebaseCloudMessaging } from "@/lib/auth/firebaseMessaging";
 import localforage from "localforage";
+import { firebaseCloudMessaging } from "@/lib/util/notifications/firebaseMessaging";
 
 const RequestPushNotifications = () => {
   const _checkNotifications = async () => {
