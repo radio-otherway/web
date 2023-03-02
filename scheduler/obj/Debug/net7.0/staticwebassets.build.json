@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "02kK+8ITz/fLWlGn+2U5tz1apqx7x3PWfR1zJk94pSA=",
+  "Source": "scheduler",
+  "BasePath": "_content/scheduler",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
