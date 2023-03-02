@@ -1,7 +1,7 @@
 import "firebase/messaging";
 import localforage from "localforage";
 import { getMessaging, getToken } from "firebase/messaging";
-import { app } from "./firebase";
+import { app } from "../../auth/firebase";
 
 
 const firebaseCloudMessaging = {

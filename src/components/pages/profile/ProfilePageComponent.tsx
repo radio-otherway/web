@@ -57,14 +57,6 @@ const ProfilePageComponent = () => {
     if (profile) {
       reset(profile);
     }
-    // setValue([
-    //   { displayName: profile?.displayName },
-    //   { email: profile?.email },
-    //   { about: profile?.about },
-    //   { photoURL: profile?.photoURL },
-    //   { headerPhotoURL: profile?.headerPhotoURL },
-    //   { mobileNumber: profile?.mobileNumber },
-    // ]);
   }, [profile, reset]);
   const onSubmit: SubmitHandler<ProfileForm> = async (data) => {
     console.log(data);
@@ -93,7 +85,7 @@ const ProfilePageComponent = () => {
     }
   };
 
-  React.useEffect(() => {}, [selectedItem]);
+  useEffect(() => {}, [selectedItem]);
   const _getView = () => {
     if (loading) {
       return <div>Loading</div>;
@@ -140,6 +132,7 @@ const ProfilePageComponent = () => {
               <form onSubmit={handleSubmit(onSubmit)}>
                 {selectedItem === "profile" ? (
                   <ProfilePageComponentProfile
+                    setValue={setValue}
                     register={register}
                     profile={profile}
                   />

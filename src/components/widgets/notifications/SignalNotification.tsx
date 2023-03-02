@@ -1,5 +1,4 @@
 import React from "react";
-import InputText from "../inputs/InputText";
 import { UseFormRegister } from "react-hook-form";
 import { ProfileForm } from "@/components/pages/profile/ProfilePageComponent";
 import { Profile } from "@/models";

@@ -8,6 +8,7 @@ import {
   QueryDocumentSnapshot,
   SnapshotOptions,
   Timestamp,
+  initializeFirestore,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -20,6 +21,9 @@ const firebaseConfig = {
   measurementId: "G-12YB78EZM4",
 };
 export const firebaseApp = initializeApp(firebaseConfig);
+initializeFirestore(firebaseApp, {
+  ignoreUndefinedProperties: true,
+});
 const firestore = getFirestore();
 const createCollection = <T = DocumentData>(collectionName: string) => {
   return collection(firestore, collectionName) as CollectionReference<T>;
@@ -64,6 +68,7 @@ import {
   Profile,
   NotificationSchedule,
 } from "@/models";
+import { storage } from "./firebaseConfig";
 // export all your collections
 
 export const users = createCollection<Profile>("users");
@@ -77,6 +82,5 @@ export const notificationSchedules =
 export const reminders = createCollection<Reminder>("reminders");
 export const remindersProcessed =
   createCollection<RemindersProcessed>("reminders");
-
 export default firestore;
-export { createCollection };
+export { createCollection, firebaseConfig, storage };

@@ -26,7 +26,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const user = u.data();
     if (user.mobileNumber) {
       console.log("notify", "sending notification to ", user);
-      const message = `New show from ${show.creator} starting now!!\nhttps://mixcloud.com/live/radiootherway`;
+      const message = (process.env.WHATSAPP_SHOW_HOUR as string)
+        .replace("{{1}}", user.displayName as string)
+        .replace("{{2}}", show.creator);
+
       await sendWhatsApp(user.mobileNumber, message);
     }
   });

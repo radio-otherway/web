@@ -1,5 +1,5 @@
 "use client";
-import useFirebaseAuth from "@/lib/auth/useFirebaseAuth";
+import { useFirebaseAuth } from "@/lib/auth";
 import { Show } from "@/models";
 import React from "react";
 import { MdAddAlarm } from "react-icons/md";

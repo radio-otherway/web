@@ -1,18 +1,22 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import useFirebaseAuth from "@/lib/auth/useFirebaseAuth";
 import { IoLogoFacebook, IoLogoGoogle, IoLogoTwitter } from "react-icons/io";
+import { useFirebaseAuth } from "@/lib/auth";
 
 const LoginPage = () => {
-  const { signInWithGoogle, signInWithFacebook, signInWithTwitter, profile, signIn } =
-    useFirebaseAuth();
+  const {
+    signInWithGoogle,
+    signInWithFacebook,
+    signInWithTwitter,
+    profile,
+    signIn,
+  } = useFirebaseAuth();
   const router = useRouter();
   const [error, setError] = React.useState("");
   const [forgot, setForgot] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-
 
   const login = async (
     event: React.SyntheticEvent<HTMLButtonElement>
@@ -21,9 +25,7 @@ const LoginPage = () => {
   };
   return (
     <div className="max-w-lg p-10 rounded-md shadow-md font-body bg-base-100 text-base-content md:flex-1">
-      <h3 className="my-4 text-2xl font-semibold font-title">
-        Account Login
-      </h3>
+      <h3 className="my-4 text-2xl font-semibold font-title">Account Login</h3>
       <form action="#" className="flex flex-col space-y-5">
         <div className="flex flex-col space-y-1">
           <label htmlFor="email" className="text-sm">
@@ -122,10 +124,18 @@ const LoginPage = () => {
           {error && (
             <div className="shadow-lg alert alert-error">
               <div>
-                <svg xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0 w-6 h-6 stroke-current" fill="none"
-                     viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="flex-shrink-0 w-6 h-6 stroke-current"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
                 <span>{error}</span>
               </div>

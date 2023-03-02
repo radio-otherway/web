@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import useFirebaseAuth from "@/lib/auth/useFirebaseAuth";
 import { IoLogoFacebook, IoLogoGoogle, IoLogoTwitter } from "react-icons/io";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 import { Info } from "react-feather";
+import { useFirebaseAuth } from "@/lib/auth";
 
 const SignupPage = () => {
   const {

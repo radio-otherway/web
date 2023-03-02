@@ -2,8 +2,10 @@ import React, { forwardRef } from "react";
 import ITextInputProps from "./props";
 
 const InputText = forwardRef<HTMLInputElement, ITextInputProps>(
-  ({ id, type, placeholder, label, showLabel = true, onChange, onBlur }, ref) => {
-
+  (
+    { id, type, placeholder, label, showLabel = true, onChange, onBlur },
+    ref
+  ) => {
     return (
       <React.Fragment>
         {showLabel && (
@@ -26,5 +28,3 @@ const InputText = forwardRef<HTMLInputElement, ITextInputProps>(
 );
 InputText.displayName = "InputTextAreaComponent";
 export default InputText;
-
-
