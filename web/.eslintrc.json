@@ -1,0 +1,14 @@
+{
+  "extends": ["eslint:recommended", "next", "prettier"],
+  "rules": {
+    "no-unused-vars": "off"
+  },
+  "settings": {
+    "next": {
+      "rootDir": "src"
+    },
+    "rules": {
+      "no-unused-vars": "off"
+    }
+  }
+}

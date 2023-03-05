@@ -1,25 +1,25 @@
 "use client";
-import { useFirebaseAuth } from "@/lib/auth";
 import { Show } from "@/models";
 import React from "react";
 import { MdAddAlarm } from "react-icons/md";
+import { useAuth } from "reactfire";
 import ToastService from "./toast/toastService";
 
 const RemindMeButton = ({ showId }: { showId: string }) => {
-  const { profile } = useFirebaseAuth();
+  const { user } = useAuth();
   const createShowReminder = async () => {
-    if (profile?.id) {
+    if (user?.id) {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/reminders`,
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            userId: profile?.id,
-            showId: profile?.id
-          })
+            userId: user?.id,
+            showId: user?.id,
+          }),
         }
       );
       if (response.status === 201) {

@@ -2,23 +2,29 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { IoLogoFacebook, IoLogoGoogle, IoLogoTwitter } from "react-icons/io";
+import useFirebaseAuth from "@/lib/auth/signin";
 
 const LoginPage = () => {
-
   const router = useRouter();
   const [error, setError] = React.useState("");
   const [forgot, setForgot] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-
+  const {
+    signInWithGoogle,
+    signInWithTwitter,
+    signInWithFacebook,
+    signIn,
+    getUserProfile,
+  } = useFirebaseAuth();
   const login = async (
     event: React.SyntheticEvent<HTMLButtonElement>
   ): Promise<void> => {
     const result = await signIn(email, password);
   };
   return (
-    <div className="max-w-lg p-10 rounded-md shadow-md font-body bg-base-100 text-base-content md:flex-1">
-      <h3 className="my-4 text-2xl font-semibold font-title">Account Login</h3>
+    <div className="font-body max-w-lg rounded-md bg-base-100 p-10 text-base-content shadow-md md:flex-1">
+      <h3 className="font-title my-4 text-2xl font-semibold">Account Login</h3>
       <form action="#" className="flex flex-col space-y-5">
         <div className="flex flex-col space-y-1">
           <label htmlFor="email" className="text-sm">
@@ -62,7 +68,7 @@ const LoginPage = () => {
         </div>
         <div>
           <button
-            className="w-full btn-primary btn"
+            className="btn-primary btn w-full"
             onClick={(event) => {
               void login(event);
             }}
@@ -72,14 +78,14 @@ const LoginPage = () => {
         </div>
         <div className="flex flex-col space-y-5">
           <span className="flex items-center justify-center space-x-2">
-            <span className="h-px bg-gray-400 w-14" />
+            <span className="h-px w-14 bg-gray-400" />
             <span className="font-normal text-gray-500">or login with</span>
-            <span className="h-px bg-gray-400 w-14" />
+            <span className="h-px w-14 bg-gray-400" />
           </span>
           <div className="flex items-center justify-center gap-4">
             <button
               type="button"
-              className="w-1/3 gap-2 btn"
+              className="btn w-1/3 gap-2"
               onClick={signInWithTwitter}
             >
               <div className="text-base-content">
@@ -91,7 +97,7 @@ const LoginPage = () => {
             </button>
             <button
               type="button"
-              className="w-1/3 gap-2 btn"
+              className="btn w-1/3 gap-2"
               onClick={signInWithGoogle}
             >
               <div className="text-base-content">
@@ -103,7 +109,7 @@ const LoginPage = () => {
             </button>
             <button
               type="button"
-              className="w-1/3 gap-2 btn"
+              className="btn w-1/3 gap-2"
               onClick={signInWithFacebook}
             >
               <div className="text-base-content">
@@ -115,11 +121,11 @@ const LoginPage = () => {
             </button>
           </div>
           {error && (
-            <div className="shadow-lg alert alert-error">
+            <div className="alert alert-error shadow-lg">
               <div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="flex-shrink-0 w-6 h-6 stroke-current"
+                  className="h-6 w-6 flex-shrink-0 stroke-current"
                   fill="none"
                   viewBox="0 0 24 24"
                 >

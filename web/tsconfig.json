@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-
     "target": "es5",
     "lib": [
       "dom",
@@ -35,7 +34,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "/srv/dev/radio-otherway/web/.next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

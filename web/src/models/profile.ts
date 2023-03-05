@@ -6,7 +6,7 @@ export default class Profile {
   displayName?: string;
   photoURL?: string;
   headerPhotoURL?: string;
-  emailVerified: boolean = false;
+  emailVerified = false;
   about?: string;
   mobileNumber?: string;
   lastSeen: Date;

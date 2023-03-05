@@ -22,17 +22,16 @@ const ToastComponent = ({
   title,
   body,
   type,
-  isVisible,
   onToastClicked,
 }: IToastComponentProps) => {
   const _getToastIcon = (type: ToastType): React.ReactNode => {
     switch (type) {
       case ToastType.success:
-        return <RiShieldCheckLine className="w-10 h-10 text-white" />;
+        return <RiShieldCheckLine className="h-10 w-10 text-white" />;
       case ToastType.warning:
-        return <RiAlarmWarningLine className="w-10 h-10 text-white" />;
+        return <RiAlarmWarningLine className="h-10 w-10 text-white" />;
       case ToastType.error:
-        return <RiErrorWarningLine className="w-10 h-10 text-white" />;
+        return <RiErrorWarningLine className="h-10 w-10 text-white" />;
     }
   };
 
@@ -48,16 +47,16 @@ const ToastComponent = ({
   }
 
   return (
-    <div className="flex flex-col items-center space-y-4 w-96 text-base-content sm:items-end">
+    <div className="flex w-96 flex-col items-center space-y-4 text-base-content sm:items-end">
       <div
         className={`pointer-events-auto flex w-full max-w-md rounded-lg shadow-lg ${_getBackgroundColour(
           type
         )}`}
       >
-        <div className="flex-1 w-0 p-4">
+        <div className="w-0 flex-1 p-4">
           <div className="flex items-start">
             <div className="flex-shrink-0 pt-0.5">{_getToastIcon(type)}</div>
-            <div className="flex-1 w-0 ml-3">
+            <div className="ml-3 w-0 flex-1">
               <p className="text-sm font-medium ">{title}</p>
               <p className="mt-1 text-sm ">{body}</p>
             </div>
@@ -67,10 +66,10 @@ const ToastComponent = ({
           <button
             type="button"
             title="Close"
-            className="flex items-center justify-center w-full p-4 text-sm font-medium border border-transparent rounded-none rounded-r-lg focus:outline-none focus:ring-0 focus:ring-offset-0"
+            className="flex w-full items-center justify-center rounded-none rounded-r-lg border border-transparent p-4 text-sm font-medium focus:outline-none focus:ring-0 focus:ring-offset-0"
             onClick={() => onToastClicked()}
           >
-            <CgCloseO className="w-8 h-8" />
+            <CgCloseO className="h-8 w-8" />
           </button>
         </div>
       </div>

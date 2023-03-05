@@ -1,8 +1,5 @@
 import React from "react";
 import "react-phone-number-input/style.css";
-import { Control, UseFormRegister } from "react-hook-form";
-import { ProfileForm } from "@/components/pages/profile/ProfilePageComponent";
-import { DefaultFormValues } from "react-phone-number-input/react-hook-form";
 import PhoneInputWithCountry from "react-phone-number-input/react-hook-form";
 
 interface IPhoneNumberNotificationControlProps {
@@ -16,7 +13,7 @@ const PhoneNumberNotificationControl = ({
   return (
     <PhoneInputWithCountry
       name={name}
-      className="w-full input-bordered input"
+      className="input-bordered input w-full"
       defaultCountry="IE"
       placeholder="Enter phone number"
       control={control}

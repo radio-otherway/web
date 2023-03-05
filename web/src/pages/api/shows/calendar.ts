@@ -1,17 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { doc, getDocs, query, setDoc, where } from "@firebase/firestore";
-import { shows } from "@/lib/db";
+import { doc, setDoc } from "@firebase/firestore";
 import logger from "@/lib/util/logging";
 import { Show } from "@/models";
 import { getCalendarEntries } from "@/lib/util/google/calendarReader";
-import Settings from "@/lib/db/settings";
+import { StatusCodes } from "http-status-codes";
+import { shows } from "@/lib/db/collections";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const resourceId = req.headers["x-goog-resource-id"];
   const channelToken = req.headers["x-goog-channel-token"];
   const channelId = req.headers["x-goog-channel-id"];
   const resourceState = req.headers["x-goog-resource-state"];
-  logger.debug("Webhook callback",
+  logger.debug(
+    "Webhook callback",
     resourceId,
     channelToken,
     channelId,
@@ -22,12 +23,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const entries = changed?.events.map((r: any) => Show.fromJson(r));
   for (const entry of entries) {
     const showRef = doc(shows, entry.id);
-    await setDoc(showRef, {
-      title: entry.title,
-      date: entry.date,
-      creator: entry.creator
-    }, { merge: true });
+    await setDoc(
+      showRef,
+      {
+        title: entry.title,
+        date: entry.date,
+        creator: entry.creator,
+      },
+      { merge: true }
+    );
   }
   res.status(StatusCodes.OK).json({ result: "We got pinged" });
   res.end();
 };
+export default handler;

@@ -1,5 +1,4 @@
 import logger from "@/lib/util/logging";
-const twilio = require("twilio");
 
 const sendSMS = async (number: string, body: string) => {
   const client = require("twilio")(

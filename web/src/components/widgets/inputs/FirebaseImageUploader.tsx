@@ -1,9 +1,9 @@
+import React from "react";
 import {
   ref as storageRef,
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import { storage } from "@/lib/db";
 import Image from "next/image";
 import {
   useEffect,
@@ -12,7 +12,7 @@ import {
   forwardRef,
   ChangeEventHandler,
 } from "react";
-var path = require("path");
+const path = require("path");
 import { UploadCloud } from "react-feather";
 import { getFileExtension } from "@/lib/util/fileUtils";
 import ITextInputProps from "@/components/widgets/inputs/props";
@@ -23,6 +23,7 @@ import {
   UseFormSetValue,
 } from "react-hook-form";
 import { ProfileForm } from "@/components/pages/profile/ProfilePageComponent";
+import { useStorage } from "reactfire";
 
 interface IFirebaseImageUploaderProps {
   forType: "user" | "show";
@@ -52,6 +53,7 @@ const FirebaseImageUploader = forwardRef<
     },
     ref
   ) => {
+    const storage = useStorage();
     const [file, setFile] = useState<File | null>();
     const [filePath, setFilePath] = useState();
     const [isUploading, setIsUploading] = useState(false);
@@ -130,7 +132,16 @@ const FirebaseImageUploader = forwardRef<
       if (file && !isUploading) {
         _handleUpload();
       }
-    }, [controlName, file, forType, imageType, isUploading, itemId, setValue]);
+    }, [
+      controlName,
+      file,
+      forType,
+      imageType,
+      isUploading,
+      itemId,
+      setValue,
+      storage,
+    ]);
 
     return imageType === "avatar" ? (
       <div className="flex flex-col">

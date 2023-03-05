@@ -18,4 +18,4 @@ export default class Show {
       new Date(r.date),
       r.creator);
   }
-};
+}

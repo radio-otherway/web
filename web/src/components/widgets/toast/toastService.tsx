@@ -6,11 +6,6 @@ import toast, {
 } from "react-hot-toast";
 
 import ToastComponent, { ToastType } from "./ToastComponent";
-import {
-  RiAlarmWarningLine,
-  RiErrorWarningLine,
-  RiShieldCheckLine,
-} from "react-icons/ri";
 
 const ToastService = {
   custom: (

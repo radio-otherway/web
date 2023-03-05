@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import Dropzone, { DropzoneRef, useDropzone } from "react-dropzone";
 
@@ -25,6 +24,7 @@ const ImageUpload = () => {
               {acceptedFiles?.length ? (
                 <div id="preview">
                   {acceptedFiles[0] && (
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       alt="Uploaded image"
                       className="object-cover"
@@ -34,7 +34,7 @@ const ImageUpload = () => {
                 </div>
               ) : (
                 <div id="drop">
-                  <div className="flex items-center justify-center w-full"></div>
+                  <div className="flex w-full items-center justify-center"></div>
                 </div>
               )}
             </div>
