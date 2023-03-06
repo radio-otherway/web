@@ -1,25 +1,26 @@
 "use client";
 import { Show } from "@/models";
-import React from "react";
+import React, { useContext } from "react";
 import { MdAddAlarm } from "react-icons/md";
-import { useAuth } from "reactfire";
+import { useAuth, useUser } from "reactfire";
 import ToastService from "./toast/toastService";
+import { AuthProfileContext } from "@/lib/auth/AuthProfileProvider";
 
 const RemindMeButton = ({ showId }: { showId: string }) => {
-  const { user } = useAuth();
+  const { status, data: user } = useUser();
   const createShowReminder = async () => {
-    if (user?.id) {
+    if (user?.uid) {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/reminders`,
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            userId: user?.id,
-            showId: user?.id,
-          }),
+            userId: user?.uid,
+            showId: user?.uid
+          })
         }
       );
       if (response.status === 201) {

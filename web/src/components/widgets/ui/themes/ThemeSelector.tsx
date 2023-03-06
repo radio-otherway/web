@@ -12,7 +12,7 @@ const ThemeSelector = () => {
     const elem = document.activeElement as HTMLElement;
     elem?.blur();
     setTheme(theme);
-  }, []);
+  }, [setTheme]);
 
   return (
     <div title="Change Theme" className="dropdown-end dropdown">

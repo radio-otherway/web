@@ -1,4 +1,4 @@
-import TosComponent from "@/components/boilerplate/TosComponent";
+import { TosComponent } from "@/components/boilerplate";
 
 const TosPage = () => {
   return <TosComponent />;

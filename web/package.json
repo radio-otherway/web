@@ -7,7 +7,8 @@
     "dev": "node ./server.js",
     "debug": "node ./server.js",
     "dev-nossl": "next dev",
-    "build": "next build && next export",
+    "build-export": "next build && next export",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },

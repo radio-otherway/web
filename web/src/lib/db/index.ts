@@ -3,7 +3,7 @@ import {
   DocumentData,
   collection,
   CollectionReference,
-  getFirestore
+  getFirestore, initializeFirestore
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -16,9 +16,7 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID
 };
 const firebaseApp = initializeApp(firebaseConfig);
-const firestore = getFirestore(firebaseApp);
-
-// initializeFirestore(firebaseApp, {}, "radio-otherway");
+const firestore = initializeFirestore(firebaseApp, { ignoreUndefinedProperties: true });
 const createCollection = <T = DocumentData>(collectionName: string) => {
   return collection(firestore, collectionName) as CollectionReference<T>;
 };

@@ -16,7 +16,7 @@ const Users = {
       const data = userQuery.docs[0].data();
       return Profile.fromJson(data);
     }
-    throw Error("Unable to find user");
+    return undefined;
   },
   getNotifiable: async (): Promise<Profile[] | undefined> => {
     const usersQuery = await getDocs(

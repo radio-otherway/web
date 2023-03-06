@@ -31,7 +31,7 @@ const AuthProfileProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
           logger.debug("AuthProfileProvider", "Error loading provider", err);
         });
     }
-  }, [status, user]);
+  }, [status, user, getUserProfile]);
 
   const [profile, setProfile] = useState<Profile>();
 
