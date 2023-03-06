@@ -41,3 +41,6 @@ next-env.d.ts
 radio-otherway-service-account.json
 serviceAccount.json
 /.env.production
+
+# Local Netlify folder
+.netlify

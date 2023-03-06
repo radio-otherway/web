@@ -8,7 +8,8 @@
       "rootDir": "src"
     },
     "rules": {
-      "no-unused-vars": "off"
+      "no-unused-vars": "off",
+      "no-control-regex": 0
     }
   }
 }
