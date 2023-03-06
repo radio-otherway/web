@@ -18,6 +18,7 @@ jobs:
       - run: yarn build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
+          entryPoint: web/
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_RADIO_OTHERWAY }}'
           channelId: live
