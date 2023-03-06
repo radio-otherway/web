@@ -3,7 +3,7 @@ name: Build Scheduler Docker Image
 on:
   push:
     branches:
-      - master
+      - trunk
       - develop
 
     # Publish `v1.2.3` tags as releases.
@@ -43,7 +43,7 @@ jobs:
           # Strip "v" prefix from tag name
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
           # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
+          [ "$VERSION" == "trunk" ] && VERSION=latest
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
