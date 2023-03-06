@@ -6,7 +6,7 @@ on:
 defaults:
   run:
     working-directory: web
-    
+
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
@@ -24,3 +24,5 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_RADIO_OTHERWAY }}'
           channelId: live
           projectId: radio-otherway
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
