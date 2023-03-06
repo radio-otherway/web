@@ -26,4 +26,4 @@ jobs:
           context: ./scheduler
           file: ./scheduler/Dockerfile
           push: true
-          tags: ghcr.io/radio-otherway-scheduler:latest
+          tags: ghcr.io/fergalmoran/radio-otherway-scheduler:latest
