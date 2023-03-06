@@ -1,8 +1,6 @@
 assembly-versioning-scheme: MajorMinorPatch
-assembly-file-versioning-scheme: MajorMinorPatch
 mode: ContinuousDelivery
-next-version: 0.0.3
-tag-prefix: '[vV]'
+next-version: 0.0.4
 branches: { }
 ignore:
   sha: [ ]
