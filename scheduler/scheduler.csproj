@@ -6,7 +6,7 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <RootNamespace>OtherWay.Radio.Scheduler</RootNamespace>
     <AssemblyName>OtherWay.Radio.Scheduler.dll</AssemblyName>
-    <Version>0.0.1</Version>
+    <Version>0.1.2</Version>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <FileVersion>1.0.0</FileVersion>
     <Authors>PodNoms</Authors>
