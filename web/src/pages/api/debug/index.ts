@@ -5,7 +5,7 @@ import { firebaseConfig } from "@/lib/db";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
-  res.status(StatusCodes.OK).json(firebaseConfig);
+  res.status(StatusCodes.OK).json(process.env);
   res.end();
 };
 

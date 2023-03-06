@@ -21,11 +21,41 @@ const LoginPage = () => {
   const login = async (
     event: React.SyntheticEvent<HTMLButtonElement>
   ): Promise<void> => {
-    const result = await signIn(email, password);
+    setError("");
+    try {
+      const result = await signIn(email, password);
+      if (result && result.user) {
+        router.push("/");
+      } else {
+        setError("Unable to log you in, please check your email & password");
+      }
+    } catch (err) {
+      setError("Unable to log you in, please check your email & password");
+    }
   };
   return (
     <div className="font-body max-w-lg rounded-md bg-base-100 p-10 text-base-content shadow-md md:flex-1">
       <h3 className="font-title my-4 text-2xl font-semibold">Account Login</h3>
+      {error && (
+        <div className="mb-4 shadow-lg alert alert-error">
+          <div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="flex-shrink-0 w-6 h-6 stroke-current"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>{error}</span>
+          </div>
+        </div>
+      )}
       <div className="flex flex-col space-y-5">
         <div className="flex flex-col space-y-1">
           <label htmlFor="email" className="text-sm">
@@ -88,26 +118,6 @@ const LoginPage = () => {
             <GoogleButton onClick={signInWithGoogle} />
             <FacebookButton onClick={signInWithFacebook} />
           </div>
-          {error && (
-            <div className="alert alert-error shadow-lg">
-              <div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 flex-shrink-0 stroke-current"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <span>{error}</span>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>
