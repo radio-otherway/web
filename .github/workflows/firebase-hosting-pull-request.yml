@@ -10,9 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - working-directory: web
-      - run:
-        shell: 'yarn build'
-        working-directory: web
+      - run: 'yarn build'
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
