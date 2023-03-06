@@ -12,6 +12,7 @@ import OtherwayAppProvider from "@/components/providers/OtherwayAppProvider";
 import { ThemeProvider } from "@/components/providers";
 import { FirebaseAppProvider } from "reactfire";
 import { Theme } from "react-daisyui";
+import AuthProfileProvider from "@/lib/auth/AuthProfileProvider";
 
 // only initialize when in the browser
 const font = Raleway({
@@ -35,15 +36,17 @@ const RootLayout = ({ children }: React.PropsWithChildren) => {
     <ThemeProvider>
       <FirebaseAppProvider firebaseConfig={firebaseConfig}>
         <OtherwayAppProvider>
-          <Toaster />
-          <PushNotificationWrapper>
-            <div className="flex min-h-screen flex-col bg-base-100">
-              <NavBar />
-              <div className="grow place-items-center items-end bg-base-200 text-base-content">
-                <main className=" text-base-content">{children}</main>
+          <AuthProfileProvider>
+            <Toaster />
+            <PushNotificationWrapper>
+              <div className="flex min-h-screen flex-col bg-base-100">
+                <NavBar />
+                <div className="grow place-items-center items-end bg-base-200 text-base-content">
+                  <main className=" text-base-content">{children}</main>
+                </div>
               </div>
-            </div>
-          </PushNotificationWrapper>
+            </PushNotificationWrapper>
+          </AuthProfileProvider>
         </OtherwayAppProvider>
       </FirebaseAppProvider>
     </ThemeProvider>

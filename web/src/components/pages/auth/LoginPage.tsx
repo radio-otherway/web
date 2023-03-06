@@ -3,6 +3,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { IoLogoFacebook, IoLogoGoogle, IoLogoTwitter } from "react-icons/io";
 import useFirebaseAuth from "@/lib/auth/signin";
+import { FacebookButton, GoogleButton, TwitterButton } from "@/components/widgets/buttons/social";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -15,7 +16,7 @@ const LoginPage = () => {
     signInWithTwitter,
     signInWithFacebook,
     signIn,
-    getUserProfile,
+    getUserProfile
   } = useFirebaseAuth();
   const login = async (
     event: React.SyntheticEvent<HTMLButtonElement>
@@ -25,7 +26,7 @@ const LoginPage = () => {
   return (
     <div className="font-body max-w-lg rounded-md bg-base-100 p-10 text-base-content shadow-md md:flex-1">
       <h3 className="font-title my-4 text-2xl font-semibold">Account Login</h3>
-      <form action="#" className="flex flex-col space-y-5">
+      <div className="flex flex-col space-y-5">
         <div className="flex flex-col space-y-1">
           <label htmlFor="email" className="text-sm">
             Email address
@@ -83,42 +84,9 @@ const LoginPage = () => {
             <span className="h-px w-14 bg-gray-400" />
           </span>
           <div className="flex items-center justify-center gap-4">
-            <button
-              type="button"
-              className="btn w-1/3 gap-2"
-              onClick={signInWithTwitter}
-            >
-              <div className="text-base-content">
-                <IoLogoTwitter />
-              </div>
-              <span className="text-sm font-medium text-base-content">
-                Twitter
-              </span>
-            </button>
-            <button
-              type="button"
-              className="btn w-1/3 gap-2"
-              onClick={signInWithGoogle}
-            >
-              <div className="text-base-content">
-                <IoLogoGoogle />
-              </div>
-              <span className="text-sm font-medium text-base-content">
-                Gmail
-              </span>
-            </button>
-            <button
-              type="button"
-              className="btn w-1/3 gap-2"
-              onClick={signInWithFacebook}
-            >
-              <div className="text-base-content">
-                <IoLogoFacebook />
-              </div>
-              <span className="text-sm font-medium text-base-content">
-                Facebook
-              </span>
-            </button>
+            <TwitterButton onClick={signInWithTwitter} />
+            <GoogleButton onClick={signInWithGoogle} />
+            <FacebookButton onClick={signInWithFacebook} />
           </div>
           {error && (
             <div className="alert alert-error shadow-lg">
@@ -141,7 +109,7 @@ const LoginPage = () => {
             </div>
           )}
         </div>
-      </form>
+      </div>
     </div>
   );
 };

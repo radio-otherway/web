@@ -2,7 +2,7 @@ import React from "react";
 import {
   ref as storageRef,
   uploadBytesResumable,
-  getDownloadURL,
+  getDownloadURL
 } from "firebase/storage";
 import Image from "next/image";
 import {
@@ -10,8 +10,9 @@ import {
   useRef,
   useState,
   forwardRef,
-  ChangeEventHandler,
+  ChangeEventHandler
 } from "react";
+
 const path = require("path");
 import { UploadCloud } from "react-feather";
 import { getFileExtension } from "@/lib/util/fileUtils";
@@ -20,7 +21,7 @@ import {
   Controller,
   FieldPath,
   UseFormReturn,
-  UseFormSetValue,
+  UseFormSetValue
 } from "react-hook-form";
 import { ProfileForm } from "@/components/pages/profile/ProfilePageComponent";
 import { useStorage } from "reactfire";
@@ -49,7 +50,7 @@ const FirebaseImageUploader = forwardRef<
       imageUrl,
       setValue,
       onChange,
-      onBlur,
+      onBlur
     },
     ref
   ) => {
@@ -140,7 +141,7 @@ const FirebaseImageUploader = forwardRef<
       isUploading,
       itemId,
       setValue,
-      storage,
+      storage
     ]);
 
     return imageType === "avatar" ? (
@@ -151,7 +152,7 @@ const FirebaseImageUploader = forwardRef<
               <Image
                 alt="Existing image"
                 src={imageUrl}
-                className="w-full h-full "
+                className="w-full h-full"
                 width={48}
                 height={48}
               />
@@ -161,7 +162,8 @@ const FirebaseImageUploader = forwardRef<
                 fill="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                <path
+                  d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
               </svg>
             )}
           </span>

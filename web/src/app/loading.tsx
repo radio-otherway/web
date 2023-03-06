@@ -1,32 +1,10 @@
 import React from "react";
 import { useState } from "react";
+
 const LogRocket = require("logrocket");
 import packageJson from "../../package.json";
 
 const Loading = () => {
-  if (process.env.LOGROCKET_ID && window !== undefined) {
-    LogRocket.init(process.env.LOGROCKET_ID, {
-      release: packageJson.version,
-      rootHostname: "radio-otherway.fergl.ie",
-      console: {
-        shouldAggregateConsoleErrors: true,
-      },
-      network: {
-        requestSanitizer: (request: any) => {
-          // if the url contains token 'ignore' it
-          if (request.url.toLowerCase().indexOf("token") !== -1) {
-            // ignore the request response pair
-            return null;
-          }
-          // remove Authorization header from logrocket
-          request.headers.Authorization = undefined;
-          // otherwise log the request normally
-          return request;
-        },
-      },
-    });
-  }
-
   return (
     <div role="status">
       <svg

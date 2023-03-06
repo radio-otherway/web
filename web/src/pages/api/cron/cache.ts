@@ -20,16 +20,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     } else {
       const entries: Show[] = e?.events.map((r: any) => Show.fromJson(r));
       for (const entry of entries) {
-        const showRef = doc(Shows.collection, entry.id);
-        await setDoc(
-          showRef,
-          {
-            title: entry.title,
-            date: entry.date,
-            creator: entry.creator,
-          },
-          { merge: true }
-        );
+        await Shows.set(entry.id, await Shows.wrapShow(entry));
       }
       if (e?.syncToken) {
         await Settings.write("CalendarSyncToken", e?.syncToken);

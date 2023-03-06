@@ -12,20 +12,20 @@ import {
   signInWithPopup,
   signOut,
   TwitterAuthProvider,
-  UserCredential,
+  UserCredential
 } from "firebase/auth";
-import { getDoc, doc, setDoc } from "firebase/firestore";
-import { clear } from "localforage";
-import router from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Users } from "../db/collections";
 import logger from "../util/logging";
+import { useRouter } from "next/navigation";
+import { AuthProfileContext } from "@/lib/auth/AuthProfileProvider";
 
 const useFirebaseAuth = () => {
+  const router = useRouter();
   const auth = getAuth();
   const [errorCredential, setErrorCredential] =
     useState<OAuthCredential | null>();
-  const [profile, setProfile] = useState<Profile | undefined>();
+
   const [loading, setLoading] = useState(true);
   const _processSignIn = async (
     provider: any
@@ -59,7 +59,6 @@ const useFirebaseAuth = () => {
   };
 
   const clear = () => {
-    setProfile(undefined);
     setLoading(true);
   };
   const getUserProfile = useCallback(async () => {
@@ -69,31 +68,22 @@ const useFirebaseAuth = () => {
       const savedProfile = await Users.get(auth.currentUser.uid);
       const profile: Profile = new Profile(
         auth.currentUser.uid,
-        (savedProfile.email || auth.currentUser.email) as string,
-        (savedProfile.displayName || auth.currentUser.displayName) as string,
-        (savedProfile.photoURL || auth.currentUser.photoURL) as string,
-        savedProfile.about as string,
-        savedProfile.mobileNumber as string,
+        (savedProfile?.email || auth.currentUser.email) as string,
+        (savedProfile?.displayName || auth.currentUser.displayName) as string,
+        (savedProfile?.photoURL || auth.currentUser.photoURL) as string,
+        savedProfile?.about as string,
+        savedProfile?.mobileNumber as string,
         new Date(),
-        savedProfile.deviceRegistrations
+        savedProfile?.notificationsBrowser,
+        savedProfile?.notificationsMobile,
+        savedProfile?.notificationsWhatsapp,
+        savedProfile?.notificationsEmail,
+        savedProfile?.deviceRegistrations
       );
-      setProfile(profile);
       await Users.set(auth.currentUser.uid, Object.assign({}, profile));
       return profile;
     }
   }, [auth.currentUser]);
-
-  const authStateChanged = useCallback(
-    async (user: any) => {
-      if (user) {
-        setLoading(true);
-        const profile = await getUserProfile();
-        setProfile(profile);
-      }
-      setLoading(false);
-    },
-    [getUserProfile]
-  );
   const signIn = (email: string, password: string) =>
     signInWithEmailAndPassword(auth, email, password);
 
@@ -126,7 +116,6 @@ const useFirebaseAuth = () => {
     if (result) {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const profile = await getUserProfile();
-      setProfile(profile);
       router.push("/");
     }
   };
@@ -136,7 +125,6 @@ const useFirebaseAuth = () => {
     if (result) {
       const credential = TwitterAuthProvider.credentialFromResult(result);
       const profile = await getUserProfile();
-      setProfile(profile);
       router.push("/");
     }
   };
@@ -144,12 +132,7 @@ const useFirebaseAuth = () => {
     const provider = new FacebookAuthProvider();
     await _processSignIn(provider);
   };
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, authStateChanged);
-    return unsubscribe;
-  }, [auth, authStateChanged]);
   return {
-    profile,
     loading,
     signIn,
     signUp,
@@ -158,7 +141,7 @@ const useFirebaseAuth = () => {
     signInWithTwitter,
     signInWithFacebook,
     // linkAccounts,
-    getUserProfile,
+    getUserProfile
   };
 };
 export default useFirebaseAuth;

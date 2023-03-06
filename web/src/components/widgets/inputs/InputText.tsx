@@ -15,6 +15,7 @@ const InputText = forwardRef<HTMLInputElement, ITextInputProps>(
         )}
         <input
           id={id}
+          name={id}
           className="w-full input-bordered input"
           type={type || "text"}
           placeholder={placeholder || ""}

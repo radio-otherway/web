@@ -2,7 +2,7 @@ import React from "react";
 import { HeadingSubComponent } from "@/components/widgets/text";
 import {
   PhoneNumber,
-  RequestPushNotifications,
+  RequestPushNotifications
 } from "@/components/widgets/notifications";
 import { UseFormRegister } from "react-hook-form";
 import { ProfileForm } from "@/components/pages/profile/ProfilePageComponent";
@@ -13,11 +13,12 @@ interface IProfilePageComponentNotificationsProps {
   control: any;
   profile: Profile;
 }
+
 const ProfilePageComponentNotifications = ({
-  register,
-  control,
-  profile,
-}: IProfilePageComponentNotificationsProps) => {
+                                             register,
+                                             control,
+                                             profile
+                                           }: IProfilePageComponentNotificationsProps) => {
   const [notificationPermissionsGranted, setNotificationPermissionsGranted] =
     React.useState(Notification.permission !== "granted");
 
@@ -58,6 +59,44 @@ const ProfilePageComponentNotifications = ({
             <div className="mt-1 sm:col-span-2 sm:mt-0">
               <div className="flex max-w-lg rounded-md shadow-sm">
                 <PhoneNumber name="mobileNumber" control={control} />
+              </div>
+            </div>
+          </div>
+          <div className="space-x-3 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:pt-5">
+            <HeadingSubComponent
+              title="Notification methods"
+              subHeading="Where you'd like to see notifications when a show is starting"
+            />
+            <div className="mt-1 sm:col-span-2 sm:mt-0">
+              <div className="flex flex-grow max-w-lg rounded-md shadow-sm">
+                <div className="form-control">
+                  <label className="cursor-pointer label">
+                    <span className="label-text mr-2">Browser</span>
+                    <input type="checkbox" id="notificationsBrowser"
+                           className="toggle toggle-primary"  {...register("notificationsBrowser")} />
+                  </label>
+                </div>
+                <div className="form-control">
+                  <label className="cursor-pointer label">
+                    <span className="label-text mr-2">Mobile</span>
+                    <input type="checkbox" id="notificationsMobile"
+                           className="toggle toggle-primary"  {...register("notificationsMobile")} />
+                  </label>
+                </div>
+                <div className="form-control">
+                  <label className="cursor-pointer label">
+                    <span className="label-text mr-2">WhatsApp</span>
+                    <input type="checkbox" id="notificationsWhatsapp"
+                           className="toggle toggle-primary"  {...register("notificationsWhatsapp")} />
+                  </label>
+                </div>
+                <div className="form-control">
+                  <label className="cursor-pointer label">
+                    <span className="label-text mr-2">Email</span>
+                    <input type="checkbox" id="notificationsEmail"
+                           className="toggle toggle-primary" {...register("notificationsEmail")} />
+                  </label>
+                </div>
               </div>
             </div>
           </div>

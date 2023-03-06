@@ -3,34 +3,18 @@ import {
   DocumentData,
   collection,
   CollectionReference,
-  initializeFirestore,
-  getFirestore,
+  getFirestore
 } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDtk_Ym-AZroXsHvQVcdHXYyc_TvgycAWw",
-
-  authDomain: "radio-otherway.firebaseapp.com",
-
-  projectId: "radio-otherway",
-
-  storageBucket: "radio-otherway.appspot.com",
-
-  messagingSenderId: "47147490249",
-
-  appId: "1:47147490249:web:6243de17f52ef79126e618",
-
-  measurementId: "G-X3MXP6RMMC",
-
-  // apiKey: process.env.API_KEY,
-  // authDomain: process.env.AUTH_DOMAIN,
-  // projectId: process.env.PROJECT_ID,
-  // storageBucket: process.env.STORAGE_BUCKET,
-  // // messagingSenderId: process.env.STORAGE_BUCKET,
-  // appId: process.env.APP_ID,
-  // measurementId: process.env.MEASUREMENT_ID,
+  apiKey: process.env.NEXT_PUBLIC_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID
 };
-
 const firebaseApp = initializeApp(firebaseConfig);
 const firestore = getFirestore(firebaseApp);
 

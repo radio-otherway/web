@@ -11,6 +11,10 @@ export default class Profile {
   mobileNumber?: string;
   lastSeen: Date;
   deviceRegistrations?: DeviceRegistration[] = [];
+  notificationsBrowser: boolean;
+  notificationsMobile: boolean;
+  notificationsWhatsapp: boolean;
+  notificationsEmail: boolean;
 
   constructor(
     id: string,
@@ -20,6 +24,10 @@ export default class Profile {
     about?: string,
     mobileNumber?: string,
     lastSeen?: Date,
+    notificationsBrowser?: boolean,
+    notificationsMobile?: boolean,
+    notificationsWhatsapp?: boolean,
+    notificationsEmail?: boolean,
     deviceRegistrations?: DeviceRegistration[]
   ) {
     this.id = id;
@@ -28,8 +36,33 @@ export default class Profile {
     this.photoURL = photoURL;
     this.about = about || "";
     this.mobileNumber = mobileNumber || "";
+    this.notificationsBrowser = notificationsBrowser || false;
+    this.notificationsMobile = notificationsMobile || false;
+    this.notificationsWhatsapp = notificationsWhatsapp || false;
+    this.notificationsEmail = notificationsEmail || false;
 
     this.lastSeen = lastSeen || new Date();
     this.deviceRegistrations = deviceRegistrations || this.deviceRegistrations;
+  }
+
+  static fromJson(r: any): Profile {
+    const profile = new Profile(
+      r.id,
+      r.email,
+      r.displayName,
+      r.photoURL,
+      r.about,
+      r.mobileNumber,
+      r.lastSeen,
+      r.lastSeen
+    );
+    if (r.deviceRegistrations) {
+      profile.deviceRegistrations = r.deviceRegistrations;
+    }
+    profile.notificationsBrowser = r.notificationsBrowser || false;
+    profile.notificationsMobile = r.notificationsMobile || false;
+    profile.notificationsWhatsapp = r.notificationsWhatsapp || false;
+    profile.notificationsEmail = r.notificationsEmail || false;
+    return profile;
   }
 }

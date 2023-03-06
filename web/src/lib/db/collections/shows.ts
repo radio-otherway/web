@@ -1,23 +1,45 @@
 import { Show } from "@/models";
 import { createCollection } from "..";
 import { showConverter } from "../util/converters";
-import { doc, getDocs, where } from "@firebase/firestore";
+import { doc, getDocs, setDoc, where } from "@firebase/firestore";
 import { getDoc, query } from "firebase/firestore";
+import { Users } from "@/lib/db/collections/index";
 
 const Shows = {
-  collection: createCollection<Show>("shows").withConverter(showConverter),
-  getShowById: async (showId: string) => {
-    const q = await getDoc(doc(Shows.collection, showId));
-    return Show.fromJson(q.data());
-  },
+    collection: createCollection<Show>("shows").withConverter(showConverter),
 
-  getUpcomingShows: async (): Promise<Show[]> => {
-    const upcomingShows = await getDocs(
-      query(Shows.collection, where("date", ">", new Date()))
-    );
-
-    return upcomingShows.docs.map((s) => Show.fromJson(s.data()));
+    wrapShow: async (show: Show): Promise<Show> => {
+      const user = await Users.getByEmail(show.creator);
+      if (user && user.displayName) {
+        show.creator = user.displayName;
+        show.image = user.photoURL;
+      }
+      return show;
+    },
+    set: async (showId: string, show: Show) => {
+      const showRef = doc(Shows.collection, showId);
+      await setDoc(
+        showRef,
+        show,
+        { merge: true }
+      );
+    },
+    get: async (showId: string) => {
+      const q = await getDoc(doc(Shows.collection, showId));
+      return Show.fromJson(q.data());
+    },
+    getUpcomingShows: async (): Promise<Show[]> => {
+      const upcomingShows = await getDocs(
+        query(Shows.collection, where("date", ">", new Date()))
+      );
+      return upcomingShows.docs.map((s) => {
+          const show = s.data();
+          console.log("Shows", "mapping upcoming shows", show);
+          return Show.fromJson(show);
+        }
+      );
+    }
   }
-};
+;
 
 export default Shows;
