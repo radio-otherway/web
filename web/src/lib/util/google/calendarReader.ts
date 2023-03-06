@@ -1,5 +1,4 @@
 import calendar, { GOOGLE_CALENDAR_ID } from "@/lib/util/google/calendar";
-import logger from "../logging";
 
 const getCalendarEntries = async (syncToken?: string) => {
   const e = await calendar.events.list({

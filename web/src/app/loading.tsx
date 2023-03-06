@@ -2,7 +2,6 @@ import React from "react";
 import { useState } from "react";
 
 const LogRocket = require("logrocket");
-import packageJson from "../../package.json";
 
 const Loading = () => {
   return (

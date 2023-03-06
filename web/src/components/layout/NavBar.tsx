@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { LogIn, LogOut, PlusSquare, Menu, User } from "react-feather";
-import { ThemeSelector } from "../widgets/ui/themes";
+import { ThemeSelector } from "@/components/widgets/ui/themes";
 import Link from "next/link";
 import { useAuth, useUser } from "reactfire";
 import { signOut } from "firebase/auth";

@@ -1,9 +1,9 @@
 import { Show } from "@/models";
 import { createCollection } from "..";
-import { showConverter } from "../util/converters";
 import { doc, getDocs, setDoc, where } from "@firebase/firestore";
 import { getDoc, query } from "firebase/firestore";
 import { Users } from "@/lib/db/collections/index";
+import { showConverter } from "@/lib/db/util/converters";
 
 const Shows = {
     collection: createCollection<Show>("shows").withConverter(showConverter),

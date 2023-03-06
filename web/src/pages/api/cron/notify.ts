@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { StatusCodes } from "http-status-codes";
 import { Shows, Users } from "@/lib/db/collections";
-import { sendSMS, sendWhatsApp } from "@/lib/util/notifications/sms";
+import { sendEmail, sendSMS, sendWhatsApp } from "@/lib/util/notifications";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {

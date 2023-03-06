@@ -15,10 +15,9 @@ import {
   UserCredential
 } from "firebase/auth";
 import { useCallback, useContext, useEffect, useState } from "react";
-import { Users } from "../db/collections";
-import logger from "../util/logging";
 import { useRouter } from "next/navigation";
-import { AuthProfileContext } from "@/lib/auth/AuthProfileProvider";
+import logger from "@/lib/util/logging";
+import { Users } from "@/lib/db/collections";
 
 const useFirebaseAuth = () => {
   const router = useRouter();
