@@ -24,6 +24,5 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./scheduler
-          file: ./scheduler/Dockerfile
-          push: true
-          tags: ghcr.io/fergalmoran/radio-otherway-scheduler:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
