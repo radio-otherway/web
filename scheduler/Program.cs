@@ -1,12 +1,11 @@
-using System.Net;
-using System.Security.Cryptography.X509Certificates;
 using OtherWay.Radio.Scheduler.Services;
 using Quartz;
+
+// [assembly: System.Reflection.AssemblyVersion("1.0.*")]
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-
 
 
 // Add services to the container.
