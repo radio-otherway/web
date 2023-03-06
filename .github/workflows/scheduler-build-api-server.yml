@@ -2,15 +2,27 @@ name: Build Scheduler Docker Image
 
 on:
   push:
-    branches: [ develop ]
+    branches:
+      - master
+      - develop
 
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+      
 defaults:
   run:
     working-directory: scheduler
 
+env:
+  IMAGE_NAME: radio-otherway-scheduler
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     steps:
       - uses: actions/checkout@v3
 
