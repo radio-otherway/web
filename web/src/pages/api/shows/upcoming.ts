@@ -1,12 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import db, { shows } from "@/lib/db";
-import { getDocs, query, where } from "@firebase/firestore";
 import { StatusCodes } from "http-status-codes";
+import { Shows } from "@/lib/db/collections";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const q = query(shows, where("date", ">", new Date()));
-  const upcoming = await getDocs(q);
-  res.status(StatusCodes.OK).json(upcoming.docs.map((r) => r.data()));
+  const shows = await Shows.getUpcomingShows();
+  res.status(StatusCodes.OK).json(shows);
   res.end();
 };
 export default handler;
+

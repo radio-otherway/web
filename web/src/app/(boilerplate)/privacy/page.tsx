@@ -1,7 +1,7 @@
-import PrivacyComponent from "@/components/boilerplate/PrivacyComponent";
+import { PrivacyComponent } from "@/components/boilerplate";
 
 const PrivacyPage = () => {
-  return <PrivacyComponent/>
-}
+  return <PrivacyComponent />;
+};
 
 export default PrivacyPage;

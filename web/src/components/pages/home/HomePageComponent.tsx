@@ -9,10 +9,11 @@ import UpcomingShowsTable from "./UpcomingShowsTable";
 interface IHomePageComponentProps {
   shows: Show[] | undefined;
 }
+
 const HomePageComponent = ({ shows }: IHomePageComponentProps) => {
   const _getLayout = () => {
     if (!shows) {
-      return <Loading />;
+      return <div className="p-4"><Loading /></div>;
     }
     if (shows.length === 0) {
       return <NoShows />;

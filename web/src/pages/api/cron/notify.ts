@@ -1,10 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { shows, users } from "@/lib/db";
-import { Show } from "@/models";
-import { doc, getDocs } from "@firebase/firestore";
-import { getDoc, query, where } from "firebase/firestore";
-import { sendWhatsApp } from "@/lib/util/notifications/sms";
 import { StatusCodes } from "http-status-codes";
+import { Shows, Users } from "@/lib/db/collections";
+import { sendEmail, sendSMS, sendWhatsApp } from "@/lib/util/notifications";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
@@ -12,27 +9,34 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
   const { showId } = req.body;
 
-  const q = await getDoc(doc(shows, showId));
-  const show = Show.fromJson(q.data());
-
+  const show = await Shows.get(showId);
+  const users = await Users.getNotifiable();
   //iterate through every user and get their notifications
   //and send 'em off
-
-  //TODO: Move this out of here
-  const usersQuery = await getDocs(
-    query(users, where("mobileNumber", "!=", null))
-  );
-  usersQuery.forEach(async (u) => {
-    const user = u.data();
+  if (!users) {
+    res.status(StatusCodes.METHOD_NOT_ALLOWED);
+    res.end();
+    return;
+  }
+  for (const user of users) {
+    const message = (process.env.WHATSAPP_SHOW_HOUR as string)
+      .replace("{{1}}", user.displayName as string)
+      .replace("{{2}}", show.creator);
     if (user.mobileNumber) {
-      console.log("notify", "sending notification to ", user);
-      const message = (process.env.WHATSAPP_SHOW_HOUR as string)
-        .replace("{{1}}", user.displayName as string)
-        .replace("{{2}}", show.creator);
-
-      await sendWhatsApp(user.mobileNumber, message);
+      if (user.notificationsWhatsapp) {
+        await sendWhatsApp(user.mobileNumber, message);
+      }
+      if (user.notificationsMobile) {
+        await sendSMS(user.mobileNumber, message);
+      }
     }
-  });
+    if (user.email && user.notificationsEmail) {
+      await sendEmail(user.email, "New show upcoming on Radio Otherway", message);
+    }
+    if (user.notificationsBrowser) {
+      // await sendEmail(user.email, "New show upcoming on Radio Otherway", message);
+    }
+  }
   res.status(StatusCodes.OK).json({ status: "OK" });
   res.end();
 };

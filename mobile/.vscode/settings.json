@@ -1,0 +1,14 @@
+{
+    "workbench.colorTheme": "monokai-charcoal",
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "build/": true,
+        ".dart_tool/": true
+    },
+    "java.configuration.updateBuildConfiguration": "interactive"
+}

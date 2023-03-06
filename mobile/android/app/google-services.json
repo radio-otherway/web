@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "47147490249",
+    "project_id": "radio-otherway",
+    "storage_bucket": "radio-otherway.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:47147490249:android:bd656beb46373ccd26e618",
+        "android_client_info": {
+          "package_name": "com.podnoms.otherway.radio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "47147490249-dq1ufee45nlp0b8grg9scljun8l8ktnv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.podnoms.otherway.radio",
+            "certificate_hash": "dcdbcc872af758cbbec89d518db0d79d9431eb46"
+          }
+        },
+        {
+          "client_id": "47147490249-4skr1875ujrbtq02cui7crdisjigr914.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRytJTiTdGNh3UBKe0f9hiJRJ8319SFrg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "47147490249-4skr1875ujrbtq02cui7crdisjigr914.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "47147490249-h3h5butr7gqncc9l53g9ume321sacp84.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.podnoms.otherway.radio"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

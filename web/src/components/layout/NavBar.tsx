@@ -1,34 +1,36 @@
 "use client";
 import React from "react";
-import Link from "next/link";
-import { useAuthUserContext } from "@/lib/auth/authUserContext";
 import Image from "next/image";
 import { LogIn, LogOut, PlusSquare, Menu, User } from "react-feather";
-import { ThemeSelector } from "../widgets/ui/themes";
+import { ThemeSelector } from "@/components/widgets/ui/themes";
+import Link from "next/link";
+import { useAuth, useUser } from "reactfire";
+import { signOut } from "firebase/auth";
 
 const Navbar = () => {
-  const { profile, loading, logOut } = useAuthUserContext();
+  const auth = useAuth();
+  const { status, data: profile } = useUser();
   const NavMenu = profile ? (
     <React.Fragment>
       <Link
         href="/profile"
         id="profile"
-        className="gap-1 normal-case btn-ghost btn"
+        className="btn-ghost btn gap-1 normal-case"
       >
         <User
           size={20}
-          className="inline-block w-5 h-5 stroke-current md:h-6 md:w-6"
+          className="inline-block h-5 w-5 stroke-current md:h-6 md:w-6"
         />
         Profile
       </Link>
       <button
         tabIndex={0}
-        className="gap-1 normal-case btn-ghost btn"
-        onClick={() => logOut()}
+        className="btn-ghost btn gap-1 normal-case"
+        onClick={() => void signOut(auth)}
       >
         <LogOut
           size={20}
-          className="inline-block w-5 h-5 stroke-current md:h-6 md:w-6"
+          className="inline-block h-5 w-5 stroke-current md:h-6 md:w-6"
         />
         <span className="hidden md:inline">Logout</span>
       </button>
@@ -38,19 +40,22 @@ const Navbar = () => {
       <Link
         href="/signup"
         id="signup"
-        className="gap-1 normal-case btn-ghost btn"
+        className="btn-ghost btn gap-1 normal-case"
       >
-        <PlusSquare size={20} className="inline-block w-5 h-5 stroke-current md:h-6 md:w-6" />
+        <PlusSquare
+          size={20}
+          className="inline-block h-5 w-5 stroke-current md:h-6 md:w-6"
+        />
         Register
       </Link>
       <Link
         href="/login"
         id="login"
-        className="gap-1 normal-case btn-ghost btn"
+        className="btn-ghost btn gap-1 normal-case"
       >
         <LogIn
           size={20}
-          className="inline-block w-5 h-5 stroke-current md:h-6 md:w-6"
+          className="inline-block h-5 w-5 stroke-current md:h-6 md:w-6"
         />
         Login
       </Link>
@@ -58,12 +63,12 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="w-full navbar bg-primary text-base-200 shadow-lg">
+    <nav className="navbar w-full bg-primary text-base-200 shadow-lg">
       <Link href="/">
         <Image src="/logo.png" alt="Otherway" width={42} height={42} />
       </Link>
-      <div className="flex-col hidden ml-auto text-sm text-center font-body md:flex md:flex-row">
-        {!loading && NavMenu}
+      <div className="font-body ml-auto hidden flex-col text-center text-sm md:flex md:flex-row">
+        {status === "success" && NavMenu}
         <ThemeSelector />
       </div>
 
@@ -72,7 +77,7 @@ const Navbar = () => {
           <div tabIndex={0} className="m-1 cursor-pointer">
             <Menu />
           </div>
-          <div className="w-24 mt-3 space-y-3 text-center dropdown-content menu">
+          <div className="dropdown-content menu mt-3 w-24 space-y-3 text-center">
             {NavMenu}
           </div>
         </div>

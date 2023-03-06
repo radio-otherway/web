@@ -2,7 +2,7 @@
 This component will handle the theme (dark/light). You are able to change the selected theme line 9.
 DaisyUI have more than 10 themes availables https://daisyui.com/docs/default-themes
 */
-
+import React from "react";
 import { HiOutlineMoon, HiOutlineSun } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import { defaults } from "@/lib/constants";
@@ -12,7 +12,7 @@ const theme = {
   secondary: defaults.defaultDarkTheme,
 };
 
-const ThemeToggle = (): JSX.Element => {
+const ThemeToggle = (): React.ReactNode => {
   const [activeTheme, setActiveTheme] = useState(
     document.body.dataset.theme || ""
   );
@@ -27,7 +27,7 @@ const ThemeToggle = (): JSX.Element => {
   }, [activeTheme]);
 
   return (
-    <button className="flex ml-3" onClick={() => setActiveTheme(inactiveTheme)}>
+    <button className="ml-3 flex" onClick={() => setActiveTheme(inactiveTheme)}>
       {activeTheme === theme.secondary ? (
         <HiOutlineSun className="m-auto text-xl hover:text-accent" />
       ) : (

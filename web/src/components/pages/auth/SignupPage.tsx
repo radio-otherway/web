@@ -5,35 +5,49 @@ import { IoLogoFacebook, IoLogoGoogle, IoLogoTwitter } from "react-icons/io";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 import { Info } from "react-feather";
-import { useFirebaseAuth } from "@/lib/auth";
+import useFirebaseAuth from "@/lib/auth/signin";
+import { FacebookButton, GoogleButton, TwitterButton } from "@/components/widgets/buttons/social";
+import ToastService from "@/components/widgets/toast";
+import { validateEmail } from "@/lib/util/validationUtils";
 
 const SignupPage = () => {
   const {
     signInWithGoogle,
     signInWithFacebook,
     signInWithTwitter,
-    profile,
-    signUp,
-    linkAccounts
+    signUp
   } = useFirebaseAuth();
   const router = useRouter();
   const [error, setError] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
-
-  const [linking, setLinking] = React.useState(false);
   const register = async (
     $event: React.SyntheticEvent<HTMLButtonElement>
   ): Promise<void> => {
-    $event.preventDefault();
     setError("");
-    setLinking(false);
+    $event.preventDefault();
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
+    if (!password) {
+      setError("Please enter a password");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+    setError("");
     const result = await signUp(email, password);
-    if (result === "auth/email-already-in-use") {
-      setLinking(true);
+    if (result === "") {
       setError("");
-      // setError("This email address has already been used to create an account.");
+      ToastService.success("Account successfully created");
+      router.push("/");
+    } else if (result === "auth/email-already-in-use") {
+      // setError("");
+      setError("This email address has already been used to create an account.");
     } else if (result === "auth/invalid-email") {
       setError("Please enter a correct email address");
     } else {
@@ -131,42 +145,9 @@ const SignupPage = () => {
             <span className="h-px bg-gray-400 w-14" />
           </span>
           <div className="flex items-center justify-center gap-4">
-            <button
-              type="button"
-              className="w-1/3 gap-2 btn"
-              onClick={signInWithTwitter}
-            >
-              <div className="text-base-content">
-                <IoLogoTwitter />
-              </div>
-              <span className="text-sm font-medium text-base-content">
-                Twitter
-              </span>
-            </button>
-            <button
-              type="button"
-              className="w-1/3 gap-2 btn"
-              onClick={signInWithGoogle}
-            >
-              <div className="text-base-content">
-                <IoLogoGoogle />
-              </div>
-              <span className="text-sm font-medium text-base-content">
-                Gmail
-              </span>
-            </button>
-            <button
-              type="button"
-              className="w-1/3 gap-2 btn"
-              onClick={signInWithFacebook}
-            >
-              <div className="text-base-content">
-                <IoLogoFacebook />
-              </div>
-              <span className="text-sm font-medium text-base-content">
-                Facebook
-              </span>
-            </button>
+            <TwitterButton onClick={signInWithTwitter} />
+            <GoogleButton onClick={signInWithGoogle} />
+            <FacebookButton onClick={signInWithFacebook} />
           </div>
         </div>
       </form>

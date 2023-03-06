@@ -12,11 +12,12 @@ interface IProfilePageComponentProfileProps {
   register: UseFormRegister<ProfileForm>;
   setValue: UseFormSetValue<ProfileForm>;
 }
+
 const ProfilePageComponentProfile = ({
-  profile,
-  register,
-  setValue,
-}: IProfilePageComponentProfileProps) => {
+                                       profile,
+                                       register,
+                                       setValue
+                                     }: IProfilePageComponentProfileProps) => {
   const [photoURLFile, setPhotoURLFile] = useState("");
   return (
     <div className="space-y-8 divide-y sm:space-y-5">
@@ -40,6 +41,7 @@ const ProfilePageComponentProfile = ({
                   id="displayName"
                   type="text"
                   label="Display name"
+                  showLabel={false}
                   {...register("displayName")}
                 />
               </div>
