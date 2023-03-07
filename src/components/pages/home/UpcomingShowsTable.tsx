@@ -9,6 +9,7 @@ interface IUpcomingShowsTableProps {
 }
 
 const UpcomingShowsTable = ({ shows }: IUpcomingShowsTableProps) => {
+  debugger
   return (
     <table className="table w-full">
       {/* head */}
@@ -32,7 +33,7 @@ const UpcomingShowsTable = ({ shows }: IUpcomingShowsTableProps) => {
             <th>{show.creator}</th>
             <td className="pl-5 pr-3 whitespace-no-wrap">
               <div className="text-gray-400">
-                {`${new Date(show.date).getDay()} ${getMonthName(show.date)}`}{" "}
+                {`${new Date(show.date).getDate()} ${getMonthName(show.date)}`}{" "}
                 @ {getTime(show.date)}
               </div>
             </td>

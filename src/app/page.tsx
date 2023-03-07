@@ -10,7 +10,6 @@ const getData = async () => {
     `${process.env.NEXT_PUBLIC_API_URL}/api/shows/upcoming`,
     { cache: "no-store" }
   );
-
   return await res.json();
 };
 
