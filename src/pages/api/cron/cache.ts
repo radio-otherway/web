@@ -72,7 +72,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
               };
             });
           const result = await callWebHook(
-            `${process.env.SCHEDULER_API_HOST}/job/schedule`,
+            `${process.env.NEXT_PUBLIC_SCHEDULER_API_HOST}/job/schedule`,
             schedules
           );
           if (result !== 200) {

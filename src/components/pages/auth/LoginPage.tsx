@@ -3,7 +3,11 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { IoLogoFacebook, IoLogoGoogle, IoLogoTwitter } from "react-icons/io";
 import useFirebaseAuth from "@/lib/auth/signin";
-import { FacebookButton, GoogleButton, TwitterButton } from "@/components/widgets/buttons/social";
+import {
+  FacebookButton,
+  GoogleButton,
+  TwitterButton,
+} from "@/components/widgets/buttons/social";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -17,7 +21,7 @@ const LoginPage = () => {
     signInWithFacebook,
     signIn,
     getUserProfile,
-    checkUserOnboarding
+    checkUserOnboarding,
   } = useFirebaseAuth();
   const login = async (
     event: React.SyntheticEvent<HTMLButtonElement>
@@ -27,7 +31,6 @@ const LoginPage = () => {
       const result = await signIn(email, password);
       if (result && result.user) {
         router.push("/");
-        checkUserOnboarding();
       } else {
         setError("Unable to log you in, please check your email & password");
       }
@@ -39,11 +42,11 @@ const LoginPage = () => {
     <div className="font-body max-w-lg rounded-md bg-base-100 p-10 text-base-content shadow-md md:flex-1">
       <h3 className="font-title my-4 text-2xl font-semibold">Account Login</h3>
       {error && (
-        <div className="mb-4 shadow-lg alert alert-error">
+        <div className="alert alert-error mb-4 shadow-lg">
           <div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="flex-shrink-0 w-6 h-6 stroke-current"
+              className="h-6 w-6 flex-shrink-0 stroke-current"
               fill="none"
               viewBox="0 0 24 24"
             >

@@ -12,7 +12,7 @@ import {
   signInWithPopup,
   signOut,
   TwitterAuthProvider,
-  UserCredential
+  UserCredential,
 } from "firebase/auth";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -90,8 +90,15 @@ const useFirebaseAuth = () => {
       return profile;
     }
   }, [auth.currentUser]);
-  const signIn = (email: string, password: string) =>
-    signInWithEmailAndPassword(auth, email, password);
+  const signIn = async (email: string, password: string) => {
+    const result = await signInWithEmailAndPassword(auth, email, password);
+    if (result) {
+      const profile = await getUserProfile();
+      if (profile && (await checkUserOnboarding(profile))) {
+        router.push("/");
+      }
+    }
+  };
 
   const signUp = async (email: string, password: string): Promise<string> => {
     try {
@@ -101,6 +108,10 @@ const useFirebaseAuth = () => {
         password
       );
       logger.debug("useFireBaseAuth", "signUp_success", response);
+      const profile = await getUserProfile();
+      if (profile) {
+        await checkUserOnboarding(profile);
+      }
       return "";
     } catch (err: { code: string } | any) {
       const credential = GoogleAuthProvider.credentialFromError(err);
@@ -121,7 +132,7 @@ const useFirebaseAuth = () => {
     const result = await _processSignIn(provider);
     if (result) {
       const profile = await getUserProfile();
-      if (profile && await checkUserOnboarding(profile)) {
+      if (profile && (await checkUserOnboarding(profile))) {
         router.push("/");
       }
     }
@@ -132,12 +143,18 @@ const useFirebaseAuth = () => {
     if (result) {
       const credential = TwitterAuthProvider.credentialFromResult(result);
       const profile = await getUserProfile();
-      router.push("/");
+      if (profile && (await checkUserOnboarding(profile))) {
+        router.push("/");
+      }
     }
   };
   const signInWithFacebook = async () => {
     const provider = new FacebookAuthProvider();
     await _processSignIn(provider);
+    const profile = await getUserProfile();
+    if (profile && (await checkUserOnboarding(profile))) {
+      router.push("/");
+    }
   };
   return {
     loading,
@@ -149,7 +166,7 @@ const useFirebaseAuth = () => {
     signInWithFacebook,
     // linkAccounts,
     getUserProfile,
-    checkUserOnboarding
+    checkUserOnboarding,
   };
 };
 export default useFirebaseAuth;

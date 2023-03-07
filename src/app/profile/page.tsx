@@ -6,9 +6,9 @@ import { useSigninCheck } from "reactfire";
 import Loading from "../loading";
 
 const ProfilePage = ({
-  params,
-  searchParams,
-}: {
+                       params,
+                       searchParams
+                     }: {
   params?: { page: number };
   searchParams?: { [key: string]: string | string[] | undefined };
 }) => {
@@ -37,7 +37,7 @@ const ProfilePage = ({
       />
     );
   } else {
-    <div>Waiting...</div>;
+    return (<div>Waiting...</div>);
   }
 };
 
