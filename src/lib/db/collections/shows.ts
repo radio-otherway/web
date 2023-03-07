@@ -12,7 +12,7 @@ const Shows = {
       const user = await Users.getByEmail(show.creator);
       if (user && user.displayName) {
         show.creator = user.displayName;
-        show.image = user.photoURL;
+        show.image = user.photoURL || "/img/default-show.png";
       }
       return show;
     },
@@ -33,9 +33,9 @@ const Shows = {
         query(Shows.collection, where("date", ">", new Date()))
       );
       return upcomingShows.docs.map((s) => {
-          const show = s.data();
-          console.log("Shows", "mapping upcoming shows", show);
-          return Show.fromJson(show);
+          console.log("Shows", "mapping upcoming shows", s);
+          const show = Show.fromJson(s.data());
+          return show;
         }
       );
     }

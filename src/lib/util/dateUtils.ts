@@ -13,11 +13,15 @@ const getStartOfToday = (admin: any) => {
 const dateDifferenceInSeconds = (date1: Date, date2: Date) =>
   Math.abs(date1.getTime() - date2.getTime()) / 1000;
 
-const isDatePast = (firstDate: Date) =>
-  firstDate.setHours(0, 0, 0, 0) <= new Date().setHours(0, 0, 0, 0);
+const isDatePast = (firstDate: Date) => firstDate < new Date();
 
 const addSeconds = (date: Date, seconds: number) => {
   date.setSeconds(date.getSeconds() + seconds);
   return date;
 };
-export { isDatePast, getMonthName, getTime, getStartOfToday, dateDifferenceInSeconds, addSeconds };
+const addHours = (date: Date, hours: number) => {
+  const dateCopy = new Date(date);
+  dateCopy.setHours(dateCopy.getHours() + hours);
+  return dateCopy;
+};
+export { isDatePast, getMonthName, getTime, getStartOfToday, dateDifferenceInSeconds, addHours, addSeconds };

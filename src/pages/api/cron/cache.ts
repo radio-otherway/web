@@ -6,15 +6,16 @@ import { Settings, Shows } from "@/lib/db/collections";
 import { Show } from "@/models";
 import { callWebHook } from "@/lib/util/httpUtils";
 import { StatusCodes } from "http-status-codes";
-import { dateDifferenceInSeconds, isDatePast } from "@/lib/util/dateUtils";
+import { addHours, addSeconds, dateDifferenceInSeconds, isDatePast } from "@/lib/util/dateUtils";
 
 type CalendarParseError = { code: number, errors: any[], stack: string, message: string }
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   let retry = false;
   do {
     try {
+      const { force } = req.query;
       logger.debug("Starting sync of shows from google calendar");
-      const syncToken = await Settings.read("CalendarSyncToken");
+      const syncToken = force ? undefined : await Settings.read("CalendarSyncToken");
       logger.debug("Starting sync of shows from google calendar");
       const e = await getCalendarEntries(syncToken);
       if (!e?.events) {
@@ -33,8 +34,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
         //ping the scheduler to let it know stuff has changed
         if (entries.length > 0) {
+          const schedules = entries.filter(r => r.date &&
+            r.date !== "Invalid Date" && !isDatePast(new Date(r.date))
+          ).map(e => {
+            return {
+              showId: e.id,
+              scheduleTimes: [
+                { scheduleName: `${e.id}-hourbefore`, scheduleTime: addHours(new Date(e.date), -1) },
+                { scheduleName: `${e.id}-showstart`, scheduleTime: new Date(e.date) }
+              ]
+            };
+          });
           const result = await callWebHook(
-            `${process.env.SCHEDULER_API_HOST}/job/reload`
+            `${process.env.SCHEDULER_API_HOST}/job/schedule`, schedules
           );
           if (result !== 200) {
             logger.error("cache", "Unable to notify job scheduler");

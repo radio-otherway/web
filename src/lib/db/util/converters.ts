@@ -4,7 +4,7 @@ import {
   DocumentData,
   Timestamp,
   QueryDocumentSnapshot,
-  SnapshotOptions,
+  SnapshotOptions
 } from "firebase/firestore";
 
 const showConverter = {
@@ -14,6 +14,8 @@ const showConverter = {
       date: show.date
         ? Timestamp.fromDate(new Date(show.date as string))
         : new Date(),
+      creator: show.creator,
+      image: show.image
     };
   },
   fromFirestore(
@@ -21,7 +23,7 @@ const showConverter = {
     options: SnapshotOptions
   ): Show {
     const data = snapshot.data(options)!;
-    return new Show(snapshot.id, data.title, data.date.toDate(), data.creator);
-  },
+    return new Show(snapshot.id, data.title, data.date.toDate(), data.creator, data.image);
+  }
 };
 export { showConverter };

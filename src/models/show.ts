@@ -3,9 +3,9 @@ export default class Show {
   title: string;
   date: string;
   creator: string;
-  image?: string;
+  image: string;
 
-  constructor(id: string, title: string, date: Date, creator: string, image?: string) {
+  constructor(id: string, title: string, date: Date, creator: string, image: string) {
     this.id = id;
     this.title = title;
     this.date = date.toString();
