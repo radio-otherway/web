@@ -61,7 +61,7 @@ const ProfilePageComponent = ({ page, onboarding }: { page: number, onboarding: 
   }, [page]);
   useEffect(() => {
     if (onboarding) {
-      ToastService.custom(
+      ToastService.success(
         "Welcome to Radio Otherway, if you want to get reminded about upcoming shows please fill in your telephone number on the profile page and choose how you would like to be notified.\nAlso, select Enable Desktop Notifications if you want the browser to give you a buzz.",
         "Welcome Aboard 🚂",
         { duration: Infinity, icon: "👋" }

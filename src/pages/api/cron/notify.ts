@@ -2,6 +2,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { StatusCodes } from "http-status-codes";
 import { Shows, Users } from "@/lib/db/collections";
 import { sendEmail, sendSMS, sendWhatsApp } from "@/lib/util/notifications";
+import logger from "@/lib/util/logging";
+import { sendCloudMessage } from "@/lib/firebase/admin";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
@@ -22,19 +24,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const message = (process.env.WHATSAPP_SHOW_HOUR as string)
       .replace("{{1}}", user.displayName as string)
       .replace("{{2}}", show.creator);
-    if (user.mobileNumber) {
-      if (user.notificationsWhatsapp) {
-        await sendWhatsApp(user.mobileNumber, message);
-      }
-      if (user.notificationsMobile) {
-        await sendSMS(user.mobileNumber, message);
-      }
-    }
-    if (user.email && user.notificationsEmail) {
-      await sendEmail(user.email, "New show upcoming on Radio Otherway", message);
-    }
+    // if (user.mobileNumber) {
+    //   if (user.notificationsWhatsapp) {
+    //     await sendWhatsApp(user.mobileNumber, message);
+    //   }
+    //   if (user.notificationsMobile) {
+    //     await sendSMS(user.mobileNumber, message);
+    //   }
+    // }
+    // if (user.email && user.notificationsEmail) {
+    //   await sendEmail(user.email, "New show upcoming on Radio Otherway", message);
+    // }
     if (user.notificationsBrowser) {
-      // await sendEmail(user.email, "New show upcoming on Radio Otherway", message);
+      void user.deviceRegistrations?.forEach(async reg => {
+        void await sendCloudMessage(reg.fcmToken, "New show starting", message);
+        logger.debug("Notify", "notificationsBrowser");
+      });
     }
   }
   res.status(StatusCodes.OK).json({ status: "OK" });

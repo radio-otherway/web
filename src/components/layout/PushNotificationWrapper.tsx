@@ -1,92 +1,100 @@
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useContext, useEffect } from "react";
+import { firebaseCloudMessaging } from "@/lib/util/notifications/firebaseMessaging";
+import { doc, setDoc } from "@firebase/firestore";
+import { Users } from "@/lib/db/collections";
+import logger from "@/lib/util/logging";
+import { getMessaging, onMessage } from "firebase/messaging";
+import ToastService from "@/components/widgets/toast";
+import { AuthProfileContext } from "@/lib/auth/AuthProfileProvider";
+import { parseUserAgent } from "react-device-detect";
+import firebaseApp from "@/lib/firebase";
 
 const PushNotificationWrapper = ({ children }: React.PropsWithChildren) => {
-  return <>{children}</>;
-  // const router = useRouter();
-  // const { profile } = useAuthUserContext();
-  // useEffect(() => {
-  //   const _getAndStoreRegistrationToken = async () => {
-  //     const { ua } = parseUserAgent(window.navigator.userAgent);
+  const router = useRouter();
+  const { profile } = useContext(AuthProfileContext);
+  useEffect(() => {
+    const _getAndStoreRegistrationToken = async () => {
+      const { ua } = parseUserAgent(window.navigator.userAgent);
 
-  //     if (!profile) return;
-  //     await setToken();
+      if (!profile) return;
+      await setToken();
 
-  //     // Event listener that listens for the push notification event in the background
-  //     if ("serviceWorker" in navigator) {
-  //       navigator.serviceWorker.addEventListener("message", (event) => {
-  //         console.log("event for the service worker", event);
-  //       });
-  //     }
+      // Event listener that listens for the push notification event in the background
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.addEventListener("message", (event) => {
+          console.log("event for the service worker", event);
+        });
+      }
 
-  //     // Calls the getMessage() function if the token is there
-  //     async function setToken() {
-  //       try {
-  //         if (!profile) return;
-  //         const token = await firebaseCloudMessaging.init();
-  //         if (token && profile) {
-  //           const newRegistration = {
-  //             fcmToken: token,
-  //             deviceType: ua,
-  //             lastSeen: new Date(),
-  //           };
-  //           const index = profile.deviceRegistrations?.findIndex((reg) => {
-  //             return reg.fcmToken === token;
-  //           });
-  //           if (index !== undefined && index !== -1) {
-  //             if (
-  //               profile.deviceRegistrations &&
-  //               profile.deviceRegistrations[index]
-  //             ) {
-  //               profile.deviceRegistrations[index] = newRegistration;
-  //             }
-  //           } else {
-  //             profile.deviceRegistrations?.push(newRegistration);
-  //           }
-  //         }
-  //         const profileWithRegistrations = Object.assign({}, profile);
-  //         await setDoc(doc(users, profile?.id), profileWithRegistrations, {
-  //           merge: true,
-  //         });
-  //         getMessage();
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
-  //     }
-  //   };
-  //   _getAndStoreRegistrationToken().catch((err) => {
-  //     logger.error(
-  //       "PushNotificationWrapper",
-  //       "_getAndStoreRegistrationToken_error",
-  //       err
-  //     );
-  //   });
-  // }, [profile]);
+      // Calls the getMessage() function if the token is there
+      async function setToken() {
+        try {
+          if (!profile) return;
+          const token = await firebaseCloudMessaging.init();
+          if (token && profile) {
+            const newRegistration = {
+              fcmToken: token,
+              deviceType: ua,
+              lastSeen: new Date()
+            };
+            const index = profile.deviceRegistrations?.findIndex((reg) => {
+              return reg.fcmToken === token;
+            });
+            if (index !== undefined && index !== -1) {
+              if (
+                profile.deviceRegistrations &&
+                profile.deviceRegistrations[index]
+              ) {
+                profile.deviceRegistrations[index] = newRegistration;
+              }
+            } else {
+              profile.deviceRegistrations?.push(newRegistration);
+            }
+          }
+          const profileWithRegistrations = Object.assign({}, profile);
+          await setDoc(doc(Users.collection, profile?.id), profileWithRegistrations, {
+            merge: true
+          });
+          getMessage();
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+    _getAndStoreRegistrationToken().catch((err) => {
+      logger.error(
+        "PushNotificationWrapper",
+        "_getAndStoreRegistrationToken_error",
+        err
+      );
+    });
+  }, [profile]);
 
-  // function getMessage() {
-  //   const messaging = getMessaging(app);
-  //   onMessage(messaging, (message) => {
-  //     ToastService.custom(
-  //       <div
-  //         onClick={() =>
-  //           message?.data?.url &&
-  //           handleClickPushNotification(message?.data?.url)
-  //         }
-  //       >
-  //         <h5>{message?.notification?.title}</h5>
-  //         <h6>{message?.notification?.body}</h6>
-  //       </div>
-  //     );
-  //   });
-  // }
+  function getMessage() {
+    const messaging = getMessaging(firebaseApp);
+    onMessage(messaging, (message) => {
+      ToastService.custom(
+        <div
+          onClick={() =>
+            message?.data?.url &&
+            handleClickPushNotification(message?.data?.url)
+          }
+        >
+          <h5>{message?.notification?.title}</h5>
+          <h6>{message?.notification?.body}</h6>
+        </div>
+      );
+    });
+  }
 
-  // const handleClickPushNotification = (url: string) => {
-  //   router.push(url);
-  // };
-  // return (
-  //   <>
-  //     <Toaster />
-  //     {children}
-  //   </>
-  // );
+  const handleClickPushNotification = (url: string) => {
+    router.push(url);
+  };
+  return (
+    <>
+      {children}
+    </>
+  );
 };
 export default PushNotificationWrapper;

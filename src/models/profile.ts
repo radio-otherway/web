@@ -1,4 +1,4 @@
-import DeviceRegistration from "@/models/deviceregistration";
+import DeviceRegistration from "@/models/deviceRegistration";
 
 export default class Profile {
   id: string;
