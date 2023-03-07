@@ -6,9 +6,10 @@ import { createCollection } from "..";
 const Users = {
   collection: createCollection<Profile>("users"),
 
-  get: async (id: string): Promise<Profile> => {
+  get: async (id: string): Promise<Profile | undefined> => {
     const result = await getDoc(doc(Users.collection, id));
-    return Profile.fromJson(result.data());
+    const j = result.data();
+    return j ? Profile.fromJson(j) : undefined;
   },
   getByEmail: async (email: string): Promise<Profile | undefined> => {
     const userQuery = await getDocs(query(Users.collection, where("email", "==", email)));

@@ -16,7 +16,8 @@ const LoginPage = () => {
     signInWithTwitter,
     signInWithFacebook,
     signIn,
-    getUserProfile
+    getUserProfile,
+    checkUserOnboarding
   } = useFirebaseAuth();
   const login = async (
     event: React.SyntheticEvent<HTMLButtonElement>
@@ -26,6 +27,7 @@ const LoginPage = () => {
       const result = await signIn(email, password);
       if (result && result.user) {
         router.push("/");
+        checkUserOnboarding();
       } else {
         setError("Unable to log you in, please check your email & password");
       }

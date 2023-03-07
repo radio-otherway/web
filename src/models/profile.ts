@@ -15,6 +15,7 @@ export default class Profile {
   notificationsMobile: boolean;
   notificationsWhatsapp: boolean;
   notificationsEmail: boolean;
+  isOnboarded: boolean;
 
   constructor(
     id: string,
@@ -28,6 +29,7 @@ export default class Profile {
     notificationsMobile?: boolean,
     notificationsWhatsapp?: boolean,
     notificationsEmail?: boolean,
+    isOnboarded?: boolean,
     deviceRegistrations?: DeviceRegistration[]
   ) {
     this.id = id;
@@ -40,6 +42,7 @@ export default class Profile {
     this.notificationsMobile = notificationsMobile || false;
     this.notificationsWhatsapp = notificationsWhatsapp || false;
     this.notificationsEmail = notificationsEmail || false;
+    this.isOnboarded = isOnboarded || false;
 
     this.lastSeen = lastSeen || new Date();
     this.deviceRegistrations = deviceRegistrations || this.deviceRegistrations;
@@ -54,15 +57,17 @@ export default class Profile {
       r.about,
       r.mobileNumber,
       r.lastSeen,
-      r.lastSeen
+      r.lastSeen,
+      r.notificationsBrowser || false,
+      r.notificationsMobile || false,
+      r.notificationsWhatsapp || false,
+      r.notificationsEmail || false,
+      r.isOnboarded || false
     );
     if (r.deviceRegistrations) {
       profile.deviceRegistrations = r.deviceRegistrations;
     }
-    profile.notificationsBrowser = r.notificationsBrowser || false;
-    profile.notificationsMobile = r.notificationsMobile || false;
-    profile.notificationsWhatsapp = r.notificationsWhatsapp || false;
-    profile.notificationsEmail = r.notificationsEmail || false;
+
     return profile;
   }
 }

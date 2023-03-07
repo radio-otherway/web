@@ -18,6 +18,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import logger from "@/lib/util/logging";
 import { Users } from "@/lib/db/collections";
+import ToastService from "@/components/widgets/toast/toastService";
 
 const useFirebaseAuth = () => {
   const router = useRouter();
@@ -56,7 +57,14 @@ const useFirebaseAuth = () => {
       }
     }
   };
-
+  const checkUserOnboarding = async (profile: Profile): Promise<boolean> => {
+    if (profile && !profile.isOnboarded) {
+      ToastService.success("Welcome to Radio Otherway, if you want to get reminded about upcoming shows please fill in your telephone number on the profile page.");
+      router.push("/profile?onboard=1");
+      return false;
+    }
+    return true;
+  };
   const clear = () => {
     setLoading(true);
   };
@@ -77,6 +85,7 @@ const useFirebaseAuth = () => {
         savedProfile?.notificationsMobile,
         savedProfile?.notificationsWhatsapp,
         savedProfile?.notificationsEmail,
+        savedProfile?.isOnboarded || false,
         savedProfile?.deviceRegistrations
       );
       await Users.set(auth.currentUser.uid, Object.assign({}, profile));
@@ -113,9 +122,10 @@ const useFirebaseAuth = () => {
 
     const result = await _processSignIn(provider);
     if (result) {
-      const credential = GoogleAuthProvider.credentialFromResult(result);
       const profile = await getUserProfile();
-      router.push("/");
+      if (profile && await checkUserOnboarding(profile)) {
+        router.push("/");
+      }
     }
   };
   const signInWithTwitter = async () => {
@@ -140,7 +150,8 @@ const useFirebaseAuth = () => {
     signInWithTwitter,
     signInWithFacebook,
     // linkAccounts,
-    getUserProfile
+    getUserProfile,
+    checkUserOnboarding
   };
 };
 export default useFirebaseAuth;
