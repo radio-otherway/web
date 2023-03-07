@@ -18,7 +18,6 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import logger from "@/lib/util/logging";
 import { Users } from "@/lib/db/collections";
-import ToastService from "@/components/widgets/toast/toastService";
 
 const useFirebaseAuth = () => {
   const router = useRouter();
@@ -59,8 +58,7 @@ const useFirebaseAuth = () => {
   };
   const checkUserOnboarding = async (profile: Profile): Promise<boolean> => {
     if (profile && !profile.isOnboarded) {
-      ToastService.success("Welcome to Radio Otherway, if you want to get reminded about upcoming shows please fill in your telephone number on the profile page.");
-      router.push("/profile?onboard=1");
+      router.push("/profile?page=1&onboarding=1");
       return false;
     }
     return true;
@@ -81,10 +79,10 @@ const useFirebaseAuth = () => {
         savedProfile?.about as string,
         savedProfile?.mobileNumber as string,
         new Date(),
-        savedProfile?.notificationsBrowser,
-        savedProfile?.notificationsMobile,
-        savedProfile?.notificationsWhatsapp,
-        savedProfile?.notificationsEmail,
+        savedProfile?.notificationsBrowser || false,
+        savedProfile?.notificationsMobile || false,
+        savedProfile?.notificationsWhatsapp || false,
+        savedProfile?.notificationsEmail || false,
         savedProfile?.isOnboarded || false,
         savedProfile?.deviceRegistrations
       );

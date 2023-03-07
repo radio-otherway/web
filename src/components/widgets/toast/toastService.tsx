@@ -2,17 +2,28 @@ import toast, {
   Renderable,
   Toast,
   ToastOptions,
-  ValueOrFunction,
+  ValueOrFunction
 } from "react-hot-toast";
 
 import ToastComponent, { ToastType } from "./ToastComponent";
 
 const ToastService = {
   custom: (
-    message: ValueOrFunction<Renderable, Toast>,
+    message: string,
+    title?: string,
     opts?: ToastOptions
   ) => {
-    toast.custom(message, opts);
+    toast.custom((t) => (
+      <ToastComponent
+        title={title ?? "Success"}
+        body={message}
+        isVisible={t.visible}
+        type={ToastType.success}
+        onToastClicked={() => {
+          toast.dismiss(t.id);
+        }}
+      />
+    ), opts);
   },
   success: (message: string, title?: string) => {
     toast.custom((t) => (
@@ -52,6 +63,6 @@ const ToastService = {
         }}
       />
     ));
-  },
+  }
 };
 export default ToastService;

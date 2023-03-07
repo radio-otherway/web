@@ -2,7 +2,7 @@ import React from "react";
 import {
   RiAlarmWarningLine,
   RiErrorWarningLine,
-  RiShieldCheckLine,
+  RiShieldCheckLine
 } from "react-icons/ri";
 import { CgCloseO } from "react-icons/cg";
 
@@ -11,6 +11,7 @@ enum ToastType {
   warning,
   error,
 }
+
 interface IToastComponentProps {
   title: string;
   body: string;
@@ -18,12 +19,13 @@ interface IToastComponentProps {
   isVisible: boolean;
   onToastClicked: () => void;
 }
+
 const ToastComponent = ({
-  title,
-  body,
-  type,
-  onToastClicked,
-}: IToastComponentProps) => {
+                          title,
+                          body,
+                          type,
+                          onToastClicked
+                        }: IToastComponentProps) => {
   const _getToastIcon = (type: ToastType): React.ReactNode => {
     switch (type) {
       case ToastType.success:
@@ -57,7 +59,7 @@ const ToastComponent = ({
           <div className="flex items-start">
             <div className="flex-shrink-0 pt-0.5">{_getToastIcon(type)}</div>
             <div className="ml-3 w-0 flex-1">
-              <p className="text-sm font-medium ">{title}</p>
+              <p className="text-md bold  shadow-accent">{title}</p>
               <p className="mt-1 text-sm ">{body}</p>
             </div>
           </div>

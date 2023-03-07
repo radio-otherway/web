@@ -27,7 +27,7 @@ export type ProfileForm = {
   notificationsEmail: boolean;
 };
 
-const ProfilePageComponent = () => {
+const ProfilePageComponent = ({ page, onboarding }: { page: number, onboarding: boolean }) => {
 
   const { profile } = useContext(AuthProfileContext);
   const { status, data: user } = useUser();
@@ -41,7 +41,7 @@ const ProfilePageComponent = () => {
     }
   ];
 
-  const [selectedItem, setSelectedItem] = React.useState("profile");
+  const [selectedItem, setSelectedItem] = React.useState(subNavigation[0].name);
   const {
     register,
     handleSubmit,
@@ -57,8 +57,20 @@ const ProfilePageComponent = () => {
   });
 
   useEffect(() => {
+    setSelectedItem(subNavigation[page].name);
+  }, [page]);
+  useEffect(() => {
+    if (onboarding) {
+      ToastService.custom(
+        "Welcome to Radio Otherway, if you want to get reminded about upcoming shows please fill in your telephone number on the profile page and choose how you would like to be notified.\nAlso, select Enable Desktop Notifications if you want the browser to give you a buzz.",
+        "Welcome Aboard 🚂",
+        { duration: Infinity, icon: "👋" }
+      );
+      onboarding = false;
+    }
+  }, []);
+  useEffect(() => {
     if (profile) {
-      console.log("ProfilePageComponent", "profileChanged", profile);
       reset(profile);
     }
   }, [profile, reset]);
@@ -79,6 +91,7 @@ const ProfilePageComponent = () => {
         notificationsBrowser: data.notificationsBrowser
       });
       console.log("ProfilePageComponent", "Updating profile", newProfile);
+      newProfile.isOnboarded = true;
       if (profile?.id) {
         const result = await Users.set(profile.id, newProfile);
       }

@@ -1,6 +1,7 @@
 import React from "react";
 import localforage from "localforage";
 import { firebaseCloudMessaging } from "@/lib/util/notifications/firebaseMessaging";
+import { MdOutlineNotificationsActive } from "react-icons/md";
 
 const RequestPushNotifications = () => {
   const _checkNotifications = async () => {
@@ -11,14 +12,15 @@ const RequestPushNotifications = () => {
   return (
     <button
       type="button"
-      className="btn-primary btn"
+      className="btn-primary btn gap"
       onClick={() => {
         _checkNotifications().catch((err: any) => {
           console.error(err);
         });
       }}
     >
-      Request Notification Permissions
+      <MdOutlineNotificationsActive className="w-6 h-6" />
+      Enable Desktop Notifications
     </button>
   );
 };

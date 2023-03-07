@@ -27,7 +27,8 @@ const UpcomingShowsTable = ({ shows }: IUpcomingShowsTableProps) => {
         shows.map((show: Show) => (
           <tr key={show.id}>
             <th>
-              <Image alt="Show" src={show.image ? show.image : "/img/default-show.png"} width={48} height={48} />
+              <Image alt="Show" src={show.image ? show.image : "/img/default-show.png"} width={48} height={48}
+                     className="w-16 rounded-xl" />
             </th>
             <th>{show.creator}</th>
             <td className="pl-5 pr-3 whitespace-no-wrap">
