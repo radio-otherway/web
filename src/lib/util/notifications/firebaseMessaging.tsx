@@ -1,7 +1,7 @@
 import "firebase/messaging";
 import localforage from "localforage";
 import { getMessaging, getToken } from "firebase/messaging";
-import firebaseApp from "@/lib/db";
+import firebaseApp from "@/lib/firebase";
 
 const firebaseCloudMessaging = {
   init: async (): Promise<string | null> => {
@@ -17,7 +17,7 @@ const firebaseCloudMessaging = {
       if (status && status === "granted") {
         // Get new token from Firebase
         const token = await getToken(messaging, {
-          vapidKey: process.env.WEBPUSH_VAPID_KEY,
+          vapidKey: process.env.WEBPUSH_VAPID_KEY
         });
         // Set token in our local storage
         if (token) {
@@ -29,6 +29,6 @@ const firebaseCloudMessaging = {
       console.error(error);
     }
     return null;
-  },
+  }
 };
 export { firebaseCloudMessaging };

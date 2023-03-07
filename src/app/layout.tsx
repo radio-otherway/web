@@ -7,12 +7,12 @@ import { NavBar, PushNotificationWrapper } from "@/components/layout";
 import Script from "next/script";
 import { Toaster } from "react-hot-toast";
 import logger from "@/lib/util/logging";
-import { firebaseConfig } from "@/lib/db";
 import OtherwayAppProvider from "@/components/providers/OtherwayAppProvider";
 import { ThemeProvider } from "@/components/providers";
 import { FirebaseAppProvider } from "reactfire";
 import { Theme } from "react-daisyui";
 import AuthProfileProvider from "@/lib/auth/AuthProfileProvider";
+import { firebaseConfig } from "@/lib/firebase";
 
 // only initialize when in the browser
 const font = Raleway({

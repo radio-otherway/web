@@ -3,14 +3,21 @@ import { JobInfoModel } from "@/models/index";
 import { SchedulerPage } from "@/components/pages/admin/scheduler";
 import { plainToInstance } from "class-transformer";
 import axios from "axios";
+import logger from "@/lib/util/logging";
 
 const getData = async (): Promise<JobInfoModel[] | undefined> => {
-  const response = await axios.get(`${process.env.NEXT_PUBLIC_SCHEDULER_API_HOST}/job`);
-  if (response.status === 200) {
-    const results = response.data.map((value: JobInfoModel) =>
-      plainToInstance(JobInfoModel, value, {})
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_SCHEDULER_API_HOST}/job`
     );
-    return results;
+    if (response.status === 200) {
+      const results = response.data.map((value: JobInfoModel) =>
+        plainToInstance(JobInfoModel, value, {})
+      );
+      return results;
+    }
+  } catch (err) {
+    logger.error("page", "getData", err);
   }
   return undefined;
 };
