@@ -9,7 +9,6 @@ interface IUpcomingShowsTableProps {
 }
 
 const UpcomingShowsTable = ({ shows }: IUpcomingShowsTableProps) => {
-  debugger
   return (
     <table className="table w-full">
       {/* head */}

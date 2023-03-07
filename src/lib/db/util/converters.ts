@@ -9,7 +9,6 @@ import {
 
 const showConverter = {
   toFirestore(show: WithFieldValue<Show>): DocumentData {
-    debugger
     return {
       ...show,
       date: show.date
