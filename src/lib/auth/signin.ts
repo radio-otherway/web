@@ -12,7 +12,7 @@ import {
   signInWithPopup,
   signOut,
   TwitterAuthProvider,
-  UserCredential,
+  UserCredential
 } from "firebase/auth";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -90,14 +90,16 @@ const useFirebaseAuth = () => {
       return profile;
     }
   }, [auth.currentUser]);
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (email: string, password: string): Promise<UserCredential | undefined> => {
     const result = await signInWithEmailAndPassword(auth, email, password);
     if (result) {
       const profile = await getUserProfile();
       if (profile && (await checkUserOnboarding(profile))) {
         router.push("/");
       }
+      return result;
     }
+    return undefined;
   };
 
   const signUp = async (email: string, password: string): Promise<string> => {
@@ -166,7 +168,7 @@ const useFirebaseAuth = () => {
     signInWithFacebook,
     // linkAccounts,
     getUserProfile,
-    checkUserOnboarding,
+    checkUserOnboarding
   };
 };
 export default useFirebaseAuth;

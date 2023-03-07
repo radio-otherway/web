@@ -71,26 +71,20 @@ const PushNotificationWrapper = ({ children }: React.PropsWithChildren) => {
     });
   }, [profile]);
 
-  function getMessage() {
-    const messaging = getMessaging(firebaseApp);
-    onMessage(messaging, (message) => {
-      ToastService.custom(
-        <div
-          onClick={() =>
-            message?.data?.url &&
-            handleClickPushNotification(message?.data?.url)
-          }
-        >
-          <h5>{message?.notification?.title}</h5>
-          <h6>{message?.notification?.body}</h6>
-        </div>
-      );
-    });
-  }
-
   const handleClickPushNotification = (url: string) => {
     router.push(url);
   };
+
+  const getMessage = () => {
+    const messaging = getMessaging(firebaseApp);
+    onMessage(messaging, (message) => {
+      ToastService.success(message?.notification?.body as string, message?.notification?.title, {
+        duration: 10000
+      }, () => message?.data?.url && handleClickPushNotification(message?.data?.url));
+    });
+  };
+
+
   return (
     <>
       {children}

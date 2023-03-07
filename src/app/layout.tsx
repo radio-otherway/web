@@ -37,8 +37,8 @@ const RootLayout = ({ children }: React.PropsWithChildren) => {
       <FirebaseAppProvider firebaseConfig={firebaseConfig}>
         <OtherwayAppProvider>
           <AuthProfileProvider>
-            <Toaster />
             <PushNotificationWrapper>
+              <Toaster />
               <div className="flex min-h-screen flex-col bg-base-100">
                 <NavBar />
                 <div className="grow place-items-center items-end bg-base-200 text-base-content">

@@ -15,7 +15,7 @@ const ToastService = {
     toast.custom(message, opts);
   },
 
-  success: (message: string, title?: string, opts?: ToastOptions) => {
+  success: (message: string, title?: string, opts?: ToastOptions, onClick?: () => void) => {
     toast.custom((t) => (
       <ToastComponent
         title={title ?? "Success"}
@@ -23,6 +23,7 @@ const ToastService = {
         isVisible={t.visible}
         type={ToastType.success}
         onToastClicked={() => {
+          onClick && onClick();
           toast.dismiss(t.id);
         }}
       />
