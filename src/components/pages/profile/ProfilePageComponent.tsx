@@ -27,8 +27,13 @@ export type ProfileForm = {
   notificationsEmail: boolean;
 };
 
-const ProfilePageComponent = ({ page, onboarding }: { page: number, onboarding: boolean }) => {
-
+const ProfilePageComponent = ({
+  page,
+  onboarding,
+}: {
+  page: number;
+  onboarding: boolean;
+}) => {
   const { profile } = useContext(AuthProfileContext);
   const { status, data: user } = useUser();
   const router = useRouter();
@@ -37,8 +42,8 @@ const ProfilePageComponent = ({ page, onboarding }: { page: number, onboarding: 
     {
       name: "notifications",
       title: "Notifications",
-      icon: Bell
-    }
+      icon: Bell,
+    },
   ];
 
   const [selectedItem, setSelectedItem] = React.useState(subNavigation[0].name);
@@ -49,11 +54,11 @@ const ProfilePageComponent = ({ page, onboarding }: { page: number, onboarding: 
     reset,
     watch,
     control,
-    formState: { errors }
+    formState: { errors },
   } = useForm<ProfileForm>({
     defaultValues: useMemo(() => {
       return profile;
-    }, [profile])
+    }, [profile]),
   });
 
   useEffect(() => {
@@ -88,7 +93,7 @@ const ProfilePageComponent = ({ page, onboarding }: { page: number, onboarding: 
         notificationsEmail: data.notificationsEmail,
         notificationsMobile: data.notificationsMobile,
         notificationsWhatsapp: data.notificationsWhatsapp,
-        notificationsBrowser: data.notificationsBrowser
+        notificationsBrowser: data.notificationsBrowser,
       });
       console.log("ProfilePageComponent", "Updating profile", newProfile);
       newProfile.isOnboarded = true;
@@ -102,10 +107,8 @@ const ProfilePageComponent = ({ page, onboarding }: { page: number, onboarding: 
     }
   };
 
-  useEffect(() => {
-  }, [selectedItem]);
+  useEffect(() => {}, [selectedItem]);
   const _getView = () => {
-
     return profile ? (
       <div className="pt-4 overflow-hidden">
         <div className="justify-center flex-1 px-2 mx-2 md:flex md:justify-start">
@@ -116,7 +119,7 @@ const ProfilePageComponent = ({ page, onboarding }: { page: number, onboarding: 
           <aside className="py-6 lg:col-span-3">
             <nav className="space-y-1">
               {subNavigation.map((item) => (
-                <a
+                <button
                   onClick={() => setSelectedItem(item.name)}
                   key={item.name}
                   className={classNames(
@@ -137,7 +140,7 @@ const ProfilePageComponent = ({ page, onboarding }: { page: number, onboarding: 
                     aria-hidden="true"
                   />
                   <span className="truncate">{item.title}</span>
-                </a>
+                </button>
               ))}
             </nav>
           </aside>
@@ -171,7 +174,9 @@ const ProfilePageComponent = ({ page, onboarding }: { page: number, onboarding: 
           </div>
         </div>
       </div>
-    ) : <Loading />;
+    ) : (
+      <Loading />
+    );
   };
   return _getView();
 };

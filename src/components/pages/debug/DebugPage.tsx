@@ -1,6 +1,7 @@
 "use client";
 import logger from "@/lib/util/logging";
 import axios from "axios";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const DebugPage = () => {
@@ -101,12 +102,12 @@ const DebugPage = () => {
                   Buttons come in various shapes, colors and sizes
                 </p>{" "}
                 <div className="flex justify-end mt-4">
-                  <a
+                  <Link
                     href="/components/button"
                     className="btn-primary btn-sm btn xl:btn-md"
                   >
                     See component
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

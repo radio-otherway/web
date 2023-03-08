@@ -1,8 +1,8 @@
 import { Fragment } from "react";
 import Link from "next/link";
 import { Popover, Transition } from "@headlessui/react";
-import clsx from "clsx";
 import { BsPersonFillAdd } from "react-icons/bs";
+import { GiHamburgerMenu } from "react-icons/gi";
 import { Button, ButtonLink } from "@/components/salient/Button";
 import { Container } from "@/components/salient/Container";
 import { Logo } from "@/components/salient/Logo";
@@ -11,36 +11,20 @@ import { useAuth, useUser } from "reactfire";
 import { CgProfile } from "react-icons/cg";
 import { BiLogInCircle, BiLogOut } from "react-icons/bi";
 import { signOut } from "firebase/auth";
+import { usePathname } from "next/navigation";
+import clsx from "clsx";
 
 const MobileNavigation = () => {
   const auth = useAuth();
   const { status, data: profile } = useUser();
+  const pathname = usePathname();
   return (
     <Popover>
       {({ open, close }) => (
         <>
           <Popover.Button className="relative z-10 flex h-8 w-8 items-center justify-center [&:not(:focus-visible)]:focus:outline-none">
             <span className="sr-only">Toggle Navigation</span>
-            <svg
-              aria-hidden="true"
-              className="h-3.5 w-3.5 overflow-visible stroke-slate-700"
-              fill="none"
-              strokeWidth={2}
-              strokeLinecap="round"
-            >
-              <path
-                d="M0 1H14M0 7H14M0 13H14"
-                className={clsx("origin-center transition", {
-                  "scale-90 opacity-0": open,
-                })}
-              />
-              <path
-                d="M2 2L12 12M12 2L2 12"
-                className={clsx("origin-center transition", {
-                  "scale-90 opacity-0": !open,
-                })}
-              />
-            </svg>
+            <GiHamburgerMenu className="h-3.5 w-3.5 overflow-visible stroke-slate-700" />
           </Popover.Button>
           <Transition.Root>
             <Transition.Child
@@ -65,12 +49,15 @@ const MobileNavigation = () => {
             >
               <Popover.Panel
                 as="ul"
-                className="absolute inset-x-0 top-full mt-4 origin-top space-y-4 rounded-2xl bg-white p-6 text-lg tracking-tight text-slate-900 shadow-xl ring-1 ring-slate-900/5"
+                className="absolute inset-x-0 p-6 mt-4 space-y-4 text-lg tracking-tight origin-top bg-white shadow-xl top-full rounded-2xl text-slate-900 ring-1 ring-slate-900/5"
               >
                 <li>
                   <Link
-                    href="/"
-                    className="block w-full"
+                    href="/upcoming"
+                    className={clsx(
+                      "block w-full",
+                      pathname == "/upcoming" ? "border-b-4" : ""
+                    )}
                     onClick={() => close()}
                   >
                     Upcoming shows
@@ -79,7 +66,10 @@ const MobileNavigation = () => {
                 <li>
                   <Link
                     href="/previous"
-                    className="block w-full"
+                    className={clsx(
+                      "block w-full",
+                      pathname == "/previous" ? "border-b-4" : ""
+                    )}
                     onClick={() => close()}
                   >
                     Previous shows
@@ -100,25 +90,25 @@ const NavBar = () => {
   return (
     <header className="py-4">
       <Container>
-        <nav className="relative z-50 bg-base-100 text-sm">
+        <nav className="relative z-50 text-sm bg-base-100">
           <ul className="flex items-center">
             <li>
               <Link href="#">
                 <span className="sr-only">Home</span>
-                <Logo className="h-10 w-auto" />
+                <Logo className="w-auto h-10" />
               </Link>
             </li>
-            <li className="ml-12 hidden md:block">
+            <li className="hidden ml-12 md:block">
               <Link href="/" className="btn-ghost btn">
                 Upcoming Shows
               </Link>
             </li>
-            <li className="ml-6 hidden md:block">
+            <li className="hidden ml-6 md:block">
               <Link href="/previous" className="btn-ghost btn">
                 Previous Shows
               </Link>
             </li>
-            <li className="ml-auto hidden md:block">
+            <li className="hidden ml-auto md:block">
               <ThemeSelector />
             </li>
             {profile ? (

@@ -36,7 +36,7 @@ const PushNotificationWrapper = ({ children }: React.PropsWithChildren) => {
             const newRegistration = {
               fcmToken: token,
               deviceType: ua,
-              lastSeen: new Date()
+              lastSeen: new Date(),
             };
             const index = profile.deviceRegistrations?.findIndex((reg) => {
               return reg.fcmToken === token;
@@ -53,9 +53,13 @@ const PushNotificationWrapper = ({ children }: React.PropsWithChildren) => {
             }
           }
           const profileWithRegistrations = Object.assign({}, profile);
-          await setDoc(doc(Users.collection, profile?.id), profileWithRegistrations, {
-            merge: true
-          });
+          await setDoc(
+            doc(Users.collection, profile?.id),
+            profileWithRegistrations,
+            {
+              merge: true,
+            }
+          );
           getMessage();
         } catch (error) {
           console.log(error);
@@ -78,17 +82,18 @@ const PushNotificationWrapper = ({ children }: React.PropsWithChildren) => {
   const getMessage = () => {
     const messaging = getMessaging(firebaseApp);
     onMessage(messaging, (message) => {
-      ToastService.success(message?.notification?.body as string, message?.notification?.title, {
-        duration: 10000
-      }, () => message?.data?.url && handleClickPushNotification(message?.data?.url));
+      ToastService.success(
+        message?.notification?.body as string,
+        message?.notification?.title,
+        {
+          duration: 10000,
+        },
+        () =>
+          message?.data?.url && handleClickPushNotification(message?.data?.url)
+      );
     });
   };
 
-
-  return (
-    <>
-      {children}
-    </>
-  );
+  return children;
 };
 export default PushNotificationWrapper;

@@ -11,38 +11,46 @@ interface IUpcomingShowsTableProps {
 const UpcomingShowsTable = ({ shows }: IUpcomingShowsTableProps) => {
   return (
     <table className="table w-full">
-      {/* head */}
       <thead>
-      <tr>
-        <th></th>
-        <th>Who?</th>
-        <th>When?</th>
-        <th>What?</th>
-        <th></th>
-      </tr>
+        <tr>
+          <th className="hidden md:table-cell">Who?</th>
+          <th className="hidden md:table-cell"></th>
+          <th>When?</th>
+          <th>What?</th>
+          <th></th>
+        </tr>
       </thead>
       <tbody>
-      {/* row 1 */}
-      {shows &&
-        shows.map((show: Show) => (
-          <tr key={show.id}>
-            <th>
-              <Image alt="Show" src={show.image ? show.image : "/img/default-show.png"} width={48} height={48}
-                     className="w-16 rounded-xl" />
-            </th>
-            <th>{show.creator}</th>
-            <td className="pl-5 pr-3 whitespace-no-wrap">
-              <div className="text-gray-400">
-                {`${new Date(show.date).getDate()} ${getMonthName(show.date)}`}{" "}
-                @ {getTime(show.date)}
-              </div>
-            </td>
-            <td>{show.title}</td>
-            <th>
-              <RemindMeButton showId={show.id} />
-            </th>
-          </tr>
-        ))}
+        {shows &&
+          shows.map((show: Show) => (
+            <tr key={show.id}>
+              <th className="hidden md:table-cell">
+                <div className="avatar">
+                  <div className="w-12 h-12 mask mask-squircle">
+                    <Image
+                      alt="Show"
+                      src={show.image ? show.image : "/img/default-show.png"}
+                      width={48}
+                      height={48}
+                    />
+                  </div>
+                </div>
+              </th>
+              <th className="hidden md:table-cell">{show.creator}</th>
+              <td className="pl-5 pr-3 whitespace-no-wrap">
+                <div className="text-xs opacity-60">
+                  {`${new Date(show.date).getDate()} ${getMonthName(
+                    show.date
+                  )}`}
+                  @ {getTime(show.date)}
+                </div>
+              </td>
+              <td>{show.title}</td>
+              <th>
+                <RemindMeButton showId={show.id} />
+              </th>
+            </tr>
+          ))}
       </tbody>
     </table>
   );
