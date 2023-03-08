@@ -36,7 +36,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "/srv/dev/radio-otherway/web/.next/types/**/*.ts"
-  ],
+, "src/app/(auth)/layout.tsx"  ],
   "exclude": [
     "node_modules"
   ]

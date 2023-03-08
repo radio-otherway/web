@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useReducer, useState } from "react";
+import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
 import { Profile } from "@/models";
 import { useUser } from "reactfire";
 import useFirebaseAuth from "@/lib/auth/signin";
@@ -11,23 +11,24 @@ interface IAuthProfileProviderState {
 
 const initialState: IAuthProfileProviderState = {
   profile: undefined,
-  setProfile: profile => {
-  }
+  setProfile: (profile) => {},
 };
 export const AuthProfileContext = createContext(initialState);
-
-const AuthProfileProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+const AuthProfileProvider: React.FC<React.PropsWithChildren> = ({
+  children,
+}) => {
   const { status, data: user } = useUser();
-  const { getUserProfile } = useFirebaseAuth();
+  const { getUserProfile, checkUserOnboarding } = useFirebaseAuth();
   useEffect(() => {
-    console.log("AuthProfileProvider", "statusChanged", status);
     if (status === "success" && user) {
       const profile = getUserProfile()
-        .then(profile => {
+        .then((profile) => {
           if (profile) {
             setProfile(profile);
+            checkUserOnboarding(profile, true);
           }
-        }).catch(err => {
+        })
+        .catch((err) => {
           logger.debug("AuthProfileProvider", "Error loading provider", err);
         });
     }
@@ -35,10 +36,10 @@ const AuthProfileProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
   const [profile, setProfile] = useState<Profile>();
 
-  return <AuthProfileContext.Provider value={{ profile, setProfile }}>
-    {children}
-  </AuthProfileContext.Provider>;
+  return (
+    <AuthProfileContext.Provider value={{ profile, setProfile }}>
+      {children}
+    </AuthProfileContext.Provider>
+  );
 };
-;
-
 export default AuthProfileProvider;

@@ -31,7 +31,8 @@ export default class Profile {
     notificationsWhatsapp?: boolean,
     notificationsEmail?: boolean,
     isOnboarded?: boolean,
-    deviceRegistrations?: DeviceRegistration[]
+    deviceRegistrations?: DeviceRegistration[],
+    roles?: Roles
   ) {
     this.id = id;
     this.email = email;
@@ -47,7 +48,7 @@ export default class Profile {
 
     this.lastSeen = lastSeen || new Date();
     this.deviceRegistrations = deviceRegistrations || this.deviceRegistrations;
-    this.roles = { listener: true };
+    this.roles = roles || { listener: true };
   }
 
   static fromJson(r: any): Profile {
@@ -64,7 +65,8 @@ export default class Profile {
       r.notificationsMobile || false,
       r.notificationsWhatsapp || false,
       r.notificationsEmail || false,
-      r.isOnboarded || false
+      r.isOnboarded || false,
+      r.roles || { listener: true }
     );
     if (r.deviceRegistrations) {
       profile.deviceRegistrations = r.deviceRegistrations;

@@ -80,7 +80,6 @@ const ProfilePageComponent = ({
     }
   }, [profile, reset]);
   const onSubmit: SubmitHandler<ProfileForm> = async (data) => {
-    console.log(data);
     try {
       const newProfile = removeUndefinedProperties({
         displayName: data.displayName,
@@ -95,7 +94,6 @@ const ProfilePageComponent = ({
         notificationsWhatsapp: data.notificationsWhatsapp,
         notificationsBrowser: data.notificationsBrowser,
       });
-      console.log("ProfilePageComponent", "Updating profile", newProfile);
       newProfile.isOnboarded = true;
       if (profile?.id) {
         const result = await Users.set(profile.id, newProfile);

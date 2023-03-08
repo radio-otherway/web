@@ -1,23 +1,17 @@
 import { Fragment } from "react";
 import Link from "next/link";
 import { Popover, Transition } from "@headlessui/react";
-import { BsPersonFillAdd } from "react-icons/bs";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { Button, ButtonLink } from "@/components/salient/Button";
-import { Container } from "@/components/salient/Container";
 import { Logo } from "@/components/salient/Logo";
-import { ThemeSelector } from "../widgets/ui/themes";
 import { useAuth, useUser } from "reactfire";
-import { CgProfile } from "react-icons/cg";
-import { BiLogInCircle, BiLogOut } from "react-icons/bi";
-import { signOut } from "firebase/auth";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
-import { ProfileDropdown } from "../widgets/dropdowns";
+import { RiLoginCircleLine, RiLogoutCircleLine } from "react-icons/ri";
+import { GrUserNew, GrUserSettings } from "react-icons/gr";
 
 const MobileNavigation = () => {
   const auth = useAuth();
-  const { status, data: profile } = useUser();
+
   const pathname = usePathname();
   return (
     <Popover>
@@ -89,83 +83,75 @@ const NavBar = () => {
   const auth = useAuth();
   const { status, data: profile } = useUser();
   return (
-    <header className="py-4">
-      <Container>
-        <nav className="relative z-50 text-sm bg-base-100">
-          <ul className="flex items-center">
-            <li>
-              <Link href="#">
-                <span className="sr-only">Home</span>
-                <Logo className="w-auto h-10" />
-              </Link>
-            </li>
-            <li className="hidden ml-12 md:block">
-              <Link href="/" className="btn-ghost btn">
-                Upcoming Shows
-              </Link>
-            </li>
-            <li className="hidden ml-6 md:block">
-              <Link href="/previous" className="btn-ghost btn">
-                Previous Shows
-              </Link>
-            </li>
-            <li className="hidden ml-auto md:block">
-              <ThemeSelector />
-            </li>
-            {profile ? (
-              <>
-                <li className="ml-auto md:ml-8">
-                  <ButtonLink href="/profile" className="btn-outline btn-xs">
-                    <CgProfile className="mr-2" />
-                    <span>Profile</span>
-                  </ButtonLink>
-                </li>
-                <li className="ml-auto md:ml-8">
-                  <Button
-                    onClick={() => void signOut(auth)}
-                    className="btn-outline btn-xs"
-                  >
-                    <BiLogOut className="mr-2" />
-                    <span>Logout</span>
-                  </Button>
-                </li>
-              </>
-            ) : (
-              <>
-                <li className="ml-auto md:ml-8">
-                  <ButtonLink
-                    href="/login"
-                    className="btn-outline btn-xs btn-success"
-                  >
-                    <BiLogInCircle className="mr-2" />
-                    <span>Login</span>
-                  </ButtonLink>
-                </li>
-                <li className="ml-auto md:ml-8">
-                  <ButtonLink
-                    href="/signup"
-                    className="btn-outline btn-xs btn-success"
-                  >
-                    <BsPersonFillAdd className="mr-2" />
-                    <span>
-                      Register<span className="hidden lg:inline"> now</span>
-                    </span>
-                  </ButtonLink>
-                </li>
-              </>
-            )}
-            {profile && (
-              <li>
-                <ProfileDropdown profile={profile} />
-              </li>
-            )}
-            <li className="ml-5 -mr-1 md:hidden">
-              <MobileNavigation />
-            </li>
-          </ul>
-        </nav>
-      </Container>
-    </header>
+    <nav className="relative flex items-center justify-between px-4 py-4 bg-white">
+      <Link className="text-3xl font-bold leading-none" href="/">
+        <span className="sr-only">Home</span>
+        <Logo className="w-auto h-10" />
+      </Link>
+      <ul className="absolute hidden transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 lg:mx-auto lg:flex lg:w-auto lg:items-center lg:space-x-6">
+        <li>
+          <a className="text-sm text-gray-400 hover:text-gray-500" href="#">
+            Home
+          </a>
+        </li>
+        <li className="text-gray-300">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            stroke="currentColor"
+            className="w-4 h-4 current-fill"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+            />
+          </svg>
+        </li>
+        <li>
+          <a className="text-sm text-gray-400 hover:text-gray-500" href="#">
+            Contact
+          </a>
+        </li>
+      </ul>
+      {status !== "loading" && profile ? (
+        <div className="flex items-center space-x-5">
+          <Link
+            className="flex text-gray-600 transition-colors duration-300 cursor-pointer hover:text-blue-500"
+            href="/signin"
+          >
+            <GrUserNew className="mr-2 mt-0.5 h-5 w-5 fill-current" />
+            Sign Up
+          </Link>
+          <Link
+            className="flex text-gray-600 transition-colors duration-300 cursor-pointer hover:text-blue-500"
+            href="/login"
+          >
+            <RiLoginCircleLine className="mr-2 mt-0.5 h-5 w-5 fill-current" />
+            Login
+          </Link>
+        </div>
+      ) : (
+        <>
+          <Link
+            className="flex text-gray-600 transition-colors duration-300 cursor-pointer hover:text-blue-500"
+            href="/profile"
+          >
+            <GrUserSettings className="mr-2 mt-0.5 h-5 w-5 fill-current" />
+            Login
+          </Link>
+          <Link
+            className="flex text-gray-600 transition-colors duration-300 cursor-pointer hover:text-blue-500"
+            href="/logout"
+          >
+            <RiLogoutCircleLine className="mr-2 mt-0.5 h-5 w-5 fill-current" />
+            Login
+          </Link>
+        </>
+      )}
+    </nav>
   );
 };
 export default NavBar;
