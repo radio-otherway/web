@@ -6,17 +6,17 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 import { Info } from "react-feather";
 import useFirebaseAuth from "@/lib/auth/signin";
-import { FacebookButton, GoogleButton, TwitterButton } from "@/components/widgets/buttons/social";
+import {
+  FacebookButton,
+  GoogleButton,
+  TwitterButton,
+} from "@/components/widgets/buttons/social";
 import ToastService from "@/components/widgets/toast";
 import { validateEmail } from "@/lib/util/validationUtils";
 
 const SignupPage = () => {
-  const {
-    signInWithGoogle,
-    signInWithFacebook,
-    signInWithTwitter,
-    signUp
-  } = useFirebaseAuth();
+  const { signInWithGoogle, signInWithFacebook, signInWithTwitter, signUp } =
+    useFirebaseAuth();
   const router = useRouter();
   const [error, setError] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -47,7 +47,9 @@ const SignupPage = () => {
       router.push("/");
     } else if (result === "auth/email-already-in-use") {
       // setError("");
-      setError("This email address has already been used to create an account.");
+      setError(
+        "This email address has already been used to create an account."
+      );
     } else if (result === "auth/invalid-email") {
       setError("Please enter a correct email address");
     } else {
@@ -55,10 +57,7 @@ const SignupPage = () => {
     }
   };
   return (
-    <div className="max-w-lg p-10 rounded-md shadow-md font-body bg-base-100 text-base-content md:flex-1">
-      <h3 className="my-4 text-2xl font-semibold font-title">
-        Create New Account
-      </h3>
+    <>
       {error && (
         <div className="mb-4 shadow-lg alert alert-error">
           <div>
@@ -151,7 +150,7 @@ const SignupPage = () => {
           </div>
         </div>
       </form>
-    </div>
+    </>
   );
 };
 

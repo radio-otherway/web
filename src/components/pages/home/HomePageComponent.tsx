@@ -1,5 +1,6 @@
 import Loading from "@/app/loading";
 import { RemindMeButton } from "@/components/widgets";
+import TitleCard from "@/components/widgets/cards/TitleCard";
 import { getMonthName, getTime } from "@/lib/util/dateUtils";
 import { Show } from "@/models";
 import React from "react";
@@ -13,21 +14,19 @@ interface IHomePageComponentProps {
 const HomePageComponent = ({ shows }: IHomePageComponentProps) => {
   const _getLayout = () => {
     if (!shows) {
-      return <div className="p-4"><Loading /></div>;
+      return (
+        <div className="p-4">
+          <Loading />
+        </div>
+      );
     }
     if (shows.length === 0) {
       return <NoShows />;
     }
     return (
-      <div className="h-full pt-4 overflow-hidden">
-        <div className="justify-center flex-1 px-2 mx-2 md:flex md:justify-start">
-          <span className="text-2xl font-bold">Upcoming events</span>
-        </div>
-        <div className="mt-1 divider" />
-        <div className="flex justify-center mx-6 mt-4" id="journal-scroll">
-          <UpcomingShowsTable shows={shows} />
-        </div>
-      </div>
+      <TitleCard title="Upcoming shows">
+        <UpcomingShowsTable shows={shows} />
+      </TitleCard>
     );
   };
   return _getLayout();

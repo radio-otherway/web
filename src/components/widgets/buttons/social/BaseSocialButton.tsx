@@ -6,10 +6,11 @@ interface IBaseSocialButtonProps extends React.PropsWithChildren {
 }
 
 const BaseSocialButton = ({ onClick, children }: IBaseSocialButtonProps) => {
-  return <button className="btn" onClick={onClick}>
-    {children}
-  </button>;
-
+  return (
+    <button className="btn-outline btn-sm btn" onClick={onClick}>
+      {children}
+    </button>
+  );
 };
 
 export default BaseSocialButton;

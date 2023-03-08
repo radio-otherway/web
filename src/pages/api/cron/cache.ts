@@ -75,7 +75,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             `${process.env.NEXT_PUBLIC_SCHEDULER_API_HOST}/job/schedule`,
             schedules
           );
-          if (result !== 200) {
+          if (result !== StatusCodes.OK) {
             logger.error("cache", "Unable to notify job scheduler");
           }
         }

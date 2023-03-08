@@ -4,13 +4,14 @@ import { SchedulerPage } from "@/components/pages/admin/scheduler";
 import { plainToInstance } from "class-transformer";
 import axios from "axios";
 import logger from "@/lib/util/logging";
+import { StatusCodes } from "http-status-codes";
 
 const getData = async (): Promise<JobInfoModel[] | undefined> => {
   try {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_SCHEDULER_API_HOST}/job`
     );
-    if (response.status === 200) {
+    if (response.status === StatusCodes.OK) {
       const results = response.data.map((value: JobInfoModel) =>
         plainToInstance(JobInfoModel, value, {})
       );

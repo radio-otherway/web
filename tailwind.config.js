@@ -12,6 +12,13 @@ module.exports = {
   plugins: [require("daisyui")],
   daisyui: {
     // themes: ["fantasy", "luxury", "synthwave"],
+    styled: true,
+    themes: true,
+    base: true,
+    utils: true,
+    logs: true,
+    rtl: false,
+    prefix: "",
     darkTheme: "luxury",
   },
 };

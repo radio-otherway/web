@@ -15,12 +15,12 @@ const RemindMeButton = ({ showId }: { showId: string }) => {
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             userId: user?.uid,
-            showId: user?.uid
-          })
+            showId: user?.uid,
+          }),
         }
       );
       if (response.status === 201) {
@@ -32,10 +32,10 @@ const RemindMeButton = ({ showId }: { showId: string }) => {
   };
   return (
     <button
-      className="gap-2 btn"
+      className="btn-outline btn-sm btn gap-2"
       onClick={async () => await createShowReminder()}
     >
-      <MdAddAlarm className="w-6 h-6" />
+      <MdAddAlarm className="h-4 w-4" />
       Remind Me!
     </button>
   );

@@ -1,13 +1,17 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import TitleCard from "@/components/widgets/cards/TitleCard";
+const AuthLayout = ({ children }: React.PropsWithChildren) => {
+  const pathname = usePathname();
 
-const RootLayout = ({ children }: React.PropsWithChildren) => {
   return (
-    <div className="flex flex-wrap w-full justify-evenly">
-      <div className="max-w-lg p-10 mt-6 rounded-md shadow-md font-body bg-base-100 text-base-content md:flex-1">
-        {children}
-      </div>
+    <div className="w-full max-w-lg mx-auto ">
+      <TitleCard title={pathname === "/login" ? "Login" : "Signup"}>
+        <div className="mx-8">{children}</div>
+      </TitleCard>
     </div>
   );
 };
 
-export default RootLayout;
+export default AuthLayout;
