@@ -1,4 +1,5 @@
 import DeviceRegistration from "@/models/deviceRegistration";
+import { Roles } from "./roles";
 
 export default class Profile {
   id: string;
@@ -16,7 +17,7 @@ export default class Profile {
   notificationsWhatsapp: boolean;
   notificationsEmail: boolean;
   isOnboarded: boolean;
-
+  roles: Roles;
   constructor(
     id: string,
     email?: string,
@@ -46,6 +47,7 @@ export default class Profile {
 
     this.lastSeen = lastSeen || new Date();
     this.deviceRegistrations = deviceRegistrations || this.deviceRegistrations;
+    this.roles = { listener: true };
   }
 
   static fromJson(r: any): Profile {

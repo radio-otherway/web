@@ -1,8 +1,7 @@
 "use client";
-import TitleCard from "@/components/widgets/cards/TitleCard";
+import { TitleCard } from "@/components/widgets/cards";
 import logger from "@/lib/util/logging";
 import axios from "axios";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import packageJson from "../../../../package.json";
 
@@ -48,29 +47,31 @@ const DebugPage = () => {
               <table className="table w-full">
                 <thead>
                   <tr>
-                    <th>Item</th>
+                    <th className="font-bold">Item</th>
                     <th>Value</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>Full Name</td>
+                    <td className="font-bold">Full Name</td>
                     <td>{schedulerFullName}</td>
                   </tr>
                   <tr>
-                    <td>Assembly Version</td>
+                    <td className="font-bold">Assembly Version</td>
                     <td>{schedulerAssemblyVersion}</td>
                   </tr>
                   <tr>
-                    <td>Assembly File Version</td>
+                    <td className="font-bold">Assembly File Version</td>
                     <td>{schedulerAssemblyFileVersion}</td>
                   </tr>
                   <tr>
-                    <td>Assembly Informational Version</td>
+                    <td className="font-bold">
+                      Assembly Informational Version
+                    </td>
                     <td>{schedulerAssemblyInformationalVersion}</td>
                   </tr>
                   <tr>
-                    <td>Web App Version</td>
+                    <td className="font-bold">Web App Version</td>
                     <td>{packageJson.version}</td>
                   </tr>
                 </tbody>

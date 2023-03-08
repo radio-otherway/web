@@ -1,7 +1,5 @@
 import Loading from "@/app/loading";
-import { RemindMeButton } from "@/components/widgets";
-import TitleCard from "@/components/widgets/cards/TitleCard";
-import { getMonthName, getTime } from "@/lib/util/dateUtils";
+import { TitleCard } from "@/components/widgets/cards";
 import { Show } from "@/models";
 import React from "react";
 import NoShows from "./NoShows";

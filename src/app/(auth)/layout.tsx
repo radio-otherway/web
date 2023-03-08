@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import TitleCard from "@/components/widgets/cards/TitleCard";
+import { TitleCard } from "@/components/widgets/cards";
 const AuthLayout = ({ children }: React.PropsWithChildren) => {
   const pathname = usePathname();
 

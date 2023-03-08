@@ -10,7 +10,6 @@ import logger from "@/lib/util/logging";
 import OtherwayAppProvider from "@/components/providers/OtherwayAppProvider";
 import { ThemeProvider } from "@/components/providers";
 import { FirebaseAppProvider } from "reactfire";
-import { Theme } from "react-daisyui";
 import AuthProfileProvider from "@/lib/auth/AuthProfileProvider";
 import { firebaseConfig } from "@/lib/firebase";
 
@@ -39,9 +38,9 @@ const RootLayout = ({ children }: React.PropsWithChildren) => {
               <AuthProfileProvider>
                 <PushNotificationWrapper>
                   <Toaster />
-                  <div className="flex min-h-screen flex-col">
+                  <div className="flex flex-col min-h-screen">
                     <NavBar />
-                    <main className="flex-1 overflow-y-auto bg-base-200 px-6 pt-4">
+                    <main className="flex-1 px-6 pt-4 overflow-y-auto bg-base-200">
                       {children}
                       <div className="h-16" />
                     </main>

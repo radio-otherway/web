@@ -13,6 +13,7 @@ import { BiLogInCircle, BiLogOut } from "react-icons/bi";
 import { signOut } from "firebase/auth";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import { ProfileDropdown } from "../widgets/dropdowns";
 
 const MobileNavigation = () => {
   const auth = useAuth();
@@ -134,7 +135,7 @@ const NavBar = () => {
                 <li className="ml-auto md:ml-8">
                   <ButtonLink
                     href="/login"
-                    className="btn-outline btn-info btn-sm"
+                    className="btn-outline btn-xs btn-success"
                   >
                     <BiLogInCircle className="mr-2" />
                     <span>Login</span>
@@ -143,7 +144,7 @@ const NavBar = () => {
                 <li className="ml-auto md:ml-8">
                   <ButtonLink
                     href="/signup"
-                    className="btn-outline btn-info btn-sm"
+                    className="btn-outline btn-xs btn-success"
                   >
                     <BsPersonFillAdd className="mr-2" />
                     <span>
@@ -152,6 +153,11 @@ const NavBar = () => {
                   </ButtonLink>
                 </li>
               </>
+            )}
+            {profile && (
+              <li>
+                <ProfileDropdown profile={profile} />
+              </li>
             )}
             <li className="ml-5 -mr-1 md:hidden">
               <MobileNavigation />
