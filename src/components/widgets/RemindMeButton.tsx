@@ -32,11 +32,12 @@ const RemindMeButton = ({ showId }: { showId: string }) => {
   };
   return (
     <button
-      className="btn-outline btn-sm btn gap-2"
+      title="Remind Me!"
+      className="gap-2 btn-outline btn-sm btn"
       onClick={async () => await createShowReminder()}
     >
-      <MdAddAlarm className="h-4 w-4" />
-      Remind Me!
+      <MdAddAlarm className="w-4 h-4" />
+      <span className="hidden md:block">Remind Me!</span>
     </button>
   );
 };

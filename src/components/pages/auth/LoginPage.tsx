@@ -114,9 +114,12 @@ const LoginPage = () => {
           </div>
           <div className="flex items-center mb-6 -mt-4">
             <div className="flex ml-auto">
-              <a href="#" className="inline-flex text-xs font-thin sm:text-sm">
+              <Link
+                href="#"
+                className="inline-flex text-xs font-thin sm:text-sm"
+              >
                 Forgot Your Password?
-              </a>
+              </Link>
             </div>
           </div>
           <div className="flex w-full">
