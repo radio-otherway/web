@@ -1,8 +1,12 @@
 import { getAuth, signOut, User } from "firebase/auth";
 import Link from "next/link";
 import Image from "next/image";
+import { FirebaseApp } from "@firebase/app-types";
+import { useFirebaseApp } from "reactfire";
+
 const ProfileDropdown = ({ profile }: { profile: User }) => {
-  const auth = getAuth();
+  const app = useFirebaseApp();
+  const auth = getAuth(app);
   return (
     <div className="ml-4 dropdown dropdown-end">
       <label tabIndex={0} className="btn-ghost btn-circle avatar btn">

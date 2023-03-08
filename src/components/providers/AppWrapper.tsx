@@ -5,8 +5,9 @@ import { getFirestore } from "firebase/firestore";
 import LogRocket from "logrocket";
 import packageJson from "../../../package.json";
 import { getStorage } from "@firebase/storage";
+import AuthContextProvider from "@/components/providers/AuthContext";
 
-const OtherwayAppProvider = ({ children }: React.PropsWithChildren) => {
+const AppWrapper = ({ children }: React.PropsWithChildren) => {
   const app = useFirebaseApp();
   const auth = getAuth(app);
   const firestore = getFirestore(app);
@@ -38,12 +39,14 @@ const OtherwayAppProvider = ({ children }: React.PropsWithChildren) => {
   return (
     <AuthProvider sdk={auth}>
       <FirestoreProvider sdk={firestore}>
-        <StorageProvider sdk={storage}>
-          {children}
-        </StorageProvider>
+        <AuthContextProvider>
+          <StorageProvider sdk={storage}>
+            {children}
+          </StorageProvider>
+        </AuthContextProvider>
       </FirestoreProvider>
     </AuthProvider>
   );
 };
 
-export default OtherwayAppProvider;
+export default AppWrapper;

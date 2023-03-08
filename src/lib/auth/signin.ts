@@ -7,32 +7,23 @@ import {
   linkWithPopup,
   OAuthCredential,
   OAuthProvider,
-  onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   TwitterAuthProvider,
-  UserCredential,
+  UserCredential
 } from "firebase/auth";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import logger from "@/lib/util/logging";
 import { Users } from "@/lib/db/collections";
+import { useFirebaseApp } from "reactfire";
 
 const useFirebaseAuth = () => {
   const router = useRouter();
-  const auth = getAuth();
-  const [errorCredential, setErrorCredential] =
-    useState<OAuthCredential | null>();
-
-  const [loading, setLoading] = useState(true);
-
-  const authStateChanged = async (authState: any) => {
-    console.log("signin", "authStateChanged", authState);
-    setLoading(false);
-    return;
-  };
-
+  const app = useFirebaseApp();
+  const auth = getAuth(app);
+  const [errorCredential, setErrorCredential] = useState();
   const _processSignIn = async (
     provider: any
   ): Promise<UserCredential | undefined> => {
@@ -73,9 +64,6 @@ const useFirebaseAuth = () => {
     }
     return true;
   };
-  const clear = () => {
-    setLoading(true);
-  };
   const getUserProfile = useCallback(async () => {
     if (auth.currentUser !== null) {
       // The user object has basic properties such as display name, email, etc.
@@ -84,7 +72,7 @@ const useFirebaseAuth = () => {
       if (savedProfile) {
         const profile: Profile = {
           ...savedProfile,
-          id: auth.currentUser.uid,
+          id: auth.currentUser.uid
         };
         profile.roles = savedProfile?.roles;
         await Users.set(auth.currentUser.uid, Object.assign({}, profile));
@@ -114,16 +102,14 @@ const useFirebaseAuth = () => {
       logger.debug("useFireBaseAuth", "signUp_success", response);
       return "";
     } catch (err: { code: string } | any) {
-      const credential = GoogleAuthProvider.credentialFromError(err);
-      if (credential) {
-        setErrorCredential(credential as OAuthCredential);
-      }
       logger.error("useFireBaseAuth", "signUp", err);
       return err.code;
     }
   };
 
-  const logOut = () => signOut(auth).then(clear);
+  const logOut = () => signOut(auth).then(() => {
+
+  });
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: "select_account" });
@@ -143,13 +129,7 @@ const useFirebaseAuth = () => {
     await _processSignIn(provider);
   };
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, authStateChanged);
-    return unsubscribe;
-  }, []);
-
   return {
-    loading,
     signIn,
     signUp,
     logOut,
@@ -158,7 +138,7 @@ const useFirebaseAuth = () => {
     signInWithFacebook,
     // linkAccounts,
     getUserProfile,
-    checkUserOnboarding,
+    checkUserOnboarding
   };
 };
 export default useFirebaseAuth;

@@ -22,8 +22,6 @@ const LoginPage = () => {
     signInWithTwitter,
     signInWithFacebook,
     signIn,
-    getUserProfile,
-    checkUserOnboarding,
   } = useFirebaseAuth();
   const login = async (
     event: React.SyntheticEvent<HTMLButtonElement>

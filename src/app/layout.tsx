@@ -7,7 +7,7 @@ import { NavBar, PushNotificationWrapper } from "@/components/layout";
 import Script from "next/script";
 import { Toaster } from "react-hot-toast";
 import logger from "@/lib/util/logging";
-import OtherwayAppProvider from "@/components/providers/OtherwayAppProvider";
+import AppWrapper from "@/components/providers/AppWrapper";
 import { ThemeProvider } from "@/components/providers";
 import { FirebaseAppProvider } from "reactfire";
 import AuthProfileProvider from "@/lib/auth/AuthProfileProvider";
@@ -34,28 +34,16 @@ const RootLayout = ({ children }: React.PropsWithChildren) => {
     <body className={`${font.className}`}>
     <ThemeProvider>
       <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-        <OtherwayAppProvider>
-          <AuthProfileProvider>
-            <PushNotificationWrapper>
-              <Toaster />
-              <NavBar />
-              <main className="flex-1 px-6 pt-4 overflow-y-auto bg-base-200">
-                {children}
-                <div className="h-16" />
-              </main>
-              {/* <div className="flex-1 px-6 pt-8 overflow-y-auto">
-                      <div className="hero h-4/5 ">
-                        <div className="hero-content">{children}</div>
-                      </div>
-                    </div> */}
-              {/* <div className="items-end grow place-items-center bg-base-200 text-base-content">
-                      <main className="flex-col justify-between w-full col-start-1 row-start-1 gap-10 pb-40 hero-content max-w-7xl lg:flex-row lg:items-end lg:gap-0 xl:gap-20">
-                        {children}
-                      </main>
-                    </div> */}
-            </PushNotificationWrapper>
-          </AuthProfileProvider>
-        </OtherwayAppProvider>
+        <AppWrapper>
+          <PushNotificationWrapper>
+            <Toaster />
+            <NavBar />
+            <main className="flex-1 px-6 pt-4 overflow-y-auto bg-base-200">
+              {children}
+              <div className="h-16" />
+            </main>
+          </PushNotificationWrapper>
+        </AppWrapper>
       </FirebaseAppProvider>
     </ThemeProvider>
     </body>

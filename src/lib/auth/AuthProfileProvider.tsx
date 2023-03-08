@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import { Profile } from "@/models";
 import { useUser } from "reactfire";
 import useFirebaseAuth from "@/lib/auth/signin";
@@ -20,6 +26,14 @@ const AuthProfileProvider: React.FC<React.PropsWithChildren> = ({
   const { status, data: user } = useUser();
   const { getUserProfile, checkUserOnboarding } = useFirebaseAuth();
   useEffect(() => {
+    console.log(
+      "AuthProfileProvider",
+      "AuthProfileProvider",
+      "status: ",
+      status,
+      "user: ",
+      user
+    );
     if (status === "success" && user) {
       const profile = getUserProfile()
         .then((profile) => {
@@ -32,7 +46,7 @@ const AuthProfileProvider: React.FC<React.PropsWithChildren> = ({
           logger.debug("AuthProfileProvider", "Error loading provider", err);
         });
     }
-  }, [status, user, getUserProfile]);
+  }, [status, user, getUserProfile, checkUserOnboarding]);
 
   const [profile, setProfile] = useState<Profile>();
 

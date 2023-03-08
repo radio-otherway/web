@@ -4,9 +4,5 @@ interface ILogoProps {
   className?: string;
 }
 export function Logo({ className }: ILogoProps) {
-  return (
-    <Link href="/" className={className}>
-      <Image src="/img/logo.png" alt="Otherway" width={120} height={120} />
-    </Link>
-  );
+  return <Image src="/img/logo.png" alt="Otherway" width={120} height={120} />;
 }
