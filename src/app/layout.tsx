@@ -10,7 +10,6 @@ import logger from "@/lib/util/logging";
 import AppWrapper from "@/components/providers/AppWrapper";
 import { ThemeProvider } from "@/components/providers";
 import { FirebaseAppProvider } from "reactfire";
-import AuthProfileProvider from "@/lib/auth/AuthProfileProvider";
 import { firebaseConfig } from "@/lib/firebase";
 
 // only initialize when in the browser

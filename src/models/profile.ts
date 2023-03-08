@@ -1,5 +1,5 @@
+import type { User } from "@firebase/auth";
 import DeviceRegistration from "@/models/deviceRegistration";
-import { Roles } from "./roles";
 
 export default class Profile {
   id: string;
@@ -17,7 +17,13 @@ export default class Profile {
   notificationsWhatsapp: boolean;
   notificationsEmail: boolean;
   isOnboarded: boolean;
-  roles: Roles;
+  roles?: [];
+
+  static fromUser(user: User): Profile {
+    const profile = new Profile(user.uid, user.email as string, user.displayName as string, user.photoURL as string);
+    return profile;
+  }
+
   constructor(
     id: string,
     email?: string,
@@ -30,9 +36,7 @@ export default class Profile {
     notificationsMobile?: boolean,
     notificationsWhatsapp?: boolean,
     notificationsEmail?: boolean,
-    isOnboarded?: boolean,
-    deviceRegistrations?: DeviceRegistration[],
-    roles?: Roles
+    deviceRegistrations?: DeviceRegistration[]
   ) {
     this.id = id;
     this.email = email;
@@ -44,11 +48,9 @@ export default class Profile {
     this.notificationsMobile = notificationsMobile || false;
     this.notificationsWhatsapp = notificationsWhatsapp || false;
     this.notificationsEmail = notificationsEmail || false;
-    this.isOnboarded = isOnboarded || false;
-
+    this.isOnboarded = false;
     this.lastSeen = lastSeen || new Date();
     this.deviceRegistrations = deviceRegistrations || this.deviceRegistrations;
-    this.roles = roles || { listener: true };
   }
 
   static fromJson(r: any): Profile {
@@ -60,18 +62,17 @@ export default class Profile {
       r.about,
       r.mobileNumber,
       r.lastSeen,
-      r.lastSeen,
-      r.notificationsBrowser || false,
-      r.notificationsMobile || false,
-      r.notificationsWhatsapp || false,
-      r.notificationsEmail || false,
-      r.isOnboarded || false,
-      r.roles || { listener: true }
+      r.lastSeen
     );
     if (r.deviceRegistrations) {
       profile.deviceRegistrations = r.deviceRegistrations;
     }
-
+    profile.notificationsBrowser = r.notificationsBrowser || false;
+    profile.notificationsMobile = r.notificationsMobile || false;
+    profile.notificationsWhatsapp = r.notificationsWhatsapp || false;
+    profile.notificationsEmail = r.notificationsEmail || false;
     return profile;
   }
+
+
 }

@@ -4,6 +4,7 @@ import { Profile } from "@/models";
 import { onAuthStateChanged } from "firebase/auth";
 import { Users } from "@/lib/db/collections";
 import { auth } from "@/lib/firebase";
+import useFirebaseAuth from "@/lib/auth/signin";
 
 interface IAuthContext {
   profile?: Profile | null,
@@ -20,13 +21,17 @@ const AuthContextProvider = ({ children }: React.PropsWithChildren) => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [status, setStatus] = useState<"loading" | "loaded" | "error">("loaded");
+  const { getUserProfile, checkUserOnboarding } = useFirebaseAuth();
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       console.log("AuthContextProvider", "onAuthStateChanged", user?.displayName);
       if (user?.uid) {
-        const profile = await Users.get(user?.uid);
+        const profile = await getUserProfile();
         setProfile(profile);
         setIsLoggedIn(profile !== null);
+        if (profile) {
+          await checkUserOnboarding(profile);
+        }
       } else {
         setIsLoggedIn(false);
         setProfile(null);

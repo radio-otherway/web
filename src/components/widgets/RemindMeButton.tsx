@@ -4,7 +4,6 @@ import React, { useContext } from "react";
 import { MdAddAlarm } from "react-icons/md";
 import { useAuth, useUser } from "reactfire";
 import ToastService from "./toast/toastService";
-import { AuthProfileContext } from "@/lib/auth/AuthProfileProvider";
 
 const RemindMeButton = ({ showId }: { showId: string }) => {
   const { status, data: user } = useUser();

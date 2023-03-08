@@ -9,10 +9,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import ToastService from "@/components/widgets/toast";
 import logger from "@/lib/util/logging";
 import { removeUndefinedProperties } from "@/lib/util/objectUtils";
-import { AuthProfileContext } from "@/lib/auth/AuthProfileProvider";
 import { useUser } from "reactfire";
 import Loading from "@/app/loading";
 import { Users } from "@/lib/db/collections";
+import { useAuthContext } from "@/components/providers/AuthContext";
 
 export type ProfileForm = {
   displayName: string;
@@ -28,13 +28,13 @@ export type ProfileForm = {
 };
 
 const ProfilePageComponent = ({
-  page,
-  onboarding,
-}: {
+                                page,
+                                onboarding
+                              }: {
   page: number;
   onboarding: boolean;
 }) => {
-  const { profile } = useContext(AuthProfileContext);
+  const { profile } = useAuthContext();
   const { status, data: user } = useUser();
   const router = useRouter();
   const subNavigation = [
@@ -42,11 +42,13 @@ const ProfilePageComponent = ({
     {
       name: "notifications",
       title: "Notifications",
-      icon: Bell,
-    },
+      icon: Bell
+    }
   ];
 
   const [selectedItem, setSelectedItem] = React.useState(subNavigation[0].name);
+  // @ts-ignore
+  // @ts-ignore
   const {
     register,
     handleSubmit,
@@ -54,11 +56,11 @@ const ProfilePageComponent = ({
     reset,
     watch,
     control,
-    formState: { errors },
-  } = useForm<ProfileForm>({
-    defaultValues: useMemo(() => {
+    formState: { errors }
+  } = useForm({
+    defaultValues: useMemo((): ProfileForm | null => {
       return profile;
-    }, [profile]),
+    }, [profile])
   });
 
   useEffect(() => {
@@ -92,7 +94,7 @@ const ProfilePageComponent = ({
         notificationsEmail: data.notificationsEmail,
         notificationsMobile: data.notificationsMobile,
         notificationsWhatsapp: data.notificationsWhatsapp,
-        notificationsBrowser: data.notificationsBrowser,
+        notificationsBrowser: data.notificationsBrowser
       });
       newProfile.isOnboarded = true;
       if (profile?.id) {
@@ -105,7 +107,8 @@ const ProfilePageComponent = ({
     }
   };
 
-  useEffect(() => {}, [selectedItem]);
+  useEffect(() => {
+  }, [selectedItem]);
   const _getView = () => {
     return profile ? (
       <div className="pt-4 overflow-hidden">

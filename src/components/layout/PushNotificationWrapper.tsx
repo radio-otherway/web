@@ -6,13 +6,13 @@ import { Users } from "@/lib/db/collections";
 import logger from "@/lib/util/logging";
 import { getMessaging, onMessage } from "firebase/messaging";
 import ToastService from "@/components/widgets/toast";
-import { AuthProfileContext } from "@/lib/auth/AuthProfileProvider";
 import { parseUserAgent } from "react-device-detect";
 import firebaseApp from "@/lib/firebase";
+import { useAuthContext } from "@/components/providers/AuthContext";
 
 const PushNotificationWrapper = ({ children }: React.PropsWithChildren) => {
   const router = useRouter();
-  const { profile } = useContext(AuthProfileContext);
+  const { profile } = useAuthContext();
   useEffect(() => {
     const _getAndStoreRegistrationToken = async () => {
       const { ua } = parseUserAgent(window.navigator.userAgent);
@@ -36,7 +36,7 @@ const PushNotificationWrapper = ({ children }: React.PropsWithChildren) => {
             const newRegistration = {
               fcmToken: token,
               deviceType: ua,
-              lastSeen: new Date(),
+              lastSeen: new Date()
             };
             const index = profile.deviceRegistrations?.findIndex((reg) => {
               return reg.fcmToken === token;
@@ -57,7 +57,7 @@ const PushNotificationWrapper = ({ children }: React.PropsWithChildren) => {
             doc(Users.collection, profile?.id),
             profileWithRegistrations,
             {
-              merge: true,
+              merge: true
             }
           );
           getMessage();
@@ -86,7 +86,7 @@ const PushNotificationWrapper = ({ children }: React.PropsWithChildren) => {
         message?.notification?.body as string,
         message?.notification?.title,
         {
-          duration: 10000,
+          duration: 10000
         },
         () =>
           message?.data?.url && handleClickPushNotification(message?.data?.url)

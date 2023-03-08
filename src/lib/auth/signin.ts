@@ -5,7 +5,6 @@ import {
   getAuth,
   GoogleAuthProvider,
   linkWithPopup,
-  OAuthCredential,
   OAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -26,7 +25,7 @@ const useFirebaseAuth = () => {
   const [errorCredential, setErrorCredential] = useState();
   const _processSignIn = async (
     provider: any
-  ): Promise<UserCredential | undefined> => {
+  ): Promise<UserCredential | null> => {
     try {
       const result = await signInWithPopup(auth, provider);
       return result;
@@ -53,6 +52,7 @@ const useFirebaseAuth = () => {
         }
       }
     }
+    return null;
   };
   const checkUserOnboarding = async (
     profile: Profile,
@@ -62,34 +62,20 @@ const useFirebaseAuth = () => {
       router.push("/profile?page=1&onboarding=1");
       return false;
     }
+    router.push("/");
     return true;
   };
-  const getUserProfile = useCallback(async () => {
-    if (auth.currentUser !== null) {
-      // The user object has basic properties such as display name, email, etc.
-      // Going forward we may look this up from the user table in firestore
-      const savedProfile = await Users.get(auth.currentUser.uid);
-      if (savedProfile) {
-        const profile: Profile = {
-          ...savedProfile,
-          id: auth.currentUser.uid
-        };
-        profile.roles = savedProfile?.roles;
-        await Users.set(auth.currentUser.uid, Object.assign({}, profile));
-        return profile;
-      }
-    }
-  }, [auth.currentUser]);
+
   const signIn = async (
     email: string,
     password: string
-  ): Promise<UserCredential | undefined> => {
+  ): Promise<UserCredential | null> => {
     const result = await signInWithEmailAndPassword(auth, email, password);
     if (result) {
       router.push("/");
       return result;
     }
-    return undefined;
+    return null;
   };
 
   const signUp = async (email: string, password: string): Promise<string> => {
@@ -101,7 +87,7 @@ const useFirebaseAuth = () => {
       );
       logger.debug("useFireBaseAuth", "signUp_success", response);
       return "";
-    } catch (err: { code: string } | any) {
+    } catch (err) {
       logger.error("useFireBaseAuth", "signUp", err);
       return err.code;
     }
@@ -128,7 +114,9 @@ const useFirebaseAuth = () => {
     const provider = new FacebookAuthProvider();
     await _processSignIn(provider);
   };
+  const getUserProfile = (uid: string) => {
 
+  };
   return {
     signIn,
     signUp,
