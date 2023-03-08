@@ -94,6 +94,6 @@ const PushNotificationWrapper = ({ children }: React.PropsWithChildren) => {
     });
   };
 
-  return children;
+  return <>{children}</>;
 };
 export default PushNotificationWrapper;

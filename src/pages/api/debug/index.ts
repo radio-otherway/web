@@ -1,4 +1,4 @@
-import { getDoc } from "firebase/firestore";
+import { withAuth } from "@/lib/middleware";
 import { StatusCodes } from "http-status-codes";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -7,4 +7,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   res.end();
 };
 
-export default handler;
+export default withAuth(handler);

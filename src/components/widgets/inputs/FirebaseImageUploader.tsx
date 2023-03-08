@@ -80,7 +80,6 @@ const FirebaseImageUploader = forwardRef<
           setError("You must choose a file to upload first");
           return;
         }
-        console.log("FirebaseImageUploader", "Creating storage refs", storage);
         const extension = getFileExtension(file);
         const newFilePath = path.join(
           "files",
@@ -90,15 +89,9 @@ const FirebaseImageUploader = forwardRef<
           `${itemId}.${extension}`
         );
         setFilePath(newFilePath);
-        console.log("FirebaseImageUploader", "FilePath", newFilePath);
         const remoteFileReference = storageRef(storage, newFilePath);
 
-        console.log(
-          "FirebaseImageUploader",
-          "Created storage refs",
-          remoteFileReference
-        );
-        console.log("FirebaseImageUploader", "Starting upload task");
+
         setIsUploading(true);
         const uploadTask = uploadBytesResumable(remoteFileReference, file);
 
@@ -108,16 +101,11 @@ const FirebaseImageUploader = forwardRef<
             const percent = Math.round(
               (snapshot.bytesTransferred / snapshot.totalBytes) * 100
             );
-            console.log(
-              "FirebaseImageUploader",
-              "uploading",
-              `${percent}% done`
-            );
             setPercent(percent);
           },
           (err) => {
             _cleanUp();
-            console.log(err);
+            console.error(err);
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((url) => {

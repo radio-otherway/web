@@ -5,13 +5,17 @@ import { firebaseConfig } from "@/lib/firebase/index";
 
 admin.initializeApp(firebaseConfig);
 
-const sendCloudMessage = async (registration: string, title: string, body: string) => {
+const sendCloudMessage = async (
+  registration: string,
+  title: string,
+  body: string
+) => {
   const message = {
     notification: {
       title,
-      body
+      body,
     },
-    token: registration
+    token: registration,
   };
   try {
     const result = await admin.messaging().send(message);
@@ -19,6 +23,6 @@ const sendCloudMessage = async (registration: string, title: string, body: strin
   } catch (err) {
     logger.error("Admin", "sendCloudMessage", err);
   }
-
 };
-export { sendCloudMessage };
+const auth = admin.auth();
+export { admin, auth, sendCloudMessage };

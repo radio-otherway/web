@@ -26,7 +26,7 @@ export function ButtonLink({
   children,
 }: IButtonProps) {
   return (
-    <Link href={href} className={clsx("btn", className)}>
+    <Link href={href as string} className={clsx("btn", className)}>
       {children}
     </Link>
   );

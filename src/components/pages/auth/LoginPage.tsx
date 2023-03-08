@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { IoLogoFacebook, IoLogoGoogle, IoLogoTwitter } from "react-icons/io";
 import useFirebaseAuth from "@/lib/auth/signin";
 import {
   FacebookButton,
@@ -9,9 +8,6 @@ import {
   TwitterButton,
 } from "@/components/widgets/buttons/social";
 import Link from "next/link";
-import { InputText } from "@/components/widgets/inputs";
-import { ErrorText } from "@/components/widgets";
-import TitleCard from "@/components/widgets/cards/TitleCard";
 import { Mail } from "react-feather";
 
 const LoginPage = () => {
