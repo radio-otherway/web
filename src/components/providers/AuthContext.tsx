@@ -1,36 +1,38 @@
-import React, { useEffect } from "react";
-import { createContext, useContext, useState } from "react";
+import React, { useEffect, useMemo } from "react";
+import { createContext, useState, useCallback } from "react";
 import { Profile } from "@/models";
 import { onAuthStateChanged } from "firebase/auth";
-import { Users } from "@/lib/db/collections";
 import { auth } from "@/lib/firebase";
-import useFirebaseAuth from "@/lib/auth/signin";
+import useFirebaseAuth from "@/lib/auth/firebase";
 
 interface IAuthContext {
-  profile?: Profile | null,
-  isLoggedIn: boolean,
-  status: "loading" | "loaded" | "error"
+  profile?: Profile | null;
+  isLoggedIn: boolean;
+  status: "loading" | "loaded" | "error";
 }
 
-const AuthContext = createContext<IAuthContext>({
-  profile: null,
-  isLoggedIn: false,
-  status: "loaded"
-});
 const AuthContextProvider = ({ children }: React.PropsWithChildren) => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [status, setStatus] = useState<"loading" | "loaded" | "error">("loaded");
+  const [status, setStatus] = useState<"loading" | "loaded" | "error">(
+    "loaded"
+  );
   const { getUserProfile, checkUserOnboarding } = useFirebaseAuth();
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      console.log("AuthContextProvider", "onAuthStateChanged", user?.displayName);
+      console.log(
+        "AuthContextProvider",
+        "onAuthStateChanged",
+        user?.displayName
+      );
       if (user?.uid) {
         const profile = await getUserProfile();
-        setProfile(profile);
-        setIsLoggedIn(profile !== null);
         if (profile) {
-          await checkUserOnboarding(profile);
+          setProfile(profile);
+          setIsLoggedIn(profile !== null);
+          if (profile) {
+            await checkUserOnboarding(profile);
+          }
         }
       } else {
         setIsLoggedIn(false);
@@ -45,9 +47,16 @@ const AuthContextProvider = ({ children }: React.PropsWithChildren) => {
   const value = {
     profile,
     isLoggedIn,
-    status
+    status,
   };
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  useEffect(() => {}, []);
+  return <>{children}</>;
 };
-export const useAuthContext = () => useContext(AuthContext);
+const useAuthContext = () =>
+  createContext<IAuthContext>({
+    profile: null,
+    isLoggedIn: false,
+    status: "loaded",
+  });
+export { useAuthContext };
 export default AuthContextProvider;

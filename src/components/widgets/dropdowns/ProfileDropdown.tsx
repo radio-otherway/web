@@ -1,10 +1,10 @@
 import { getAuth, signOut, User } from "firebase/auth";
 import Link from "next/link";
 import Image from "next/image";
-import { FirebaseApp } from "@firebase/app-types";
 import { useFirebaseApp } from "reactfire";
+import { Profile } from "@/models";
 
-const ProfileDropdown = ({ profile }: { profile: User }) => {
+const ProfileDropdown = ({ profile }: { profile: Profile }) => {
   const app = useFirebaseApp();
   const auth = getAuth(app);
   return (

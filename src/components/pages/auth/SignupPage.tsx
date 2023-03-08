@@ -5,7 +5,7 @@ import { IoLogoFacebook, IoLogoGoogle, IoLogoTwitter } from "react-icons/io";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 import { Info } from "react-feather";
-import useFirebaseAuth from "@/lib/auth/signin";
+import useFirebaseAuth from "@/lib/auth/firebase";
 import {
   FacebookButton,
   GoogleButton,

@@ -10,7 +10,7 @@ import {
   signInWithPopup,
   signOut,
   TwitterAuthProvider,
-  UserCredential
+  UserCredential,
 } from "firebase/auth";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -54,18 +54,23 @@ const useFirebaseAuth = () => {
     }
     return null;
   };
-  const checkUserOnboarding = async (
-    profile: Profile,
-    redirectIfNew: boolean = false
-  ): Promise<boolean> => {
-    if (profile && !profile.isOnboarded && redirectIfNew) {
-      router.push("/profile?page=1&onboarding=1");
-      return false;
-    }
-    router.push("/");
-    return true;
-  };
 
+  const getUserProfile = useCallback(async () => {
+    if (auth.currentUser !== null) {
+      // The user object has basic properties such as display name, email, etc.
+      // Going forward we may look this up from the user table in firestore
+      const savedProfile = await Users.get(auth.currentUser.uid);
+      if (savedProfile) {
+        const profile: Profile = {
+          ...savedProfile,
+          id: auth.currentUser.uid,
+        };
+        profile.roles = savedProfile?.roles;
+        await Users.set(auth.currentUser.uid, Object.assign({}, profile));
+        return profile;
+      }
+    }
+  }, [auth.currentUser]);
   const signIn = async (
     email: string,
     password: string
@@ -87,15 +92,13 @@ const useFirebaseAuth = () => {
       );
       logger.debug("useFireBaseAuth", "signUp_success", response);
       return "";
-    } catch (err) {
+    } catch (err: { code: string }) {
       logger.error("useFireBaseAuth", "signUp", err);
       return err.code;
     }
   };
 
-  const logOut = () => signOut(auth).then(() => {
-
-  });
+  const logOut = () => signOut(auth).then(() => {});
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: "select_account" });
@@ -114,8 +117,16 @@ const useFirebaseAuth = () => {
     const provider = new FacebookAuthProvider();
     await _processSignIn(provider);
   };
-  const getUserProfile = (uid: string) => {
-
+  const checkUserOnboarding = async (
+    profile: Profile,
+    redirectIfNew: boolean = false
+  ): Promise<boolean> => {
+    if (profile && !profile.isOnboarded && redirectIfNew) {
+      router.push("/profile?page=1&onboarding=1");
+      return false;
+    }
+    router.push("/");
+    return true;
   };
   return {
     signIn,
@@ -124,9 +135,8 @@ const useFirebaseAuth = () => {
     signInWithGoogle,
     signInWithTwitter,
     signInWithFacebook,
-    // linkAccounts,
+    checkUserOnboarding,
     getUserProfile,
-    checkUserOnboarding
   };
 };
 export default useFirebaseAuth;
