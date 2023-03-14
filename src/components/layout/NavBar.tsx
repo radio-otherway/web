@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import Link from "next/link";
 import { Popover, Transition } from "@headlessui/react";
 import { BsPersonFillAdd } from "react-icons/bs";
@@ -16,11 +16,10 @@ import clsx from "clsx";
 import { ProfileDropdown } from "../widgets/dropdowns";
 import { RiLoginCircleLine, RiLogoutCircleLine } from "react-icons/ri";
 import { GrUser, GrUserNew, GrUserSettings } from "react-icons/gr";
-import { useAuthContext } from "@/components/providers/AuthContext";
+import { useAuthContext } from "../providers/AuthContext";
 
 const MobileNavigation = () => {
   const auth = useAuth();
-
   const pathname = usePathname();
   return (
     <Popover>
@@ -89,7 +88,11 @@ const MobileNavigation = () => {
 };
 
 const NavBar = () => {
-  const { status, profile, isLoggedIn } = useAuthContext();
+  const { profile, status } = useAuthContext();
+
+  useEffect(() => {
+    console.log("NavBar", "useAuthContext", profile, status);
+  }, [profile, status]);
   return (
     <nav className="relative flex items-center justify-between px-4 py-4 bg-white">
       <Link className="text-3xl font-bold leading-none" href="/">
@@ -98,9 +101,9 @@ const NavBar = () => {
       </Link>
       <ul className="absolute hidden transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 lg:mx-auto lg:flex lg:w-auto lg:items-center lg:space-x-6">
         <li>
-          <a className="text-sm text-gray-400 hover:text-gray-500" href="#">
-            Home
-          </a>
+          <Link className="text-sm text-gray-400 hover:text-gray-500" href="/">
+            Upcoming
+          </Link>
         </li>
         <li className="text-gray-300">
           <svg
@@ -119,13 +122,16 @@ const NavBar = () => {
           </svg>
         </li>
         <li>
-          <a className="text-sm text-gray-400 hover:text-gray-500" href="#">
-            Contact
-          </a>
+          <Link
+            className="text-sm text-gray-400 hover:text-gray-500"
+            href="/previous"
+          >
+            Previous
+          </Link>
         </li>
       </ul>
       <div className="flex items-center space-x-5">
-        {status !== "loading" && isLoggedIn ? (
+        {status === "authenticated" ? (
           <>
             <Link
               className="flex text-gray-600 transition-colors duration-300 cursor-pointer hover:text-blue-500"
@@ -144,22 +150,24 @@ const NavBar = () => {
             {profile && <ProfileDropdown profile={profile} />}
           </>
         ) : (
-          <>
-            <Link
-              className="flex text-gray-600 transition-colors duration-300 cursor-pointer hover:text-blue-500"
-              href="/signin"
-            >
-              <GrUserNew className="mr-2 mt-0.5 h-5 w-5 fill-current" />
-              Sign Up
-            </Link>
-            <Link
-              className="flex text-gray-600 transition-colors duration-300 cursor-pointer hover:text-blue-500"
-              href="/login"
-            >
-              <RiLoginCircleLine className="mr-2 mt-0.5 h-5 w-5 fill-current" />
-              Login
-            </Link>
-          </>
+          status !== "loading" && (
+            <>
+              <Link
+                className="flex text-gray-600 transition-colors duration-300 cursor-pointer hover:text-blue-500"
+                href="/signin"
+              >
+                <GrUserNew className="mr-2 mt-0.5 h-5 w-5 fill-current" />
+                Sign Up
+              </Link>
+              <Link
+                className="flex text-gray-600 transition-colors duration-300 cursor-pointer hover:text-blue-500"
+                href="/login"
+              >
+                <RiLoginCircleLine className="mr-2 mt-0.5 h-5 w-5 fill-current" />
+                Login
+              </Link>
+            </>
+          )
         )}
       </div>
     </nav>

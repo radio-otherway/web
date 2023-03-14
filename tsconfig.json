@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -25,9 +21,7 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     }
   },
   "include": [
@@ -35,9 +29,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "/srv/dev/radio-otherway/web/.next/types/**/*.ts"
-, "src/app/(auth)/layout.tsx"  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "/srv/dev/radio-otherway/web/.next/types/**/*.ts",
+    "src/app/(auth)/layout.tsx"
+  ],
+  "exclude": ["node_modules"]
 }

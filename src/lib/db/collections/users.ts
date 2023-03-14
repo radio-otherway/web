@@ -2,11 +2,8 @@ import { Profile } from "@/models";
 import { doc, getDocs, setDoc, where } from "@firebase/firestore";
 import { getDoc, query } from "firebase/firestore";
 import { createCollection } from "..";
-import { useCallback, useMemo } from "react";
-import { auth } from "@/lib/firebase";
-import { Users } from "@/lib/db/collections";
 
-const AuthService = {
+const Users = {
   collection: createCollection<Profile>("users"),
 
   get: async (id: string): Promise<Profile | null> => {
@@ -37,4 +34,4 @@ const AuthService = {
   },
 };
 
-export default AuthService;
+export default Users;

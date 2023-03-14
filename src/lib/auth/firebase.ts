@@ -6,17 +6,19 @@ import {
   GoogleAuthProvider,
   linkWithPopup,
   OAuthProvider,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   TwitterAuthProvider,
   UserCredential,
 } from "firebase/auth";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import logger from "@/lib/util/logging";
 import { Users } from "@/lib/db/collections";
 import { useFirebaseApp } from "reactfire";
+import { auth } from "../firebase";
 
 const useFirebaseAuth = () => {
   const router = useRouter();
@@ -55,7 +57,7 @@ const useFirebaseAuth = () => {
     return null;
   };
 
-  const getUserProfile = useCallback(async () => {
+  const getUserProfile = useCallback(async (): Promise<Profile | undefined> => {
     if (auth.currentUser !== null) {
       // The user object has basic properties such as display name, email, etc.
       // Going forward we may look this up from the user table in firestore
@@ -66,6 +68,10 @@ const useFirebaseAuth = () => {
           id: auth.currentUser.uid,
         };
         profile.roles = savedProfile?.roles;
+        await Users.set(auth.currentUser.uid, Object.assign({}, profile));
+        return profile;
+      } else {
+        const profile = Profile.fromUser(auth.currentUser);
         await Users.set(auth.currentUser.uid, Object.assign({}, profile));
         return profile;
       }
@@ -92,7 +98,7 @@ const useFirebaseAuth = () => {
       );
       logger.debug("useFireBaseAuth", "signUp_success", response);
       return "";
-    } catch (err: { code: string }) {
+    } catch (err: any) {
       logger.error("useFireBaseAuth", "signUp", err);
       return err.code;
     }
@@ -138,5 +144,13 @@ const useFirebaseAuth = () => {
     checkUserOnboarding,
     getUserProfile,
   };
+};
+export const onAuthStateHasChanged = (setSession: StateDispatch) => {
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) return setSession({ status: "anonymous", profile: undefined });
+    const profile = await Users.get(user!.uid);
+
+    setSession({ status: "authenticated", profile: profile });
+  });
 };
 export default useFirebaseAuth;

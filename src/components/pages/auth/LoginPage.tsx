@@ -17,12 +17,8 @@ const LoginPage = () => {
   const [forgot, setForgot] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const {
-    signInWithGoogle,
-    signInWithTwitter,
-    signInWithFacebook,
-    signIn,
-  } = useFirebaseAuth();
+  const { signInWithGoogle, signInWithTwitter, signInWithFacebook, signIn } =
+    useFirebaseAuth();
   const login = async (
     event: React.SyntheticEvent<HTMLButtonElement>
   ): Promise<void> => {
@@ -41,7 +37,7 @@ const LoginPage = () => {
   return (
     <>
       <div className="mt-2">
-        <p className="text-sm font-medium text-gray-700">Sign in with</p>
+        <p className="text-sm font-medium opacity-30 ">Sign in with</p>
 
         <div className="grid grid-cols-3 gap-3 mt-1">
           <TwitterButton onClick={signInWithTwitter} />
@@ -49,16 +45,13 @@ const LoginPage = () => {
           <FacebookButton onClick={signInWithFacebook} />
         </div>
 
-        <div className="relative my-4">
-          <div
-            className="absolute inset-0 flex items-center"
-            aria-hidden="true"
-          >
-            <div className="w-full border-t border-gray-300" />
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-primary" />
           </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-2 text-gray-500 bg-white">
-              Or continue with
+          <div className="relative flex justify-center my-4 text-sm">
+            <span className="px-2 bg-base-100">
+              or continue with
             </span>
           </div>
         </div>
@@ -72,7 +65,7 @@ const LoginPage = () => {
                 type="text"
                 title="email"
                 id="sign-in-email"
-                className="flex-1 w-full px-4 py-2 text-base placeholder-gray-400 bg-white border border-gray-300 rounded-r-lg shadow-sm appearance-none text-base-200 focus:outline-none focus:ring-0 focus:ring-offset-0"
+                className="flex-1 w-full px-4 py-2 text-base border rounded-r-lg shadow-sm appearance-none text-base-200 focus:outline-none focus:ring-0 focus:ring-offset-0"
                 placeholder="Your email"
                 value={email}
                 onChange={(event) => {
@@ -97,7 +90,7 @@ const LoginPage = () => {
               <input
                 type="password"
                 id="password"
-                className="flex-1 w-full px-4 py-2 text-base placeholder-gray-400 bg-white border border-gray-300 rounded-r-lg shadow-sm appearance-none text-base-200 focus:outline-none focus:ring-0 focus:ring-offset-0"
+                className="flex-1 w-full px-4 py-2 text-base rounded-r-lg shadow-sm appearance-none text-base-200 focus:outline-none focus:ring-0 focus:ring-offset-0"
                 placeholder="Your password"
                 value={password}
                 onChange={(event) => {

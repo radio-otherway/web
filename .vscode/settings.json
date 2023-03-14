@@ -12,6 +12,7 @@
     ".working": true,
     ".yarn": true
   },
+  "workbench.colorTheme": ".NET Purple theme dark",
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "editor.fontFamily": "Cascadia Code",

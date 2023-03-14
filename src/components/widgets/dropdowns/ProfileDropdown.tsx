@@ -8,15 +8,15 @@ const ProfileDropdown = ({ profile }: { profile: Profile }) => {
   const app = useFirebaseApp();
   const auth = getAuth(app);
   return (
-    <div className="ml-4 dropdown dropdown-end">
+    <div className="ml-4 dropdown-end dropdown">
       <label tabIndex={0} className="btn-ghost btn-circle avatar btn">
-        <div className="w-10 rounded-full">
+        <div className="w-6 rounded-full">
           {profile.photoURL && (
             <Image
               src={profile.photoURL}
               alt="profile"
-              width={64}
-              height={64}
+              width={24}
+              height={24}
             />
           )}
         </div>
@@ -34,7 +34,9 @@ const ProfileDropdown = ({ profile }: { profile: Profile }) => {
         <li className="">
           <Link href={"/scheduler"}>Scheduler</Link>
         </li>
-        <div className="mt-0 mb-0 divider"></div>
+        <li>
+          <div className="mt-0 mb-0 divider"></div>
+        </li>
         <li>
           <a onClick={() => signOut(auth)}>Logout</a>
         </li>

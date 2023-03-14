@@ -1,11 +1,16 @@
 import React, { useEffect } from "react";
-import { AuthProvider, FirestoreProvider, StorageProvider, useFirebaseApp } from "reactfire";
+import {
+  AuthProvider,
+  FirestoreProvider,
+  StorageProvider,
+  useFirebaseApp,
+} from "reactfire";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import LogRocket from "logrocket";
 import packageJson from "../../../package.json";
 import { getStorage } from "@firebase/storage";
-import AuthContextProvider from "@/components/providers/AuthContext";
+import { AuthContextProvider } from "./AuthContext";
 
 const AppWrapper = ({ children }: React.PropsWithChildren) => {
   const app = useFirebaseApp();
@@ -18,7 +23,7 @@ const AppWrapper = ({ children }: React.PropsWithChildren) => {
         release: packageJson.version,
         rootHostname: "radio-otherway.fergl.ie",
         console: {
-          shouldAggregateConsoleErrors: true
+          shouldAggregateConsoleErrors: true,
         },
         network: {
           requestSanitizer: (request: any) => {
@@ -31,21 +36,21 @@ const AppWrapper = ({ children }: React.PropsWithChildren) => {
             request.headers.Authorization = undefined;
             // otherwise log the request normally
             return request;
-          }
-        }
+          },
+        },
       });
     }
   }, []);
   return (
-    <AuthProvider sdk={auth}>
-      <FirestoreProvider sdk={firestore}>
-        <AuthContextProvider>
-          <StorageProvider sdk={storage}>
-            {children}
-          </StorageProvider>
-        </AuthContextProvider>
-      </FirestoreProvider>
-    </AuthProvider>
+    <div className="bg-base-100">
+      <AuthProvider sdk={auth}>
+        <FirestoreProvider sdk={firestore}>
+          <AuthContextProvider>
+            <StorageProvider sdk={storage}>{children}</StorageProvider>
+          </AuthContextProvider>
+        </FirestoreProvider>
+      </AuthProvider>
+    </div>
   );
 };
 

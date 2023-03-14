@@ -5,7 +5,7 @@ export default function Home() {
     return (
         <div>
             <Head>
-                <title>Sentry Onboarding</title>
+                <title>Radio::Otherway</title>
                 <meta name="description" content="Make your Next.js ready for Sentry" />
             </Head>
 
